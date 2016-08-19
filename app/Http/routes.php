@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login/{name}','Login@index');
+
+Route::get('/insert', function() {
+    App\SegUsuario::create(array('usuario' => 'test','nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
+    return 'Usuario Agregado';
+});
