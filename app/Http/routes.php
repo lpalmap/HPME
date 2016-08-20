@@ -15,9 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login/{name}','Login@index');
+Route::get('/login','Login@login');
+Route::post('/login','Login@auth');
+Route::get('/logout','Login@logout');
+
+
 
 Route::get('/insert', function() {
-    App\SegUsuario::create(array('usuario' => 'test','nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
-    return 'Usuario Agregado';
+    App\SegUsuario::create(array('usuario' => 'lpalma','password'=>  bcrypt('lpalma'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
+    return 'Usuario Agregado 222';
 });

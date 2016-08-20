@@ -23,16 +23,18 @@ and open the template in the editor.
                         <img src="{{asset('images/loghab.png')}}"/>
                     </div>
 			  	<div class="panel-heading">
-                                    <h3 class="panel-title" style="text-align: center;font-weight: bold">Iniciar Sesi&#243;n {{$name}}</h3>
+                                    <h3 class="panel-title" style="text-align: center;font-weight: bold">Iniciar Sesi&#243;n</h3>
 			 	</div>
 			  	<div class="panel-body">
-			    	<form accept-charset="UTF-8" role="form">
-                                <fieldset>
+                                    <form accept-charset="UTF-8" role="form" method="POST" action="{{url('login')}}"
+                                          {{csrf_field()}}
+                                     <fieldset>
+                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 			    	  	<div class="form-group">
-			    		    <input class="form-control" placeholder="Usuario" name="user" type="text">
+                                            <input class="form-control" placeholder="Usuario" name="usuario" type="text" id="usuario">
 			    		</div>
 			    		<div class="form-group">
-			    			<input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                            <input class="form-control" placeholder="Password" name="password" type="password" value="" id="password">
 			    		</div>
 			    		<div class="checkbox">
 			    	    	<label>
