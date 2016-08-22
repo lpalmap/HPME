@@ -7,12 +7,13 @@ and open the template in the editor.
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Herramienta de Planificaci&#243;n</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+  <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap/css/bootstrap.css')}}" />
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+  <script src="{{asset('assets/plugins/jquery.min.js')}}"></script>
+  <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script> 
 </head>
     <body>
          <div class="container">
@@ -20,11 +21,17 @@ and open the template in the editor.
 		<div class="col-md-4 col-md-offset-4">
     		<div class="panel panel-default">
                     <div style="text-align: center">
-                        <img src="{{asset('images/loghab.png')}}"/>
+                        <img src="{{asset('images/loghab_login.png')}}"/>
                     </div>
 			  	<div class="panel-heading">
                                     <h3 class="panel-title" style="text-align: center;font-weight: bold">Iniciar Sesi&#243;n</h3>
 			 	</div>
+                    @if (isset($error))
+                    <div class="alert alert-danger fade in">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                            <strong>Error!</strong> Usuario o contrase&ntilde;a incorrectos.
+                    </div>
+                    @endif
 			  	<div class="panel-body">
                                     <form accept-charset="UTF-8" role="form" method="POST" action="{{url('login')}}"
                                           {{csrf_field()}}

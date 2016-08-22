@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class Login extends Controller
 {
     
-    public function login(){
-        return view('login');
+    public function login($error=null){
+        return view('login',array('error'=>$error));
+//        if($nombre=null){
+//            return view('login');
+//        }else{
+//            return view('login',array('nombre'=>$nombre));
+//        }    
     }
     
     public function auth(Request $request){
         if($request->isMethod('post')){
-            if (\Illuminate\Support\Facades\Auth::attempt(['usuario' => $request->get('usuario'), 'password' => $request->get('password')])){
-                    return 'login '.$request->get('usuario');
+            if (Auth::attempt(['usuario' => $request->get('usuario'), 'password' => $request->get('password')])){
+                //return redirect()->route('home',array('usuario'=>$request->get('usuario')));
+                return redirect()->route('home');
             } else {
-                return 'No logueado '.$request->get('usuario')." passs ".$request->get('password');
+                //return 'No logueado '.$request->get('usuario')." passs ".$request->get('password');
+                return redirect()->route('login',array("error"=>"sinlog"));
+                
             }
         }else{
             return 'No se puede procesar no es post';
