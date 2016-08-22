@@ -21,6 +21,8 @@ class Login extends Controller
             if (Auth::attempt(['usuario' => $request->get('usuario'), 'password' => $request->get('password')])){
                 //return redirect()->route('home',array('usuario'=>$request->get('usuario')));
                 return redirect()->route('home');
+            
+                //return redirect()->route('usuarios');
             } else {
                 //return 'No logueado '.$request->get('usuario')." passs ".$request->get('password');
                 return redirect()->route('login',array("error"=>"sinlog"));

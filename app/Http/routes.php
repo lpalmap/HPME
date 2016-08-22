@@ -19,9 +19,7 @@ Route::get('/login/{error?}','Login@login')->name('login');
 Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
 Route::get('/home','Home@index')->name('home');
-Route::get('/test/{nombre}',  function ($nombre){
-    return view('login',array('nombre'=>$nombre));
-});
+Route::get('/usuarios','Usuarios@index')->name('usuarios');
 
 
 

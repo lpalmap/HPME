@@ -3,11 +3,10 @@
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 
-<!-- BEGIN HEAD-->
+ <!-- BEGIN HEAD -->
 <head>
-   
      <meta charset="UTF-8" />
-     <title>Herramienta de Planificaci&#243;n</title>
+    <title>BCORE Admin Dashboard Template | Data Tables</title>
      <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
 	<meta content="" name="author" />
@@ -24,6 +23,7 @@
     <!--END GLOBAL STYLES -->
 
     <!-- PAGE LEVEL STYLES -->
+    <link href="assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
     <!-- END PAGE LEVEL  STYLES -->
        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,7 +31,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-    <!-- END  HEAD-->
+     <!-- END HEAD -->
+     
     <!-- BEGIN BODY-->
 <body class="padTop53 " >
 
@@ -440,7 +441,7 @@
                           &nbsp; <span class="label label-danger">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="chart-nav">
-                        <li><a href="{{url('usuarios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
+                        <li><a href="charts_line.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
                         <li><a href="charts_bar.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
                         <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>
                     </ul>
@@ -453,14 +454,15 @@
 
 
         <!--PAGE CONTENT -->
+         <!--PAGE CONTENT -->
         <div id="content">
 
-            <div class="inner" style="min-height:1200px;">
+            <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
 
 
-                        <h2>Bienvenido.</h2>
+                        <h2> Usuarios </h2>
 
 
 
@@ -470,14 +472,43 @@
                 <hr />
 
 
-
-
+                <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Agregar Usuario
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($usuarios))
+                                            @for ($i=0;$i<count($usuarios);$i++)
+                                        <tr class="even gradeA">
+                                            <td>{{$usuarios[$i]->usuario}}</td>
+                                            <td>{{$usuarios[$i]->nombres}}</td>
+                                            <td>{{$usuarios[$i]->apellidos}}</td>
+                                        </tr>
+                                            @endfor
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-
-
+            </div>
         </div>
+       <!--END PAGE CONTENT -->
        <!--END PAGE CONTENT -->
 
 
@@ -495,6 +526,15 @@
      <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     <!-- END GLOBAL SCRIPTS -->
+        <!-- PAGE LEVEL SCRIPTS -->
+    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+     <script>
+         $(document).ready(function () {
+             $('#dataTables-example').dataTable();
+         });
+    </script>
+     <!-- END PAGE LEVEL SCRIPTS -->
 </body>
     <!-- END BODY-->
     
