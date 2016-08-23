@@ -22,4 +22,9 @@ class Usuarios extends Controller
         return response()->json($user);
     }
     
+    public function retrive($id){
+        $user = SegUsuario::find($id);
+        return response()->json($user);
+    }
+    
 }

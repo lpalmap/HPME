@@ -41,7 +41,7 @@ and open the template in the editor.
                                             <input class="form-control" placeholder="Usuario" name="usuario" type="text" id="usuario">
 			    		</div>
 			    		<div class="form-group">
-                                            <input class="form-control" placeholder="Password" name="password" type="password" value="" id="password">
+                                            <input class="form-control" placeholder="Contrase&ntilde;a" name="password" type="password" value="" id="password">
 			    		</div>
 			    		<div class="checkbox">
 			    	    	<label>

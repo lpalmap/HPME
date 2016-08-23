@@ -80,6 +80,19 @@ $(document).ready(function(){
         });
         $('#buttonedModal').modal('hide');
     });
+    
+    //Agregar nuevo usuario
+    $('#btnAgregar').click(function(){
+        $('#inputTitle').html("Agregar Usuario");
+        $('#formAgregar').trigger("reset");
+        $('#formModal').modal('show');
+    });
+    
+    $('.btn-editar').click(function(){
+        $('#inputTitle').html("Editar Usuario "+$(this).val());
+        $('#formAgregar').trigger("reset");
+        $('#formModal').modal('show');
+    });    
 
 //    //create new task / update existing task
 //    $("#btn-save").click(function (e) {
