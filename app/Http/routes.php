@@ -20,6 +20,7 @@ Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
 Route::get('/home','Home@index')->name('home');
 Route::get('/usuarios','Usuarios@index')->name('usuarios');
+Route::delete('/usuarios/{id}','Usuarios@delete');
 
 
 

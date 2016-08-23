@@ -25,7 +25,7 @@ class Login extends Controller
                 //return redirect()->route('usuarios');
             } else {
                 //return 'No logueado '.$request->get('usuario')." passs ".$request->get('password');
-                return redirect()->route('login',array("error"=>"sinlog"));
+                return redirect()->route('login',array("error"=>"error"));
                 
             }
         }else{

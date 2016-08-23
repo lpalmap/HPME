@@ -441,7 +441,7 @@
                           &nbsp; <span class="label label-danger">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="chart-nav">
-                        <li><a href="charts_line.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
+                        <li><a href="{{url('usuarios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
                         <li><a href="charts_bar.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
                         <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>
                     </ul>
@@ -486,15 +486,20 @@
                                             <th>Usuario</th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (isset($usuarios))
                                             @for ($i=0;$i<count($usuarios);$i++)
-                                        <tr class="even gradeA">
+                                        <tr class="even gradeA" id="usuario{{$usuarios[$i]->ide_usuario}}">
                                             <td>{{$usuarios[$i]->usuario}}</td>
                                             <td>{{$usuarios[$i]->nombres}}</td>
                                             <td>{{$usuarios[$i]->apellidos}}</td>
+                                            <td>
+                                                <button class="btn btn-primary" value="{{$usuarios[$i]->ide_usuario}}"><i class="icon-pencil icon-white" ></i> Editar</button>
+                                                <button class="btn btn-danger" value="{{$usuarios[$i]->ide_usuario}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                            </td>
                                         </tr>
                                             @endfor
                                         @endif
@@ -515,12 +520,33 @@
     </div>
 
      <!--END MAIN WRAPPER -->
+     
+     <div class="col-lg-12">
+                        <div class="modal fade" id="buttonedModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="H1">Eliminar Usuario</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Esta seguro de eliminar el usuario.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="btnEliminar">Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
 
    <!-- FOOTER -->
     <div id="footer">
         <p>&copy;  Habitat para la Humanidad Guatemala &nbsp;2016 &nbsp;</p>
     </div>
     <!--END FOOTER -->
+    <meta name="_token" content="{!! csrf_token() !!}" />
      <!-- GLOBAL SCRIPTS -->
     <script src="assets/plugins/jquery-2.0.3.min.js"></script>
      <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -529,11 +555,12 @@
         <!-- PAGE LEVEL SCRIPTS -->
     <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
-     <script>
+    <script src="{{asset('js/hpme.usuarios.js')}}"></script>
+<!--     <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();
          });
-    </script>
+    </script>-->
      <!-- END PAGE LEVEL SCRIPTS -->
 </body>
     <!-- END BODY-->

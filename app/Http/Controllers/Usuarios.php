@@ -17,4 +17,9 @@ class Usuarios extends Controller
         return view('usuarios',array('usuarios'=>$data));
     }
     
+    public function delete($id){
+        $user = SegUsuario::destroy($id);
+        return response()->json($user);
+    }
+    
 }
