@@ -489,7 +489,7 @@
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="lista-items" name="lista-items">
                                         @if (isset($usuarios))
                                             @for ($i=0;$i<count($usuarios);$i++)
                                         <tr class="even gradeA" id="usuario{{$usuarios[$i]->ide_usuario}}">
@@ -573,7 +573,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary">Guardar</button>
+                                            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
                                             <input type="hidden" id="ide_usuario" value="0"/>
                                         </div>
                                     </div>

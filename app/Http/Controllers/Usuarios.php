@@ -27,4 +27,12 @@ class Usuarios extends Controller
         return response()->json($user);
     }
     
+    public function add(Request $request){
+        
+    }
+    
+    public function update(Request $request,$id){
+        
+    }
+    
 }

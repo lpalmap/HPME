@@ -33,7 +33,6 @@ $(document).ready(function(){
 
     //delete task and remove it from list
     $('.btn-danger').click(function(){
-        var user_id = $(this).val();
         $('#btnEliminar').val($(this).val());
         $('#buttonedModal').modal('show');
         
@@ -85,72 +84,81 @@ $(document).ready(function(){
     $('#btnAgregar').click(function(){
         $('#inputTitle').html("Agregar Usuario");
         $('#formAgregar').trigger("reset");
+        $('#btnGuardar').val('add');
         $('#formModal').modal('show');
     });
     
     $('.btn-editar').click(function(){
-        $('#inputTitle').html("Editar Usuario "+$(this).val());
-        $('#formAgregar').trigger("reset");
-        $('#formModal').modal('show');
+        var ide_usuario=$(this).val();
+        $('#inputTitle').html("Editar Usuario");
+        $.get(url + '/' + ide_usuario, function (data) {
+            //success data
+            console.log(data);
+            $('#inUsuario').val(data.usuario);
+            $('#inPassword').val(data.password);
+            $('#inNombres').val(data.nombres);
+            $('#inApellidos').val(data.apellidos);
+            $('#ide_usuario').val(data.ide_usuario);
+            $('#btnGuardar').val('update');
+            $('#formModal').modal('show');
+        }) 
     });    
 
-//    //create new task / update existing task
-//    $("#btn-save").click(function (e) {
-//        $.ajaxSetup({
-//            headers: {
-//                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-//            }
-//        })
-//
-//        e.preventDefault(); 
-//
-//        var formData = {
-//            task: $('#task').val(),
-//            description: $('#description').val(),
-//        }
-//
-//        //used to determine the http verb to use [add=POST], [update=PUT]
-//        var state = $('#btn-save').val();
-//
-//        var type = "POST"; //for creating new resource
-//        var task_id = $('#task_id').val();;
-//        var my_url = url;
-//
-//        if (state == "update"){
-//            type = "PUT"; //for updating existing resource
-//            my_url += '/' + task_id;
-//        }
-//
-//        console.log(formData);
-//
-//        $.ajax({
-//
-//            type: type,
-//            url: my_url,
-//            data: formData,
-//            dataType: 'json',
-//            success: function (data) {
-//                console.log(data);
-//
-//                var task = '<tr id="task' + data.id + '"><td>' + data.id + '</td><td>' + data.task + '</td><td>' + data.description + '</td><td>' + data.created_at + '</td>';
-//                task += '<td><button class="btn btn-warning btn-xs btn-detail open-modal" value="' + data.id + '">Edit</button>';
-//                task += '<button class="btn btn-danger btn-xs btn-delete delete-task" value="' + data.id + '">Delete</button></td></tr>';
-//
-//                if (state == "add"){ //if user added a new record
-//                    $('#tasks-list').append(task);
-//                }else{ //if user updated an existing record
-//
-//                    $("#task" + task_id).replaceWith( task );
-//                }
-//
-//                $('#frmTasks').trigger("reset");
-//
-//                $('#myModal').modal('hide')
-//            },
-//            error: function (data) {
-//                console.log('Error:', data);
-//            }
-//        });
-//    });
+    //create new task / update existing task
+    $("#btnGuardar").click(function (e) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        var formData = {
+            usuario: $('#inUsuario').val(),
+            password: $('#inPassword').val(),
+            nombres: $('#inNombres').val(),
+            apellidos: $('#inApellidos').val(),
+        };
+
+        //used to determine the http verb to use [add=POST], [update=PUT]
+        var state = $('#btnGuardar').val();
+
+        var type = "POST"; //for creating new resource
+        var ide_usuario = $('#ide_usuario').val();;
+        var my_url = url;
+
+        if (state == "update"){
+            type = "PUT"; //for updating existing resource
+            my_url += '/' + ide_usuario;
+        }
+
+        console.log(formData);
+
+        $.ajax({
+            type: type,
+            url: my_url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+
+                var item = '<tr class="even gradeA" id="usuario' + data.ide_usuario+ '"><td>' + data.usuario + '</td><td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
+                item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_suario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
+                item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
+
+                if (state == "add"){ //if user added a new record
+                    $('#lista-items').append(item);
+                }else{ //if user updated an existing record
+
+                    $("#lista-items" + ide_usuario).replaceWith( item );
+                }
+
+                $('#formAgregar').trigger("reset");
+
+                $('#formModal').modal('hide')
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    });
 });
 
