@@ -22,8 +22,8 @@ Route::get('/home','Home@index')->name('home');
 Route::get('/usuarios','Usuarios@index')->name('usuarios');
 Route::delete('/usuarios/{id}','Usuarios@delete');
 Route::get('/usuarios/{id}','Usuarios@retrive');
-Route::post('/usuarios','Usuario@add');
-Route::put('/usuarios/{id}','Usuario@update');
+Route::post('/usuarios','Usuarios@add');
+Route::put('/usuarios/{id}','Usuarios@update');
 
 
 

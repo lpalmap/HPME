@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    $('#dataTables-example').dataTable();
+    var dataTable=$('#dataTables-example').dataTable();
     
     var url = "/hpme/public/usuarios";
 
@@ -32,28 +32,34 @@ $(document).ready(function(){
 //    });
 
     //delete task and remove it from list
-    $('.btn-danger').click(function(){
+//    $('.btn-danger').on('click','.btn-danger',function(){
+//        $('#btnEliminar').val($(this).val());
+//        $('#buttonedModal').modal('show');
+//        alert('tesrs33333333');
+//        
+////        $.ajaxSetup({
+////            headers: {
+////                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+////            }
+////        })
+////        
+////        $.ajax({
+////            type: "DELETE",
+////            url: url + '/' + user_id,
+////            success: function (data) {
+////                console.log(data);
+////                $("#usuario" + user_id).remove();
+////            },
+////            error: function (data) {
+////                console.log('####Error:', data);
+////                alert('Error borrado '+data);
+////            }
+////        });
+//    });
+    
+    $( document ).on( 'click', '.btn-danger', function() {
         $('#btnEliminar').val($(this).val());
         $('#buttonedModal').modal('show');
-        
-//        $.ajaxSetup({
-//            headers: {
-//                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-//            }
-//        })
-//        
-//        $.ajax({
-//            type: "DELETE",
-//            url: url + '/' + user_id,
-//            success: function (data) {
-//                console.log(data);
-//                $("#usuario" + user_id).remove();
-//            },
-//            error: function (data) {
-//                console.log('####Error:', data);
-//                alert('Error borrado '+data);
-//            }
-//        });
     });
     
     $('#btnEliminar').click(function(){
@@ -70,7 +76,9 @@ $(document).ready(function(){
             url: url + '/' + user_id,
             success: function (data) {
                 console.log(data);
-                $("#usuario" + user_id).remove();
+                //$("#usuario" + user_id).remove();
+                //dataTable.DataTable().draw();
+                dataTable.DataTable().row( $('#usuario'+user_id)).remove().draw();
             },
             error: function (data) {
                 console.log('####Error:', data);
@@ -131,7 +139,7 @@ $(document).ready(function(){
         }
 
         console.log(formData);
-
+        console.log("Enviando url "+my_url);
         $.ajax({
             type: type,
             url: my_url,
@@ -141,22 +149,26 @@ $(document).ready(function(){
                 console.log(data);
 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_usuario+ '"><td>' + data.usuario + '</td><td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
-                item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_suario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
+                item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_usuario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
                 item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
 
                 if (state == "add"){ //if user added a new record
-                    $('#lista-items').append(item);
+                    //$('#lista-items').append(item);
+                    //dataTable.DataTable.add(item).draw();
+                    dataTable.DataTable().rows.add($(item)).draw();
+                    dataTable.DataTable().draw()
                 }else{ //if user updated an existing record
-
                     $("#lista-items" + ide_usuario).replaceWith( item );
                 }
 
                 $('#formAgregar').trigger("reset");
 
-                $('#formModal').modal('hide')
+                $('#formModal').modal('hide');
+                //dataTable.DataTable.ajax.reload();
             },
             error: function (data) {
                 console.log('Error:', data);
+                alert(data.responseText);
             }
         });
     });

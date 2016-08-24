@@ -28,11 +28,23 @@ class Usuarios extends Controller
     }
     
     public function add(Request $request){
-        
+        //$request->attributes->set('password', bcrypt($request->password));
+        $data = $request->toArray();
+        $data['password']=  bcrypt($data['password']);
+        $user=  SegUsuario::create($data);
+        return response()->json($user);
     }
     
     public function update(Request $request,$id){
-        
+        $user=  SegUsuario::find($id);
+        $user->usuario=$request->usuario;
+        if(strlen($request->password)>0){
+            $user->password=  bcrypt($request->password);
+        }
+        $user->nombres=$request->nombres;
+        $user->apellidos=$request->apellidos;
+        $user->save();
+        return response()->json($user);       
     }
     
 }
