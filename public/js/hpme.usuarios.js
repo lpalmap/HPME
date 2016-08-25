@@ -61,6 +61,10 @@ $(document).ready(function(){
         $('#btnEliminar').val($(this).val());
         $('#buttonedModal').modal('show');
     });
+//    $( '.btn-danger' ).on( 'click', 'button', function() {
+//        $('#btnEliminar').val($(this).val());
+//        $('#buttonedModal').modal('show');
+//    });
     
     $('#btnEliminar').click(function(){
         var user_id = $(this).val();
@@ -96,7 +100,7 @@ $(document).ready(function(){
         $('#formModal').modal('show');
     });
     
-    $('.btn-editar').click(function(){
+    $(document).on('click','.btn-editar',function(){
         var ide_usuario=$(this).val();
         $('#inputTitle').html("Editar Usuario");
         $.get(url + '/' + ide_usuario, function (data) {
@@ -146,19 +150,25 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
-
+                console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_usuario+ '"><td>' + data.usuario + '</td><td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
-                item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_usuario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
-                item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
-
+                    item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_usuario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
+                    item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
+ 
                 if (state == "add"){ //if user added a new record
+                    
                     //$('#lista-items').append(item);
                     //dataTable.DataTable.add(item).draw();
                     dataTable.DataTable().rows.add($(item)).draw();
-                    dataTable.DataTable().draw()
+                    //dataTable.DataTable().draw();
+                    
                 }else{ //if user updated an existing record
-                    $("#lista-items" + ide_usuario).replaceWith( item );
+                    //var d=dataTable.DataTable().row($('#usuario'+ide_usuario)).data();
+                    //$("#lista-items" + ide_usuario).replaceWith( item );
+                     //dataTable.DataTable.row(item).data().draw();
+                     //dataTable.DataTable().row($('#usuario'+ide_usuario)).data($(item)).draw();
+                     dataTable.DataTable().row( $('#usuario'+ide_usuario)).remove();
+                     dataTable.DataTable().rows.add($(item)).draw();
                 }
 
                 $('#formAgregar').trigger("reset");
