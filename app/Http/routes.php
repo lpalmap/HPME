@@ -18,7 +18,7 @@ Route::get('/', function () {
 Route::get('/login/{error?}','Login@login')->name('login');
 Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
-Route::get('/home','Home@index')->name('home');
+Route::get('/home',['uses' => 'Home@index', 'middleware' => 'auth'])->name('home');
 Route::get('/usuarios','Usuarios@index')->name('usuarios');
 Route::delete('/usuarios/{id}','Usuarios@delete');
 Route::get('/usuarios/{id}','Usuarios@retrive');

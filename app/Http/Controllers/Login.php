@@ -18,7 +18,7 @@ class Login extends Controller
     
     public function auth(Request $request){
         if($request->isMethod('post')){
-            if (Auth::attempt(['usuario' => $request->get('usuario'), 'password' => $request->get('password')])){
+            if (Auth::attempt(['usuario' => $request->get('usuario'), 'password' => $request->get('password')],$request->get('remember'))){
                 //return redirect()->route('home',array('usuario'=>$request->get('usuario')));
                 return redirect()->route('home');
             
@@ -31,6 +31,11 @@ class Login extends Controller
         }else{
             return 'No se puede procesar no es post';
         }
+    }
+    
+    public function logout(){
+        Auth::logout();
+        return view('login');
     }
     
 }
