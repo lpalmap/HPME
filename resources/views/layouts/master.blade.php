@@ -404,7 +404,10 @@
                             </a>
                             <ul class="collapse" id="DDL1-nav">
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_afiliado.png')}}"/> Afiliados</a>
+                                    <a href="{{url('regiones')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_afiliado.png')}}"/> Regiones</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/afiliado.png')}}"/> Afiliados</a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_proyecto.png')}}"/> Proyectos</a>
