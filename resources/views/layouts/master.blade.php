@@ -132,12 +132,12 @@
                                 <a href="#">
                                     <div>
                                         <p>
-                                            <strong> Profile </strong>
-                                            <span class="pull-right text-muted">40% Complete</span>
+                                            <strong> Enero - Marzo </strong>
+                                            <span class="pull-right text-muted">40% Completado</span>
                                         </p>
                                         <div class="progress progress-striped active">
                                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                <span class="sr-only">40% Complete (success)</span>
+                                                <span class="sr-only">40% Completado (success)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -148,12 +148,12 @@
                                 <a href="#">
                                     <div>
                                         <p>
-                                            <strong> Pending Tasks </strong>
-                                            <span class="pull-right text-muted">20% Complete</span>
+                                            <strong> Abril - Junio </strong>
+                                            <span class="pull-right text-muted">20% Completado</span>
                                         </p>
                                         <div class="progress progress-striped active">
                                             <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                                                <span class="sr-only">20% Complete</span>
+                                                <span class="sr-only">20% Completado</span>
                                             </div>
                                         </div>
                                     </div>
@@ -164,12 +164,12 @@
                                 <a href="#">
                                     <div>
                                         <p>
-                                            <strong> Work Completed </strong>
-                                            <span class="pull-right text-muted">60% Complete</span>
+                                            <strong> Julio - Septiembre </strong>
+                                            <span class="pull-right text-muted">60% Completado</span>
                                         </p>
                                         <div class="progress progress-striped active">
                                             <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                                <span class="sr-only">60% Complete (warning)</span>
+                                                <span class="sr-only">60% Completado (warning)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -180,12 +180,12 @@
                                 <a href="#">
                                     <div>
                                         <p>
-                                            <strong> Summary </strong>
-                                            <span class="pull-right text-muted">80% Complete</span>
+                                            <strong> Octubre Diciembre </strong>
+                                            <span class="pull-right text-muted">80% Completado</span>
                                         </p>
                                         <div class="progress progress-striped active">
                                             <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                                                <span class="sr-only">80% Complete (danger)</span>
+                                                <span class="sr-only">80% Compleatado (danger)</span>
                                             </div>
                                         </div>
                                     </div>
@@ -194,7 +194,7 @@
                             <li class="divider"></li>
                             <li>
                                 <a class="text-center" href="#">
-                                    <strong>See All Tasks</strong>
+                                    <strong>Ver detalle</strong>
                                     <i class="icon-angle-right"></i>
                                 </a>
                             </li>
@@ -275,9 +275,9 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#"><i class="icon-user"></i> User Profile </a>
+                            <li><a href="#"><i class="icon-user"></i> Perfil de usuario </a>
                             </li>
-                            <li><a href="#"><i class="icon-gear"></i> Settings </a>
+                            <li><a href="#"><i class="icon-gear"></i> Configuraci&#243;n </a>
                             </li>
                             <li class="divider"></li>
                             <li><a href="{{url('logout')}}"><i class="icon-signout"></i> Salir </a>
@@ -410,7 +410,7 @@
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_proyecto.png')}}"/> Proyectos</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_meta.png')}}"/> Metas</a>
+                                    <a href="{{url('metas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_meta.png')}}"/> Metas</a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_indicador.png')}}"/> Indicadores</a>

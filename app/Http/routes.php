@@ -19,11 +19,23 @@ Route::get('/login/{error?}','Login@login')->name('login');
 Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
 Route::get('/home',['uses' => 'Home@index', 'middleware' => 'auth'])->name('home');
+
+/* Mantenimiento de usuarios */
+
 Route::get('/usuarios','Usuarios@index')->name('usuarios');
 Route::delete('/usuarios/{id}','Usuarios@delete');
 Route::get('/usuarios/{id}','Usuarios@retrive');
 Route::post('/usuarios','Usuarios@add');
 Route::put('/usuarios/{id}','Usuarios@update');
+
+/* Mantenimiento de metas */
+
+Route::get('/metas','Metas@index')->name('metas');
+Route::delete('/metas/{id}','Metas@delete');
+Route::get('/metas/{id}','Metas@retrive');
+Route::post('/metas','Metas@add');
+Route::put('/metas/{id}','Metas@update');
+
 
 
 

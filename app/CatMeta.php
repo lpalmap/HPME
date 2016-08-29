@@ -7,12 +7,14 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class SegUsuario extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class CatMeta extends BaseModel
 {
     use Authenticatable, CanResetPassword;
 
-    protected $primaryKey = 'ide_usuario';
-    protected $table = 'seg_usuario';
-    protected $fillable = array('usuario','password', 'nombres', 'apellidos','ide_afiliado');
+    protected $primaryKey = 'ide_meta';
+    protected $table = 'cat_meta';
+    protected $fillable = array('nombre','descripcion');
     public $timestamps = false;
 }
+
+

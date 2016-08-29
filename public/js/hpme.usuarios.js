@@ -29,7 +29,7 @@ $(document).ready(function(){
 //	}
 //});
 
-    $('#dataTables-example').DataTable(window.lang);
+    var dataTable=$('#dataTables-example').DataTable(window.lang);
     
     var url = "/hpme/public/usuarios";
 
@@ -107,7 +107,7 @@ $(document).ready(function(){
                 console.log(data);
                 //$("#usuario" + user_id).remove();
                 //dataTable.DataTable().draw();
-                dataTable.DataTable().row( $('#usuario'+user_id)).remove().draw();
+                dataTable.row( $('#usuario'+user_id)).remove().draw();
             },
             error: function (data) {
                 console.log('####Error:', data);
@@ -184,7 +184,7 @@ $(document).ready(function(){
                     
                     //$('#lista-items').append(item);
                     //dataTable.DataTable.add(item).draw();
-                    dataTable.DataTable().rows.add($(item)).draw();
+                    dataTable.rows.add($(item)).draw();
                     //dataTable.DataTable().draw();
                     
                 }else{ //if user updated an existing record
@@ -192,8 +192,8 @@ $(document).ready(function(){
                     //$("#lista-items" + ide_usuario).replaceWith( item );
                      //dataTable.DataTable.row(item).data().draw();
                      //dataTable.DataTable().row($('#usuario'+ide_usuario)).data($(item)).draw();
-                     dataTable.DataTable().row( $('#usuario'+ide_usuario)).remove();
-                     dataTable.DataTable().rows.add($(item)).draw();
+                     dataTable.row( $('#usuario'+ide_usuario)).remove();
+                     dataTable.rows.add($(item)).draw();
                 }
 
                 $('#formAgregar').trigger("reset");
