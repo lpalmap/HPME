@@ -464,8 +464,16 @@
 
     </div>
     <!--END MAIN WRAPPER -->
-    @yield('outsidewraper')
-    @section('footer') 
+    @yield('outsidewraper') 
+    @section('footer')
+    <!--    LOADING-->    
+    <div class="modal" id="loading" data-backdrop="static">
+        <div style="position: absolute; width: 100%; height: 100%; background: grey;opacity: 0.3;">
+            <img src="{{asset('images/cube_64.gif')}}" style="margin: 0;position: absolute;top: 50%;left: 50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);"/>   
+        </div>
+          
+    </div>
+    
     <!-- FOOTER -->
     <div id="footer">
         <p>&copy;  Habitat para la Humanidad Guatemala &nbsp;2016 &nbsp;</p>

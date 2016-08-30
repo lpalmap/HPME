@@ -93,8 +93,7 @@ $(document).ready(function(){
     
     $('#btnEliminar').click(function(){
         var user_id = $(this).val();
-        $('#buttonedModal').modal('show');
-        
+        $('#loading').modal('show');      
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -105,11 +104,11 @@ $(document).ready(function(){
             url: url + '/' + user_id,
             success: function (data) {
                 console.log(data);
-                //$("#usuario" + user_id).remove();
-                //dataTable.DataTable().draw();
                 dataTable.row( $('#usuario'+user_id)).remove().draw();
+                $('#loading').modal('hide');
             },
             error: function (data) {
+                $('#loading').modal('hide');
                 console.log('####Error:', data);
                 alert('Error borrado '+data);
             }
@@ -126,6 +125,7 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
+        $('#loading').modal('show');
         var ide_usuario=$(this).val();
         $('#inputTitle').html("Editar Usuario");
         $.get(url + '/' + ide_usuario, function (data) {
@@ -138,11 +138,13 @@ $(document).ready(function(){
             $('#ide_usuario').val(data.ide_usuario);
             $('#btnGuardar').val('update');
             $('#formModal').modal('show');
-        }) 
+            $('#loading').modal('hide');
+        });      
     });    
 
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {
+       $('#loading').modal('show');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -199,13 +201,15 @@ $(document).ready(function(){
                 $('#formAgregar').trigger("reset");
 
                 $('#formModal').modal('hide');
-                //dataTable.DataTable.ajax.reload();
+                $('#loading').modal('hide');
             },
             error: function (data) {
+                $('#loading').modal('hide');
                 console.log('Error:', data);
                 alert(data.responseText);
             }
         });
+        
     });
 });
 

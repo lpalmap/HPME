@@ -15,6 +15,7 @@ $(document).ready(function(){
     
     //Clic sobre el botón eliminar en el popup de confirmación
     $('#btnEliminar').click(function(){
+        $('#loading').modal('show');
         //Se obtiene el id del elemento a eliminar
         var item_id = $(this).val();
        
@@ -32,8 +33,10 @@ $(document).ready(function(){
                 //$("#usuario" + user_id).remove();
                 //dataTable.DataTable().draw();
                 dataTable.row( $('#item'+item_id)).remove().draw();
+                $('#loading').modal('hide');
             },
             error: function (data) {
+                $('#loading').modal('hide');
                 console.log('####Error:', data);
                 alert('Error borrado '+data);
             }
@@ -52,6 +55,7 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
+        $('#loading').modal('show');
         var ide_item=$(this).val();
         $('#inputTitle').html("Editar Meta");
         $.get(url + '/' + ide_item, function (data) {
@@ -62,11 +66,13 @@ $(document).ready(function(){
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.ide_meta);
+            $('#loading').modal('hide');
         }) 
     });    
 
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {
+        $('#loading').modal('show');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -111,8 +117,10 @@ $(document).ready(function(){
                 }
                 $('#formAgregar').trigger("reset");
                 $('#agregarEditarModal').modal('hide');
+                $('#loading').modal('hide');
             },
             error: function (data) {
+                $('#loading').modal('hide');
                 console.log('Error:', data);
                 alert(data.responseText);
             }
