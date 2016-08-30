@@ -31,7 +31,7 @@ $(document).ready(function(){
 
     var dataTable=$('#dataTables-example').DataTable(window.lang);
     
-    var url = "/hpme/public/usuarios";
+    var url = window.location;
 
     //display modal form for task editing
 //    $('.open-modal').click(function(){
@@ -126,6 +126,7 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
+        alert(url);
         var ide_usuario=$(this).val();
         $('#inputTitle').html("Editar Usuario");
         $.get(url + '/' + ide_usuario, function (data) {

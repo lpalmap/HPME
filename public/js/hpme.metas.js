@@ -5,7 +5,7 @@
  */
 $(document).ready(function(){
     var dataTable=$('#dataTables-example').DataTable(window.lang);
-    var url = "/hpme/public/metas";
+    var url = window.location;
     
     //Clic sobre el botón eliminar para un item de la tabla
     $( document ).on( 'click', '.btn-danger', function() {
@@ -52,6 +52,7 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
+        alert(url);
         var ide_item=$(this).val();
         $('#inputTitle').html("Editar Meta");
         $.get(url + '/' + ide_item, function (data) {
