@@ -30,11 +30,28 @@ Route::put('/usuarios/{id}','Usuarios@update');
 
 /* Mantenimiento de metas */
 
-Route::get('/metas','Metas@index')->name('metas');
+Route::get('/metas',['uses' => 'Metas@index', 'middleware' => 'auth'])->name('metas');
 Route::delete('/metas/{id}','Metas@delete');
 Route::get('/metas/{id}','Metas@retrive');
 Route::post('/metas','Metas@add');
 Route::put('/metas/{id}','Metas@update');
+
+/* Mantenimiento de regiones */
+
+Route::get('/regiones',['uses' => 'Regiones@index', 'middleware' => 'auth'])->name('regiones');
+Route::delete('/regiones/{id}','Regiones@delete');
+Route::get('/regiones/{id}','Regiones@retrive');
+Route::post('/regiones','Regiones@add');
+Route::put('/regiones/{id}','Regiones@update');
+
+/* Mantenimiento de afiliados */
+
+Route::get('/afiliados',['uses' => 'Afiliados@index', 'middleware' => 'auth'])->name('afiliados');
+Route::delete('/afiliados/{id}','Afiliados@delete');
+Route::get('/afiliados/{id}','Afiliados@retrive');
+Route::post('/afiliados','Afiliados@add');
+Route::put('/afiliados/{id}','Afiliados@update');
+
 
 
 
