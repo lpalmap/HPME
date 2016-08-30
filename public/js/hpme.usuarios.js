@@ -126,7 +126,6 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
-        alert(url);
         var ide_usuario=$(this).val();
         $('#inputTitle').html("Editar Usuario");
         $.get(url + '/' + ide_usuario, function (data) {

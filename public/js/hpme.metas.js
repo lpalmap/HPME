@@ -52,7 +52,6 @@ $(document).ready(function(){
     });
     
     $(document).on('click','.btn-editar',function(){
-        alert(url);
         var ide_item=$(this).val();
         $('#inputTitle').html("Editar Meta");
         $.get(url + '/' + ide_item, function (data) {
