@@ -117,14 +117,6 @@
         <meta name="_token" content="{!! csrf_token() !!}" />
         <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
-        <link rel="stylesheet" href="assets/plugins/validationengine/css/validationEngine.jquery.css" />
         <script src="{{asset('js/hpme.lang.js')}}"></script>
         <script src="{{asset('js/hpme.metas.js')}}"></script>
-        <script src="assets/plugins/validationengine/js/jquery.validationEngine.js"></script>
-        <script src="assets/plugins/validationengine/js/languages/jquery.validationEngine-en.js"></script>
-        <script src="assets/plugins/jquery-validation-1.11.1/dist/jquery.validate.min.js"></script>
-        <script src="assets/js/validationInit.js"></script>
-        <script>
-        $(function () { formValidation(); });
-        </script>
 @endsection

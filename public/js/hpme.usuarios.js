@@ -32,7 +32,7 @@ $(document).ready(function(){
     var dataTable=$('#dataTables-example').DataTable(window.lang);
     
     var url = window.location;
-
+    url=(""+url).replace("#","");
     //display modal form for task editing
 //    $('.open-modal').click(function(){
 //        var task_id = $(this).val();
@@ -83,6 +83,7 @@ $(document).ready(function(){
 //    });
     
     $( document ).on( 'click', '.btn-danger', function() {
+        alert(url);
         $('#btnEliminar').val($(this).val());
         $('#buttonedModal').modal('show');
     });
