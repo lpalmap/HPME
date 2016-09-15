@@ -2,12 +2,10 @@
 
 namespace App;
 
-class CatMeta extends BaseModel
+class CfgRegion extends BaseModel
 {
-    protected $primaryKey = 'ide_meta';
-    protected $table = 'cat_meta';
+    protected $primaryKey = 'ide_region';
+    protected $table = 'cfg_region';
     protected $fillable = array('nombre','descripcion');
     public $timestamps = false;
 }
-
-

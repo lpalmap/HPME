@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Metas</h2>
+                        <h2>Proyectos</h2>
                     </div>
                 </div>
 
@@ -23,11 +23,11 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Agregar Meta</button>
+                            <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Agregar Proyecto</button>
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <table class="table table-striped table-bordered table-hover" id="dataTableItems">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
@@ -38,12 +38,12 @@
                                     <tbody id="lista-items" name="lista-items">
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
-                                        <tr class="even gradeA" id="item{{$items[$i]->ide_meta}}">
+                                        <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
                                             <td>
-                                                <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_meta}}"><i class="icon-pencil icon-white" ></i> Editar</button>
-                                                <button class="btn btn-danger" value="{{$items[$i]->ide_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
+                                                <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
                                         </tr>
                                             @endfor
@@ -67,10 +67,10 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Meta</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar Proyecto</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar la meta.
+                                            Esta seguro de eliminar el proyecto..
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -144,5 +144,5 @@
         <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
-        <script src="{{asset('js/hpme.metas.js')}}"></script>
+        <script src="{{asset('js/hpme.proyectos.js')}}"></script>
 @endsection

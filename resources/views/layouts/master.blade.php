@@ -410,13 +410,13 @@
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/afiliado.png')}}"/> Afiliados</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_proyecto.png')}}"/> Proyectos</a>
+                                    <a href="{{url('proyectos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_proyecto.png')}}"/> Proyectos</a>
                                 </li>
                                 <li>
                                     <a href="{{url('metas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_meta.png')}}"/> Metas</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_indicador.png')}}"/> Indicadores</a>
+                                    <a href="{{url('indicadores')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_indicador.png')}}"/> Indicadores</a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_objetivo.png')}}"/> Objetivos</a>

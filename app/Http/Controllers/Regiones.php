@@ -3,38 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\CfgMeta;
+use App\CfgRegion;
 
-class Metas extends Controller
+class Regiones extends Controller
 {
     //
     //Obtiene metas y crea vista
     public function index(){
-        $metas=new CfgMeta();
+        $metas=new CfgRegion();
         $data=$metas->all(); 
-        return view('metas',array('items'=>$data));
+        return view('regiones',array('items'=>$data));
     }
     
     public function delete($id){
-        $item = CfgMeta::destroy($id);
+        $item = CfgRegion::destroy($id);
         return response()->json($item);
     }
     
     public function retrive($id){
-        $item = CfgMeta::find($id);
+        $item = CfgRegion::find($id);
         return response()->json($item);
     }
     
     public function add(Request $request){
         $this->validateRequest($request);
         $data = $request->toArray();
-        $item =  CfgMeta::create($data);
+        $item =  CfgRegion::create($data);
         return response()->json($item);
     }
     
     public function update(Request $request,$id){
         $this->validateRequest($request);
-        $item= CfgMeta::find($id);
+        $item= CfgRegion::find($id);
         $item->nombre=$request->nombre;
         $item->descripcion=$request->descripcion;        
         $item->save();

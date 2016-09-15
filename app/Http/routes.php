@@ -31,18 +31,35 @@ Route::put('/usuarios/{id}','Usuarios@update');
 /* Mantenimiento de metas */
 
 Route::get('/metas',['uses' => 'Metas@index', 'middleware' => 'auth'])->name('metas');
-Route::delete('/metas/{id}','Metas@delete');
-Route::get('/metas/{id}','Metas@retrive');
-Route::post('/metas','Metas@add');
-Route::put('/metas/{id}','Metas@update');
+Route::delete('/metas/{id}',['uses' => 'Metas@delete', 'middleware' => 'auth']);
+Route::get('/metas/{id}',['uses' => 'Metas@retrive', 'middleware' => 'auth']);
+Route::post('/metas',['uses' => 'Metas@add', 'middleware' => 'auth']);
+Route::put('/metas/{id}',['uses' => 'Metas@update', 'middleware' => 'auth']);
 
 /* Mantenimiento de regiones */
 
 Route::get('/regiones',['uses' => 'Regiones@index', 'middleware' => 'auth'])->name('regiones');
-Route::delete('/regiones/{id}','Regiones@delete');
-Route::get('/regiones/{id}','Regiones@retrive');
-Route::post('/regiones','Regiones@add');
-Route::put('/regiones/{id}','Regiones@update');
+Route::delete('/regiones/{id}',['uses' => 'Regiones@delete', 'middleware' => 'auth']);
+Route::get('/regiones/{id}',['uses' => 'Regiones@retrive', 'middleware' => 'auth']);
+Route::post('/regiones',['uses' => 'Regiones@add', 'middleware' => 'auth']);
+Route::put('/regiones/{id}',['uses' => 'Regiones@update', 'middleware' => 'auth']);
+
+/* Mantenimiento de proyectos */
+
+Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
+Route::delete('/proyectos/{id}',['uses' => 'Proyectos@delete', 'middleware' => 'auth']);
+Route::get('/proyectos/{id}',['uses' => 'Proyectos@retrive', 'middleware' => 'auth']);
+Route::post('/proyectos',['uses' => 'Proyectos@add', 'middleware' => 'auth']);
+Route::put('/proyectos/{id}',['uses' => 'Proyectos@update', 'middleware' => 'auth']);
+
+
+/* Mantenimiento de indicadores */
+
+Route::get('/indicadores',['uses' => 'Indicadores@index', 'middleware' => 'auth'])->name('indicadores');
+Route::delete('/indicadores/{id}',['uses' => 'Indicadores@delete', 'middleware' => 'auth']);
+Route::get('/indicadores/{id}',['uses' => 'Indicadores@retrive', 'middleware' => 'auth']);
+Route::post('/indicadores',['uses' => 'Indicadores@add', 'middleware' => 'auth']);
+Route::put('/indicadores/{id}',['uses' => 'Indicadores@update', 'middleware' => 'auth']);
 
 /* Mantenimiento de afiliados */
 
