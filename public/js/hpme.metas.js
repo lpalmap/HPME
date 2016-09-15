@@ -72,18 +72,18 @@ $(document).ready(function(){
     });    
 
     //create new task / update existing task
-    $("#btnGuardar").click(function (e) {
+    $("#btnGuardar").click(function (e) {      
+        var formData = {
+            nombre: $('#inNombre').val(),
+            descripcion: $('#inDescripcion').val(),
+        };   
         $('#loading').modal('show');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        var formData = {
-            nombre: $('#inNombre').val(),
-            descripcion: $('#inDescripcion').val(),
-        };
-
+        
         //used to determine the http verb to use [add=POST], [update=PUT]
         var state = $('#btnGuardar').val();
 
@@ -122,8 +122,17 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
+                var errHTML="";
+                if(data.responseJSON.hasOwnProperty("nombre")){
+                  errHTML+="<li>"+data.responseJSON.nombre+"</li>";  
+                }
+                if(data.responseJSON.hasOwnProperty("descripcion")){
+                  errHTML+="<li>"+data.responseJSON.descripcion+"</li>";  
+                }
                 console.log('Error:', data);
-                alert(data.responseText);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');
+                //alert(data.responseJSON.nombre);                
             }
         });
     });

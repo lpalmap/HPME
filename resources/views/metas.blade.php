@@ -91,16 +91,17 @@
                                             <h4 class="modal-title" id="inputTitle"></h4>
                                         </div>
                                         <div class="modal-body">
-                                            <form role="form" id="formAgregar">
-                                            <div class="form-group">
+                                       <form role="form" id="formAgregar">
+                                           <div class="form-group">
                                                 <label>Nombre</label>
                                                 <input class="form-control" id="inNombre" required="true"/>
-                                            </div>
+                                                </div>
                                             <div class="form-group">
                                                 <label>Descripci&oacute;n</label>
-                                                <input class="form-control" id="inDescripcion" required="true"/>
-                                            </div>                                       
-                                    </form>
+<!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
+                                                <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
+                                                </div>
+                                        </form>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -111,6 +112,31 @@
                                 </div>
                             </div>
                     </div>
+
+<!-- Modal for displaying the messages -->
+<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Errores</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+                   <ul style="list-style-type:circle" id="erroresContent"></ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('footer')
     @parent
