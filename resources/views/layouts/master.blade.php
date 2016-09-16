@@ -419,13 +419,13 @@
                                     <a href="{{url('indicadores')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_indicador.png')}}"/> Indicadores</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_objetivo.png')}}"/> Objetivos</a>
+                                    <a href="{{url('objetivos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_objetivo.png')}}"/> Objetivos</a>
                                 </li>
                                 <li>
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_producto.png')}}"/> Productos</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_recurso.png')}}"/> Recursos</a>
+                                    <a href="{{url('recursos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_recurso.png')}}"/> Recursos</a>
                                 </li>
                             </ul>
 

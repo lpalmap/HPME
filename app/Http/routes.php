@@ -61,6 +61,23 @@ Route::get('/indicadores/{id}',['uses' => 'Indicadores@retrive', 'middleware' =>
 Route::post('/indicadores',['uses' => 'Indicadores@add', 'middleware' => 'auth']);
 Route::put('/indicadores/{id}',['uses' => 'Indicadores@update', 'middleware' => 'auth']);
 
+/* Mantenimiento de objetivos */
+
+Route::get('/objetivos',['uses' => 'Objetivos@index', 'middleware' => 'auth'])->name('objetivos');
+Route::delete('/objetivos/{id}',['uses' => 'Objetivos@delete', 'middleware' => 'auth']);
+Route::get('/objetivos/{id}',['uses' => 'Objetivos@retrive', 'middleware' => 'auth']);
+Route::post('/objetivos',['uses' => 'Objetivos@add', 'middleware' => 'auth']);
+Route::put('/objetivos/{id}',['uses' => 'Objetivos@update', 'middleware' => 'auth']);
+
+/* Mantenimiento de recursos */
+
+Route::get('/recursos',['uses' => 'Recursos@index', 'middleware' => 'auth'])->name('recursos');
+Route::delete('/recursos/{id}',['uses' => 'Recursos@delete', 'middleware' => 'auth']);
+Route::get('/recursos/{id}',['uses' => 'Recursos@retrive', 'middleware' => 'auth']);
+Route::post('/recursos',['uses' => 'Recursos@add', 'middleware' => 'auth']);
+Route::put('/recursos/{id}',['uses' => 'Recursos@update', 'middleware' => 'auth']);
+
+
 /* Mantenimiento de afiliados */
 
 Route::get('/afiliados',['uses' => 'Afiliados@index', 'middleware' => 'auth'])->name('afiliados');
