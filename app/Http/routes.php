@@ -86,6 +86,39 @@ Route::get('/afiliados/{id}','Afiliados@retrive');
 Route::post('/afiliados','Afiliados@add');
 Route::put('/afiliados/{id}','Afiliados@update');
 
+/* Mantenimiento de roles */
+
+Route::get('/roles',['uses' => 'Roles@index', 'middleware' => 'auth'])->name('roles');
+Route::delete('/roles/{id}','Roles@delete');
+Route::get('/roles/{id}','Roles@retrive');
+Route::post('/roles','Roles@add');
+Route::put('/roles/{id}','Roles@update');
+
+/* Mantenimiento de areas de atencion */
+
+Route::get('/areas',['uses' => 'Areas@index', 'middleware' => 'auth'])->name('areas');
+Route::delete('/areas/{id}','Areas@delete');
+Route::get('/areas/{id}','Areas@retrive');
+Route::post('/areas','Areas@add');
+Route::put('/areas/{id}','Areas@update');
+
+/* Mantenimiento de areas de parametros */
+
+Route::get('/parametros',['uses' => 'Parametros@index', 'middleware' => 'auth'])->name('parametros');
+Route::delete('/parametros/{id}','Parametros@delete');
+Route::get('/parametros/{id}','Parametros@retrive');
+Route::post('/parametros','Parametros@add');
+Route::put('/parametros/{id}','Parametros@update');
+
+/* Mantenimiento de lista de valores */
+
+Route::get('/listas',['uses' => 'Listas@index', 'middleware' => 'auth'])->name('listas');
+Route::delete('/listas/{id}','Listas@delete');
+Route::get('/listas/{id}','Listas@retrive');
+Route::post('/listas','Listas@add');
+Route::put('/listas/{id}','Listas@update');
+
+
 
 
 

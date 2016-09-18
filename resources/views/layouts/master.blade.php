@@ -390,8 +390,8 @@
                         </span>
                     </a>
                     <ul class="collapse" id="DDL-nav">
-                        <li><a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_parametro.png')}}"/> Par&aacute;metros </a></li>
-                        <li><a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_lista.png')}}"/> Lista de Valores </a></li>
+                        <li><a href="{{url('parametros')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_parametro.png')}}"/> Par&aacute;metros </a></li>
+                        <li><a href="{{url('listas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_lista.png')}}"/> Lista de Valores </a></li>
                         <li>
                             <a href="#" data-parent="#DDL-nav" data-toggle="collapse" class="accordion-toggle" data-target="#DDL1-nav">
                                 <img class="menu-imagen"src="{{asset('images/conf_catalogo.png')}}"/> Cat&aacute;logos
@@ -422,6 +422,9 @@
                                     <a href="{{url('objetivos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_objetivo.png')}}"/> Objetivos</a>
                                 </li>
                                 <li>
+                                    <a href="{{url('areas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_area_atencion.png')}}"/> &Aacute;rea de Atenci&oacute;n</a>
+                                </li>
+                                <li>
                                     <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_producto.png')}}"/> Productos</a>
                                 </li>
                                 <li>
@@ -446,7 +449,7 @@
                     </a>
                     <ul class="collapse" id="chart-nav">
                         <li><a href="{{url('usuarios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
-                        <li><a href="charts_bar.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
+                        <li><a href="{{url('roles')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
                         <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>
                     </ul>
                 </li>
