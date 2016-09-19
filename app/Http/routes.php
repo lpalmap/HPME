@@ -122,7 +122,6 @@ Route::put('/listas/{id}','Listas@update');
 
 
 
-
 Route::get('/insert', function() {
     App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
     return 'Usuario Agregado 222';
