@@ -425,7 +425,7 @@
                                     <a href="{{url('areas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_area_atencion.png')}}"/> &Aacute;rea de Atenci&oacute;n</a>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_producto.png')}}"/> Productos</a>
+                                    <a href="{{url('productos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_producto.png')}}"/> Productos</a>
                                 </li>
                                 <li>
                                     <a href="{{url('recursos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_recurso.png')}}"/> Recursos</a>

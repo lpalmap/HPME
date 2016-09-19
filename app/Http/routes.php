@@ -119,6 +119,16 @@ Route::post('/listas','Listas@add');
 Route::put('/listas/{id}','Listas@update');
 
 
+/* Mantenimiento de productos */
+
+Route::get('/productos',['uses' => 'Productos@index', 'middleware' => 'auth'])->name('productos');
+Route::delete('/productos/{id}',['uses' => 'Productos@delete', 'middleware' => 'auth']);
+Route::get('/productos/{id}',['uses' => 'Productos@retrive', 'middleware' => 'auth']);
+Route::post('/productos',['uses' => 'Productos@add', 'middleware' => 'auth']);
+Route::put('/productos/{id}',['uses' => 'Productos@update', 'middleware' => 'auth']);
+
+
+
 
 
 
