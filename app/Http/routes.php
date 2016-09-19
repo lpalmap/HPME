@@ -137,6 +137,8 @@ Route::get('/planificacion_anual',['uses' => 'ProyectoPlanificacion@index', 'mid
 Route::get('/planificacion_metas',['uses' => 'ProyectoPlanificacion@metas', 'middleware' => 'auth']);
 Route::get('/planificacion_objetivos',['uses' => 'ProyectoPlanificacion@objetivos', 'middleware' => 'auth']);
 Route::get('/planificacion_areas',['uses' => 'ProyectoPlanificacion@areas', 'middleware' => 'auth']);
+Route::get('/planificacion_indicadores',['uses' => 'ProyectoPlanificacion@indicadores', 'middleware' => 'auth']);
+Route::get('/planificacion_productos',['uses' => 'ProyectoPlanificacion@productos', 'middleware' => 'auth']);
 
 
 

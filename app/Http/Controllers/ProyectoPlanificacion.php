@@ -28,6 +28,14 @@ class ProyectoPlanificacion extends Controller
         return view('planificacionarea');
     }
     
+    public function indicadores(){
+        return view('planificacionindicadores');
+    }
+    
+    public function productos(){
+        return view('planificacionproductos');
+    }
+
     public function delete($id){
         $item = CfgProducto::destroy($id);
         return response()->json($item);
