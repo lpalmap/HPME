@@ -185,7 +185,7 @@
         </div>
         <div class="checkbox anim-checkbox">
             <input type="checkbox" id="ch2" class="primary" />
-            <label for="ch2">Finacieros</label>
+            <label for="ch2">Financieros</label>
         </div>
         <div class="checkbox anim-checkbox">
             <input type="checkbox" id="ch3" class="success" />
