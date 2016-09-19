@@ -128,6 +128,18 @@ Route::post('/productos',['uses' => 'Productos@add', 'middleware' => 'auth']);
 Route::put('/productos/{id}',['uses' => 'Productos@update', 'middleware' => 'auth']);
 
 
+/*
+ *
+ * Planificacion 
+ * 
+ *  */
+Route::get('/planificacion_anual',['uses' => 'ProyectoPlanificacion@index', 'middleware' => 'auth'])->name('planificacion_anual');
+Route::get('/planificacion_metas',['uses' => 'ProyectoPlanificacion@metas', 'middleware' => 'auth']);
+Route::get('/planificacion_objetivos',['uses' => 'ProyectoPlanificacion@objetivos', 'middleware' => 'auth']);
+Route::get('/planificacion_areas',['uses' => 'ProyectoPlanificacion@areas', 'middleware' => 'auth']);
+
+
+
 
 
 
