@@ -49,7 +49,7 @@ $(document).ready(function(){
     
     //Agregar nuevo usuario
     $('#btnAgregar').click(function(){
-        $('#inputTitle').html("Agregar &Aacute; de Atenci&oacute;n");
+        $('#inputTitle').html("Agregar &Aacute;rea de Atenci&oacute;n");
         $('#formAgregar').trigger("reset");
         $('#btnGuardar').val('add');
         $('#agregarEditarModal').modal('show');
@@ -58,7 +58,7 @@ $(document).ready(function(){
     $(document).on('click','.btn-editar',function(){
         $('#loading').modal('show');
         var ide_item=$(this).val();
-        $('#inputTitle').html("Editar &Aacute; de Atenci&oacute;n");
+        $('#inputTitle').html("Editar &Aacute;rea de Atenci&oacute;n");
         $.get(url + '/' + ide_item, function (data) {
             //success data
             console.log(data);
