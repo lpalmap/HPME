@@ -19,23 +19,20 @@
                 <hr />
 
 
+<!--                <div class="row">-->
                 <div class="row">
                 <div class="col-lg-12">
-                      <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Proyectos
+                            <span style="font-weight: bold">Plantillas de Planificaci&oacute;n</span>
                         </div>
-                        <div class="panel-body">
-                            <ul class="nav nav-pills">
-                                <li class="active"><a href="#home-pills" data-toggle="tab">Proyectos</a>
+                        
+                         <div class="panel-body">
+                             <ul class="nav nav-pills">
+                                <li class="active"><a href="#tableContent" data-toggle="tab">Plantillas</a>
                                 </li>
                             </ul>
-
-                            <div class="tab-content">
-                                <div class="tab-pane fade in active" id="home-pills">
-                                    <div class="panel-body">
-                            <div class="table-responsive">
+                             <div class="table-responsive" id="tableContent">
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
                                     <thead>
                                         <tr>
@@ -66,13 +63,7 @@
                             </div>
                            
                         </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
+<!--            </div>-->
             </div>
         </div>
        <!--END PAGE CONTENT -->
