@@ -49,7 +49,7 @@ $(document).ready(function(){
     
     //Agregar nuevo usuario
     $('.btn').click(function(){
-        $('#inputTitle').html("Ingresar Planificaci&oacute;n");
+        $('#inputTitle').html("Nueva Plantilla");
         $('#formAgregar').trigger("reset");
         $('#btnGuardar').val('add');
         $('#agregarEditarModal').modal('show');
@@ -59,7 +59,7 @@ $(document).ready(function(){
     $(document).on('click','.btn-editar',function(){
         $('#loading').modal('show');
         var ide_item=$(this).val();
-        $('#inputTitle').html("Editar Meta");
+        $('#inputTitle').html("Editar Plantilla");
         $.get(url + '/' + ide_item, function (data) {
             //success data
             console.log(data);
