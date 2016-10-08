@@ -80,7 +80,7 @@
                                             <h4 class="modal-title" id="H1">Eliminar Regi&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar la regi&oacute;n.
+                                            Esta seguro de eliminar la plantilla.
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -101,16 +101,16 @@
                                             <h4 class="modal-title" id="inputTitle"></h4>
                                         </div>
                                         <div class="modal-body">
-                                       <form role="form" id="formAgregar">
-                                           <div class="form-group">
-                                                <label>Nombre</label>
-                                                <input class="form-control" id="inNombre" required="true"/>
-                                                </div>
+                                        <form role="form" id="formAgregar">
                                             <div class="form-group">
                                                 <label>Descripci&oacute;n</label>
-<!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
-                                                <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
-                                                </div>
+                                                <input class="form-control" id="inDescripcion" required="true"/>
+                                            </div>
+                                            <select id="inPerido" class="form-control" value="5">
+                                                   @for ($i=0;$i<count($periodos);$i++)
+                                                       <option value="{{$periodos[$i]->ide_lista}}">{{$periodos[$i]->descripcion}}</option>
+                                                    @endfor
+                                            </select>
                                         </form>
                                         </div>
                                         <div class="modal-footer">

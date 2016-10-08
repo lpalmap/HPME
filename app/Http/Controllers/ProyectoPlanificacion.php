@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\CfgProducto;
 use App\PlnProyectoPlanificacion;
+use App\CfgListaValor;
 
 class ProyectoPlanificacion extends Controller
 {
@@ -13,7 +14,8 @@ class ProyectoPlanificacion extends Controller
     public function index(){
         $proyecto=new PlnProyectoPlanificacion();
         $data=$proyecto->all(); 
-        return view('planificacionanual',array('items'=>$data));
+        $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
+        return view('planificacionanual',array('items'=>$data),array('periodos'=>$periodos));
     }
     
     public function metas(){

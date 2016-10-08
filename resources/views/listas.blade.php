@@ -72,7 +72,7 @@
                                             <h4 class="modal-title" id="H1">Eliminar Lista</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar el lista.
+                                            Esta seguro de eliminar la lista.
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
