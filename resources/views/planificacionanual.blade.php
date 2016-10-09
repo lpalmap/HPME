@@ -50,7 +50,7 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
                                             <td>{{$items[$i]->fecha_proyecto}}</td>
-                                            <td><a href="{{url('/planificacion_metas')}}">{{$items[$i]->descripcion}}</a></td>
+                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
                                             <td>lpalma</td>
                                             <td>Trimestral</td>
                                             <td>
@@ -108,8 +108,12 @@
                                             </div>
                                             <select id="inPerido" class="form-control" value="5">
                                                    @for ($i=0;$i<count($periodos);$i++)
+                                                       @if ($periodos[$i]->codigo_lista==='TRI')
+                                                       <option value="{{$periodos[$i]->ide_lista}}" selected>{{$periodos[$i]->descripcion}}</option>
+                                                       @else
                                                        <option value="{{$periodos[$i]->ide_lista}}">{{$periodos[$i]->descripcion}}</option>
-                                                    @endfor
+                                                       @endif
+                                                   @endfor
                                             </select>
                                         </form>
                                         </div>

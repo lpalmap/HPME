@@ -16,11 +16,11 @@
         <![endif]-->
     @section('globalStyles') 
     <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <link rel="stylesheet" href="assets/css/theme.css" />
-    <link rel="stylesheet" href="assets/css/MoneAdmin.css" />
-    <link rel="stylesheet" href="assets/plugins/Font-Awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="{{asset('assets/plugins/bootstrap/css/bootstrap.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/main.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/theme.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/MoneAdmin.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/plugins/Font-Awesome/css/font-awesome.css')}}" />
     <!--END GLOBAL STYLES -->
     @show
     
@@ -483,9 +483,9 @@
     </div>
     <!--END FOOTER -->
      <!-- GLOBAL SCRIPTS -->
-    <script src="assets/plugins/jquery-2.0.3.min.js"></script>
-    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <script src="{{asset('assets/plugins/jquery-2.0.3.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/modernizr-2.6.2-respond-1.1.0.min.js')}}"></script>
     <!-- END GLOBAL SCRIPTS -->
     @show
 </body>
