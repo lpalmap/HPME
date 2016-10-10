@@ -138,9 +138,19 @@ Route::get('/planificacion_anual',['uses' => 'ProyectoPlanificacion@index', 'mid
 Route::post('/planificacion_anual',['uses' => 'ProyectoPlanificacion@addPlantilla', 'middleware' => 'auth']);
 
 //Metas
-Route::get('/plantilla/{id}',['uses' => 'ProyectoPlanificacion@metasPlantilla', 'middleware' => 'auth']);
-Route::get('/planificacion_metas/{id}',['uses' => 'ProyectoPlanificacion@metas', 'middleware' => 'auth']);
+Route::get('/plantilla/{id}',['uses' => 'ProyectoPlanificacion@metasProyecto', 'middleware' => 'auth']);
+//Borrar meta
+Route::delete('/planmeta/{id}',['uses' => 'ProyectoPlanificacion@deleteMeta', 'middleware' => 'auth']);
+//Agregar meta
+Route::post('/planmeta',['uses' => 'ProyectoPlanificacion@addMeta', 'middleware' => 'auth']);
+//Actualizar meta
+Route::put('/planmeta/{id}',['uses' => 'ProyectoPlanificacion@updateMeta', 'middleware' => 'auth']);
+//Lista metas
+Route::post('/planmeta/all',['uses' => 'ProyectoPlanificacion@retriveAllMetas', 'middleware' => 'auth']);
 
+
+
+//Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 
 
 Route::get('/planificacion_objetivos',['uses' => 'ProyectoPlanificacion@objetivos', 'middleware' => 'auth']);

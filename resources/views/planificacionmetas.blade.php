@@ -48,8 +48,8 @@
                                     <tbody id="lista-items" name="lista-items">
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
-                                        <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
-                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto_meta)}}">{{$items[$i]->meta->descripcion}}</a></td>
+                                        <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto_meta}}">
+                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto_meta)}}">{{$items[$i]->meta->nombre}}</a></td>
                                             <td style="text-align: center">
                                                 <div class="checkbox">
                                                     <input class="uniform" type="checkbox" value="{{$items[$i]->ide_proyecto_meta}}" {{$items[$i]->ind_obligatorio=='S'?'checked':''}}/>
@@ -77,7 +77,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Regi&oacute;n</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar Meta</h4>
                                         </div>
                                         <div class="modal-body">
                                             Esta seguro de eliminar la meta se borrar&aacute; toda la planificaci&oacute;n asociada.
@@ -102,10 +102,11 @@
                                         </div>
                                         <div class="modal-body">
                                         <form role="form" id="formAgregar">
-                                            <div class="form-group">
-                                                <label>Descripci&oacute;n</label>
-                                                <input class="form-control" id="inDescripcion" required="true"/>
-                                            </div>
+                                            @for ($i=0;$i<count($itemsSelect);$i++)
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="ckMeta" value="{{$itemsSelect[$i]->ide_meta}}"/><label>{{$itemsSelect[$i]->nombre}}</label>
+                                                </div>
+                                            @endfor
                                         </form>
                                         </div>
                                         <div class="modal-footer">
@@ -146,6 +147,8 @@
 @section('footer')
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
+        <meta name="_url" content="{{url('planmeta')}}"/>
+        <meta name="_proyecto" content="{{$ideProyecto}}"/>
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

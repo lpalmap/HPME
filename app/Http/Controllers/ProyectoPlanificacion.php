@@ -26,7 +26,7 @@ class ProyectoPlanificacion extends Controller
         return view('planificacionmetas');
     }
     
-    public function metasPlantilla($ideProyecto){
+    public function metasProyecto($ideProyecto){
         Log::info("Buscando proyecto $ideProyecto");
         $proyecto=  PlnProyectoPlanificacion::findOrFail($ideProyecto);
         //$metas=  PlnProyectoMeta::where('ide_proyecto',$ideProyecto)->get());
@@ -40,20 +40,20 @@ class ProyectoPlanificacion extends Controller
 //        }
 //        $metas=  PlnProyectoMeta::find(1);
 //        Log::info($metas->meta->descripcion);
-       $mm=$this->metasPorPlantilla(1); 
-       Log::info("resulta ".count($mm) );
-       foreach ($mm as $m){
-        Log::info($m->ide_meta);
-        Log::info($m->descripcion);
-       }
-       
-       Log::info("astes de view"); 
-        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion));
+       $mm=$this->metasPorProyecto($ideProyecto); 
+//       Log::info("resulta ".count($mm) );
+//       foreach ($mm as $m){
+//        Log::info($m->ide_meta);
+//        Log::info($m->descripcion);
+//       }
+//       
+//       Log::info("astes de view"); 
+        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'itemsSelect'=>$mm,'ideProyecto'=>$ideProyecto));
     }
     
-    public function metasPorPlantilla($idePlantilla){
+    public function metasPorProyecto($ideProyecto){
         $metas=  new CfgMeta();;
-        $params = array("ideProyecto"=>1);
+        $params = array("ideProyecto"=>$ideProyecto);
         return $metas->selectQuery(HPMEConstants::META_PROYECTO_QUERY,$params);
     }
     
@@ -73,8 +73,8 @@ class ProyectoPlanificacion extends Controller
         return view('planificacionproductos');
     }
 
-    public function delete($id){
-        $item = CfgProducto::destroy($id);
+    public function deleteMeta($ideProyectoMeta){
+        $item = PlnProyectoMeta::destroy($ideProyectoMeta);
         return response()->json($item);
     }
     
@@ -90,13 +90,35 @@ class ProyectoPlanificacion extends Controller
         return response()->json($item);
     }
     
-    public function update(Request $request,$id){
-        $this->validateRequest($request);
-        $item= CfgProducto::find($id);
-        $item->nombre=$request->nombre;
-        $item->descripcion=$request->descripcion;        
+    public function retriveAllMetas(Request $request){
+        $ideProyecto=$request->ide_proyecto;
+        $metas=$this->metasPorProyecto($ideProyecto);
+        return response()->json($metas);
+    }
+    
+    public function updateMeta(Request $request,$id){
+        $item= PlnProyectoMeta::find($id);
+        $item->ind_obligatorio=$request->ind_obligatorio;       
         $item->save();
         return response()->json($item);       
+    }
+    
+    public function addMeta(Request $request){
+        $listaMetas=$request->metas;
+        $ideProyecto=$request->ide_proyecto;
+        Log::info("Guardando metas: ".count($listaMetas));
+        $metas=array();
+        foreach($listaMetas as $meta){
+            Log::info($meta);
+            $proyectoMeta=new PlnProyectoMeta;
+            $proyectoMeta->ide_proyecto=$ideProyecto;
+            $proyectoMeta->ide_meta=$meta['ide_meta'];
+            $proyectoMeta->ind_obligatorio=  HPMEConstants::SI;
+            $proyectoMeta->save();
+            $proyectoMeta->meta;
+            $metas[]=$proyectoMeta;
+        }
+        return response()->json($metas);
     }
     
     public function validateRequest($request){
