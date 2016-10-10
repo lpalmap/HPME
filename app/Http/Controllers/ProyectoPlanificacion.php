@@ -40,7 +40,7 @@ class ProyectoPlanificacion extends Controller
 //        }
 //        $metas=  PlnProyectoMeta::find(1);
 //        Log::info($metas->meta->descripcion);
-       $mm=$this->metasPorProyecto($ideProyecto); 
+       //$mm=$this->metasPorProyecto($ideProyecto); 
 //       Log::info("resulta ".count($mm) );
 //       foreach ($mm as $m){
 //        Log::info($m->ide_meta);
@@ -48,8 +48,10 @@ class ProyectoPlanificacion extends Controller
 //       }
 //       
 //       Log::info("astes de view"); 
-        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'itemsSelect'=>$mm,'ideProyecto'=>$ideProyecto));
+        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto));
     }
+    
+    
     
     public function metasPorProyecto($ideProyecto){
         $metas=  new CfgMeta();;

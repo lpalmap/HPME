@@ -149,6 +149,9 @@ Route::put('/planmeta/{id}',['uses' => 'ProyectoPlanificacion@updateMeta', 'midd
 Route::post('/planmeta/all',['uses' => 'ProyectoPlanificacion@retriveAllMetas', 'middleware' => 'auth']);
 
 
+//Objetivos
+Route::get('/meta/{id}',['uses' => 'ProyectoPlanificacion@metasProyecto', 'middleware' => 'auth']);
+
 
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 

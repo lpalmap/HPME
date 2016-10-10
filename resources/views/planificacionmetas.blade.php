@@ -102,11 +102,7 @@
                                         </div>
                                         <div class="modal-body">
                                         <form role="form" id="formAgregar">
-                                            @for ($i=0;$i<count($itemsSelect);$i++)
-                                                <div class="checkbox">
-                                                    <input type="checkbox" name="ckMeta" value="{{$itemsSelect[$i]->ide_meta}}"/><label>{{$itemsSelect[$i]->nombre}}</label>
-                                                </div>
-                                            @endfor
+                                            
                                         </form>
                                         </div>
                                         <div class="modal-footer">
