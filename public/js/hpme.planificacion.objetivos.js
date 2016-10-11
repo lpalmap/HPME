@@ -103,7 +103,7 @@ $(document).ready(function(){
                 if(seleccion){
                     text+=',{"ide_objetivo":"'+this.value+'"}';
                 }else{
-                    text+='{"ide_objetivo":"'+this.value+'"}'
+                    text+='{"ide_objetivo":"'+this.value+'"}';
                     seleccion=true;
                 }           
             }
@@ -122,7 +122,7 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
             });
-            var state = $('#btnGuardar').val();
+         
             $.ajax({
                 type: 'POST',
                 url: my_url,

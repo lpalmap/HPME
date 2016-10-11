@@ -161,7 +161,6 @@ Route::delete('/planobjetivo/{id}',['uses' => 'ProyectoPlanificacion@deleteObjet
 
 
 //Area atencion
-//Objetivos
 Route::get('/objetivo/{id}',['uses' => 'ProyectoPlanificacion@areaObjetivo', 'middleware' => 'auth']);
 //Agregar objetivos
 Route::post('/planarea',['uses' => 'ProyectoPlanificacion@addArea', 'middleware' => 'auth']);
@@ -171,6 +170,14 @@ Route::post('/planarea/all',['uses' => 'ProyectoPlanificacion@retriveAllAreas', 
 Route::delete('/planarea/{id}',['uses' => 'ProyectoPlanificacion@deleteArea', 'middleware' => 'auth']);
 
 
+//Indicadores
+Route::get('/area/{id}',['uses' => 'ProyectoPlanificacion@indicadorArea', 'middleware' => 'auth']);
+//Agregar objetivos
+Route::post('/planindicador',['uses' => 'ProyectoPlanificacion@addIndicador', 'middleware' => 'auth']);
+//Lista objetivos
+Route::post('/planindicador/all',['uses' => 'ProyectoPlanificacion@retriveAllIndicadores', 'middleware' => 'auth']);
+//Borrar el objetivo
+Route::delete('/planindicador/{id}',['uses' => 'ProyectoPlanificacion@deleteIndicador', 'middleware' => 'auth']);
 
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 

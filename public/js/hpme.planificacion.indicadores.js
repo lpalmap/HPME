@@ -17,14 +17,14 @@ $(document).ready(function(){
     //Agregar nuevo
     $('#btnAgregar').click(function(){
         $('#loading').modal('show');
-        $('#inputTitle').html("Agregar &Aacute;rea de Atenci&oacute;n");
+        $('#inputTitle').html("Agregar Indicador");
         //$('#formAgregar').trigger("reset");
         $('#formAgregar').empty();
         
         var my_url=(""+$('meta[name="_url"]').attr('content'))+"/all";
-        var ideObjetivoMeta=$('meta[name="_proyectoobjetivo"]').attr('content');
+        var ideAreaObjetivo=$('meta[name="_proyectoarea"]').attr('content');
         var formData = {
-            ide_objetivo_meta:ideObjetivoMeta
+            ide_area_objetivo:ideAreaObjetivo
         };   
 
         $.ajaxSetup({
@@ -42,12 +42,12 @@ $(document).ready(function(){
                     console.log(data);
                     var item='';
                     for(var i in data){
-                        item+='<div class="checkbox"><input type="checkbox" name="ckItem" value="'+data[i].ide_area+'"/><label>'+data[i].nombre+'</label></div>'; 
+                        item+='<div class="checkbox"><input type="checkbox" name="ckItem" value="'+data[i].ide_indicador+'"/><label>'+data[i].nombre+'</label></div>'; 
                     }
                     if(item.length>0){
                        $('#formAgregar').html(item);
                     }else{
-                       $ ('#formAgregar').html("<li>No hay &Aacute;reas de Atenci&oacute;n pendientes de agregar.</li>");  
+                       $ ('#formAgregar').html("<li>No hay Indicadores pendientes de agregar.</li>");  
                     }
                     $('#agregarEditarModal').modal('show'); 
                 },
@@ -55,7 +55,7 @@ $(document).ready(function(){
                     $('#loading').modal('hide');
                     console.log('Error:', data);
                     $('#agregarEditarModal').modal('hide'); 
-                    $("#erroresContent").html("<li>Error al agregar &Aacute;rea de Atenci&oacute;n</li>"); 
+                    $("#erroresContent").html("<li>Error al agregar Indicador</li>"); 
                     $('#erroresModal').modal('show');              
                 }
             });   
@@ -87,7 +87,7 @@ $(document).ready(function(){
             error: function (data) {
                 $('#loading').modal('hide');
                 console.log('Error borrando objetivo:', data);
-                $("#erroresContent").html("<li>Error al borrar el &Aacute;rea de Atenci&oacute;n.</li>"); 
+                $("#erroresContent").html("<li>Error al borrar el Indicador</li>"); 
                 $('#erroresModal').modal('show');
             }
         });
@@ -101,9 +101,9 @@ $(document).ready(function(){
         $("input[name='ckItem']").each(function() {
             if(this.checked){
                 if(seleccion){
-                    text+=',{"ide_area":"'+this.value+'"}';
+                    text+=',{"ide_indicador":"'+this.value+'"}';
                 }else{
-                    text+='{"ide_area":"'+this.value+'"}';
+                    text+='{"ide_indicador":"'+this.value+'"}';
                     seleccion=true;
                 }           
             }
@@ -115,8 +115,8 @@ $(document).ready(function(){
             //alert(text);
             var my_url=(""+$('meta[name="_url"]').attr('content'));
             var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
-            var ide_objetivo_meta=$('meta[name="_proyectoobjetivo"]').attr('content');
-            text+='],"ide_objetivo_meta":"'+ide_objetivo_meta+'"}';
+            var ide_area_objetivo=$('meta[name="_proyectoarea"]').attr('content');
+            text+='],"ide_area_objetivo":"'+ide_area_objetivo+'"}';
             $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -139,9 +139,9 @@ $(document).ready(function(){
 //                  
                     var item;
                     for(var i in data){
-                        item='<tr class="even gradeA" id="item'+data[i].ide_area_objetivo+'">';
-                        item+='<td><a href="'+url_target+'/'+data[i].ide_ide_area_objetivo+'">'+data[i].area.nombre+'</a></td>';
-                        item+='<td><button class="btn btn-danger" value="'+data[i].ide_area_objetivo+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
+                        item='<tr class="even gradeA" id="item'+data[i].ide_indicador_area+'">';
+                        item+='<td><a href="'+url_target+'/'+data[i].ide_indicador_area+'">'+data[i].indicador.nombre+'</a></td>';
+                        item+='<td><button class="btn btn-danger" value="'+data[i].ide_indicador_area+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
                     $('#formAgregar').trigger("reset");
@@ -151,14 +151,14 @@ $(document).ready(function(){
                 error: function (data) {
                     $('#loading').modal('hide');
                     console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar el &Aacute;rea de Atenci&oacute;n</li>"); 
+                    $("#erroresContent").html("<li>Error al agregar el Indicador</li>"); 
                     $('#erroresModal').modal('show');
                     //alert(data.responseJSON.nombre);                
                 }
             });
             
         }else{
-            $("#erroresContent").html("<li>Debe seleccionar un &Aacute;rea de Atenci&oacute;n</li>"); 
+            $("#erroresContent").html("<li>Debe seleccionar un Indicador</li>"); 
             $('#erroresModal').modal('show');
             $('#loading').modal('hide');
         }

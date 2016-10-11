@@ -14,6 +14,8 @@ use App\CfgObjetivo;
 use App\HPMEConstants;
 use App\PlnAreaObjetivo;
 use App\CfgAreaAtencion;
+use App\PlnIndicadorArea;
+use App\CfgIndicador;
 
 class ProyectoPlanificacion extends Controller
 {
@@ -75,6 +77,12 @@ class ProyectoPlanificacion extends Controller
         return $area->selectQuery(HPMEConstants::AREA_OBJETIVO_QUERY,$params);
     }
     
+    public function indicadorPorArea($ideAreaObjetivo){
+        $indicador=  new CfgIndicador();
+        $params = array("ideAreaObjetivo"=>$ideAreaObjetivo);
+        return $indicador->selectQuery(HPMEConstants::INDICADOR_AREA_QUERY,$params);
+    }
+    
     public function objetivoMeta($ideProyectoMeta){
         $meta= PlnProyectoMeta::find($ideProyectoMeta);
         $meta->meta; 
@@ -92,6 +100,19 @@ class ProyectoPlanificacion extends Controller
         $areas= PlnAreaObjetivo::with("area")->where("ide_objetivo_meta",$ideObjetivoMeta)->get();
 
         return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta));    
+    }
+    
+    public function indicadorArea($ideAreaObjetivo){
+        $area= PlnAreaObjetivo::find($ideAreaObjetivo);
+        $area->area;
+        $area->objetivoMeta;
+        $ideProyecto=$area->ide_proyecto;
+        $ideProyectoMeta=$area->objetivoMeta->ide_proyecto_meta;
+        $ideObjetivoMeta=$area->ide_objetivo_meta;
+        Log::info('atnes de query');
+        $indicadores=PlnIndicadorArea::with("indicador")->where("ide_area_objetivo",$ideAreaObjetivo)->get();
+        Log::info('fin traer indicador');
+        return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo));    
     }
     
     
@@ -126,6 +147,11 @@ class ProyectoPlanificacion extends Controller
         return response()->json($item);
     }
     
+    public function deleteIndicador($ideIndicadorArea){
+        $item = PlnIndicadorArea::destroy($ideIndicadorArea);
+        return response()->json($item);
+    }
+    
     public function retrive($id){
         $item = CfgProducto::find($id);
         return response()->json($item);
@@ -154,6 +180,12 @@ class ProyectoPlanificacion extends Controller
         $ideObjetivoMeta=$request->ide_objetivo_meta;
         $areas=$this->areaPorObjetivo($ideObjetivoMeta);
         return response()->json($areas);
+    }
+    
+    public function retriveAllIndicadores(Request $request){
+        $ideAreaObjetivo=$request->ide_area_objetivo;
+        $indicadores=$this->indicadorPorArea($ideAreaObjetivo);
+        return response()->json($indicadores);
     }
     
     public function updateMeta(Request $request,$id){
@@ -217,6 +249,31 @@ class ProyectoPlanificacion extends Controller
             $nItem->ide_area=$item['ide_area'];
             $nItem->save();
             $nItem->area;
+            $items[]=$nItem;
+        }
+        return response()->json($items);
+    }
+    
+    public function addIndicador(Request $request){
+        $listaItems=$request->items;
+        $ideAreaObjetivo=$request->ide_area_objetivo;
+        Log::info("Guardando indicador: ".count($listaItems));
+        $areaObjetivo= PlnAreaObjetivo::find($ideAreaObjetivo);
+        Log::info("buscadon ".$ideAreaObjetivo);
+        $items=array();
+        foreach($listaItems as $item){
+            Log::info($item);
+            $nItem=new PlnIndicadorArea();
+            $nItem->ide_area_objetivo=$ideAreaObjetivo;
+            Log::info('asdfasdf');
+            $nItem->ide_proyecto=$areaObjetivo->ide_proyecto;
+            Log::info('asdfasdfasdf desc');
+            $nItem->ide_meta=$areaObjetivo->ide_meta;
+            $nItem->ide_objetivo=$areaObjetivo->ide_objetivo;
+            $nItem->ide_area=$areaObjetivo->ide_area;
+            $nItem->ide_indicador=$item['ide_indicador'];
+            $nItem->save();
+            $nItem->indicador;
             $items[]=$nItem;
         }
         return response()->json($items);

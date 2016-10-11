@@ -52,7 +52,7 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_area_objetivo}}">
-                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_area_objetivo)}}">{{$items[$i]->area->nombre}}</a></td>
+                                            <td><a href="{{url('/area/'.$items[$i]->ide_area_objetivo)}}">{{$items[$i]->area->nombre}}</a></td>
                                             <td>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_area_objetivo}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
@@ -76,7 +76,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Meta</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar &Aacute;rea de Atenci&oac&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
                                             Esta seguro de eliminar el &Aacute;rea de Atenci&oacute;n se borrar&aacute; toda la planificaci&oacute;n asociada.
@@ -143,6 +143,7 @@
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_url" content="{{url('planarea')}}"/>
+        <meta name="_urlTarget" content="{{url('area')}}"/>
         <meta name="_proyecto" content="{{$ideProyecto}}"/>
         <meta name="_proyectometa" content="{{$ideProyectoMeta}}"/>
         <meta name="_proyectoobjetivo" content="{{$ideObjetivoMeta}}"/>
