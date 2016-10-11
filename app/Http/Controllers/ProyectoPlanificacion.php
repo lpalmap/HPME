@@ -12,6 +12,8 @@ use App\PlnObjetivoMeta;
 use App\CfgMeta;
 use App\CfgObjetivo;
 use App\HPMEConstants;
+use App\PlnAreaObjetivo;
+use App\CfgAreaAtencion;
 
 class ProyectoPlanificacion extends Controller
 {
@@ -67,6 +69,11 @@ class ProyectoPlanificacion extends Controller
         return $objetivo->selectQuery(HPMEConstants::OBJETIVO_META_QUERY,$params);
     }
     
+    public function areaPorObjetivo($ideObjetivoMeta){
+        $area=  new CfgAreaAtencion();
+        $params = array("ideObjetivoMeta"=>$ideObjetivoMeta);
+        return $area->selectQuery(HPMEConstants::AREA_OBJETIVO_QUERY,$params);
+    }
     
     public function objetivoMeta($ideProyectoMeta){
         $meta= PlnProyectoMeta::find($ideProyectoMeta);
@@ -76,6 +83,18 @@ class ProyectoPlanificacion extends Controller
         
         return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta));    
     }
+    
+    public function areaObjetivo($ideObjetivoMeta){
+        $objetivo= PlnObjetivoMeta::find($ideObjetivoMeta);
+        $objetivo->objetivo; 
+        $ideProyecto=$objetivo->ide_proyecto;
+        $ideProyectoMeta=$objetivo->ide_proyecto_meta;     
+        $areas= PlnAreaObjetivo::with("area")->where("ide_objetivo_meta",$ideObjetivoMeta)->get();
+
+        return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta));    
+    }
+    
+    
     public function objetivos(){
         return view('planificacionobjetivos');
     }
@@ -102,6 +121,11 @@ class ProyectoPlanificacion extends Controller
         return response()->json($item);
     }
     
+    public function deleteArea($ideAreaObjetivo){
+        $item = PlnAreaObjetivo::destroy($ideAreaObjetivo);
+        return response()->json($item);
+    }
+    
     public function retrive($id){
         $item = CfgProducto::find($id);
         return response()->json($item);
@@ -124,6 +148,12 @@ class ProyectoPlanificacion extends Controller
         $ideProyectoMeta=$request->ide_proyecto_meta;
         $objetivos=$this->objetivoPorMeta($ideProyectoMeta);
         return response()->json($objetivos);
+    }
+    
+    public function retriveAllAreas(Request $request){
+        $ideObjetivoMeta=$request->ide_objetivo_meta;
+        $areas=$this->areaPorObjetivo($ideObjetivoMeta);
+        return response()->json($areas);
     }
     
     public function updateMeta(Request $request,$id){
@@ -166,6 +196,27 @@ class ProyectoPlanificacion extends Controller
             $nItem->ide_objetivo=$item['ide_objetivo'];
             $nItem->save();
             $nItem->objetivo;
+            $items[]=$nItem;
+        }
+        return response()->json($items);
+    }
+    
+    public function addArea(Request $request){
+        $listaItems=$request->items;
+        $ideObjetivoMeta=$request->ide_objetivo_meta;
+        Log::info("Guardando area: ".count($listaItems));
+        $objetivoMeta= PlnObjetivoMeta::find($ideObjetivoMeta);
+        $items=array();
+        foreach($listaItems as $item){
+            Log::info($item);
+            $nItem=new PlnAreaObjetivo();
+            $nItem->ide_objetivo_meta=$ideObjetivoMeta;
+            $nItem->ide_proyecto=$objetivoMeta->ide_proyecto;
+            $nItem->ide_meta=$objetivoMeta->ide_meta;
+            $nItem->ide_objetivo=$objetivoMeta->ide_objetivo;
+            $nItem->ide_area=$item['ide_area'];
+            $nItem->save();
+            $nItem->area;
             $items[]=$nItem;
         }
         return response()->json($items);

@@ -50,7 +50,7 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_objetivo_meta}}">
-                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_objetivo_meta)}}">{{$items[$i]->objetivo->nombre}}</a></td>
+                                            <td><a href="{{url('/objetivo/'.$items[$i]->ide_objetivo_meta)}}">{{$items[$i]->objetivo->nombre}}</a></td>
                                             <td>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_objetivo_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
@@ -141,6 +141,7 @@
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_url" content="{{url('planobjetivo')}}"/>
+        <meta name="_urlTarget" content="{{url('objetivo')}}"/>
         <meta name="_proyecto" content="{{$ideProyecto}}"/>
         <meta name="_proyectometa" content="{{$ideProyectoMeta}}"/>
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
