@@ -150,7 +150,13 @@ Route::post('/planmeta/all',['uses' => 'ProyectoPlanificacion@retriveAllMetas', 
 
 
 //Objetivos
-Route::get('/meta/{id}',['uses' => 'ProyectoPlanificacion@metasProyecto', 'middleware' => 'auth']);
+Route::get('/meta/{id}',['uses' => 'ProyectoPlanificacion@objetivoMeta', 'middleware' => 'auth']);
+//Agregar objetivos
+Route::post('/planobjetivo',['uses' => 'ProyectoPlanificacion@addObjetivo', 'middleware' => 'auth']);
+//Lista objetivos
+Route::post('/planobjetivo/all',['uses' => 'ProyectoPlanificacion@retriveAllObjetivos', 'middleware' => 'auth']);
+//Borrar el objetivo
+Route::delete('/planobjetivo/{id}',['uses' => 'ProyectoPlanificacion@deleteObjetivo', 'middleware' => 'auth']);
 
 
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
