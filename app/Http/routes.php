@@ -179,6 +179,15 @@ Route::post('/planindicador/all',['uses' => 'ProyectoPlanificacion@retriveAllInd
 //Borrar el objetivo
 Route::delete('/planindicador/{id}',['uses' => 'ProyectoPlanificacion@deleteIndicador', 'middleware' => 'auth']);
 
+//productos
+Route::get('/indicador/{id}',['uses' => 'PlanificacionProducto@productoArea', 'middleware' => 'auth']);
+//Agregar objetivos
+Route::post('/planproducto',['uses' => 'PlanificacionProducto@addProducto', 'middleware' => 'auth']);
+//Lista objetivos
+Route::post('/planproducto/all',['uses' => 'PlanificacionProducto@retriveAllProductos', 'middleware' => 'auth']);
+//Borrar el objetivo
+Route::delete('/planproducto/{id}',['uses' => 'PlanificacionProducto@deleteProducto', 'middleware' => 'auth']);
+
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 
 

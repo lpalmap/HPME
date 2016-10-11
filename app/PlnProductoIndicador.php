@@ -2,11 +2,11 @@
 
 namespace App;
 
-class PlnIndicadorArea extends BaseModel
+class PlnProductoIndicador extends BaseModel
 {
-    protected $primaryKey ='ide_indicador_area' ;
-    protected $table = 'pln_indicador_area';
-    protected $fillable = array('ide_area_objetivo','ide_proyecto','ide_meta','ide_objetivo','ide_area','ide_indicador');
+    protected $primaryKey ='ide_producto_indicador' ;
+    protected $table = 'pln_producto_indicador';
+    protected $fillable = array('ide_indicador_area','ide_proyecto','ide_meta','ide_objetivo','ide_area','ide_indicador','ide_producto');
     public $timestamps = false;
     
     public function meta(){
@@ -25,13 +25,8 @@ class PlnIndicadorArea extends BaseModel
         return $this->belongsTo('App\CfgAreaAtencion','ide_area');
     }
     
-    public function indicador(){
-        return $this->belongsTo('App\CfgIndicador','ide_indicador');
+    public function producto(){
+        return $this->belongsTo('App\CfgProducto','ide_producto');
     }
-    
-    public function areaObjetivo(){
-        return $this->belongsTo('App\PlnAreaObjetivo','ide_area_objetivo');
-    }
-    
-    
+ 
 }

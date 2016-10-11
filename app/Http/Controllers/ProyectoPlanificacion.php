@@ -16,6 +16,7 @@ use App\PlnAreaObjetivo;
 use App\CfgAreaAtencion;
 use App\PlnIndicadorArea;
 use App\CfgIndicador;
+use App\PlnProductoIndicador;
 
 class ProyectoPlanificacion extends Controller
 {
@@ -28,36 +29,12 @@ class ProyectoPlanificacion extends Controller
         return view('planificacionanual',array('items'=>$data),array('periodos'=>$periodos));
     }
     
-    public function metas(){
-        return view('planificacionmetas');
-    }
-    
     public function metasProyecto($ideProyecto){
         Log::info("Buscando proyecto $ideProyecto");
         $proyecto=  PlnProyectoPlanificacion::findOrFail($ideProyecto);
-        //$metas=  PlnProyectoMeta::where('ide_proyecto',$ideProyecto)->get());
-        //$metas=  PlnProyectoMeta::all()->where('ide_proyecto', $ideProyecto)->get();
         $metas = PlnProyectoMeta::with("meta")->where('ide_proyecto', $ideProyecto)->get();
-        //$metas =  PlnProyectoMeta::all();
-//        Log::info('Metasdddd '.  count($metas)); 
-//        foreach ($metas as $meta){
-//            Log::info("meta,,,,");
-//            Log::info("ide proyecto ".$meta->ide_proyecto_meta);
-//        }
-//        $metas=  PlnProyectoMeta::find(1);
-//        Log::info($metas->meta->descripcion);
-       //$mm=$this->metasPorProyecto($ideProyecto); 
-//       Log::info("resulta ".count($mm) );
-//       foreach ($mm as $m){
-//        Log::info($m->ide_meta);
-//        Log::info($m->descripcion);
-//       }
-//       
-//       Log::info("astes de view"); 
         return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto));
     }
-    
-    
     
     public function metasPorProyecto($ideProyecto){
         $metas=  new CfgMeta();;
@@ -87,8 +64,7 @@ class ProyectoPlanificacion extends Controller
         $meta= PlnProyectoMeta::find($ideProyectoMeta);
         $meta->meta; 
         $ideProyecto=$meta->ide_proyecto;
-        $objetivos= PlnObjetivoMeta::with("objetivo")->where("ide_proyecto_meta",$ideProyectoMeta)->get();
-        
+        $objetivos= PlnObjetivoMeta::with("objetivo")->where("ide_proyecto_meta",$ideProyectoMeta)->get();      
         return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta));    
     }
     
@@ -114,24 +90,7 @@ class ProyectoPlanificacion extends Controller
         Log::info('fin traer indicador');
         return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo));    
     }
-    
-    
-    public function objetivos(){
-        return view('planificacionobjetivos');
-    }
-    
-    public function areas(){
-        return view('planificacionarea');
-    }
-    
-    public function indicadores(){
-        return view('planificacionindicadores');
-    }
-    
-    public function productos(){
-        return view('planificacionproductos');
-    }
-
+   
     public function deleteMeta($ideProyectoMeta){
         $item = PlnProyectoMeta::destroy($ideProyectoMeta);
         return response()->json($item);
@@ -257,17 +216,13 @@ class ProyectoPlanificacion extends Controller
     public function addIndicador(Request $request){
         $listaItems=$request->items;
         $ideAreaObjetivo=$request->ide_area_objetivo;
-        Log::info("Guardando indicador: ".count($listaItems));
         $areaObjetivo= PlnAreaObjetivo::find($ideAreaObjetivo);
         Log::info("buscadon ".$ideAreaObjetivo);
         $items=array();
         foreach($listaItems as $item){
-            Log::info($item);
             $nItem=new PlnIndicadorArea();
             $nItem->ide_area_objetivo=$ideAreaObjetivo;
-            Log::info('asdfasdf');
             $nItem->ide_proyecto=$areaObjetivo->ide_proyecto;
-            Log::info('asdfasdfasdf desc');
             $nItem->ide_meta=$areaObjetivo->ide_meta;
             $nItem->ide_objetivo=$areaObjetivo->ide_objetivo;
             $nItem->ide_area=$areaObjetivo->ide_area;
