@@ -109,7 +109,7 @@
                                             @if (isset($periodos))
                                             <select id="inPerido" class="form-control" value="5">
                                                    @for ($i=0;$i<count($periodos);$i++)
-                                                       <option value="{{$i}}" >{{$periodos[$i]}}</option>
+                                                       <option value="{{$i}}" >{{count($periodos)}}</option>
                                                    @endfor
                                             </select>
                                             @endif
