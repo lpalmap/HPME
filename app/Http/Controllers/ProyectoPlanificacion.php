@@ -25,8 +25,10 @@ class ProyectoPlanificacion extends Controller
     public function index(){
         $proyecto=new PlnProyectoPlanificacion();
         $data=$proyecto->all(); 
+        Log::info("*******Antes de query,");
         $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
-        return view('planificacionanual',array('items'=>$data),array('periodos'=>$periodos));
+        Log::info("despues de query...");
+        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos));
     }
     
     public function metasProyecto($ideProyecto){
