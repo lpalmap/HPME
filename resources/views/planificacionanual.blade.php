@@ -106,6 +106,7 @@
                                                 <label>Descripci&oacute;n</label>
                                                 <input class="form-control" id="inDescripcion" required="true"/>
                                             </div>
+                                            @if (isset($periodos))
                                             <select id="inPerido" class="form-control" value="5">
                                                    @for ($i=0;$i<count($periodos);$i++)
                                                        @if ($periodos[$i]->codigo_lista==='TRI')
@@ -115,6 +116,7 @@
                                                        @endif
                                                    @endfor
                                             </select>
+                                            @endif
                                         </form>
                                         </div>
                                         <div class="modal-footer">
