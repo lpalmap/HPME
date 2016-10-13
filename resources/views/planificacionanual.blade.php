@@ -106,19 +106,14 @@
                                                 <label>Descripci&oacute;n</label>
                                                 <input class="form-control" id="inDescripcion" required="true"/>
                                             </div>
-                                            @if($errors->count() > 0)
-                                                <p>The following errors have occurred:</p>
-
-                                                <ul>
-                                                  @foreach($errors->all() as $message)
-                                                    <li>{{$message}}</li>
-                                                  @endforeach
-                                                </ul>
-                                              @endif
                                             @if (isset($periodos))
                                             <select id="inPerido" class="form-control" value="5">
                                                    @for ($i=0;$i<count($periodos);$i++)
-                                                       <option value="{{$i}}" >OPtion {{$periodos}}</option>
+                                                       @if ($periodos[$i]->codigo_lista==='TRI')
+                                                       <option value="{{$periodos[$i]->ide_lista}}" selected>{{$periodos[$i]->descripcion}}</option>
+                                                       @else
+                                                       <option value="{{$periodos[$i]->ide_lista}}">{{$periodos[$i]->descripcion}}</option>
+                                                       @endif
                                                    @endfor
                                             </select>
                                             @endif
