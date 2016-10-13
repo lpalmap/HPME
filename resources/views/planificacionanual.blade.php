@@ -46,6 +46,20 @@
                                         </tr>
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
+                                        @if (isset($items))
+                                            @for ($i=0;$i<count($items);$i++)
+                                        <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
+                                            <td>{{$items[$i]->fecha_proyecto}}</td>
+                                            <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
+                                            <td>lpalma</td>
+                                            <td>Trimestral</td>
+                                            <td>
+                                                <a href="{{url('/planificacion_metas')}}" class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
+                                                <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                            </td>
+                                        </tr>
+                                            @endfor
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -77,6 +91,32 @@
                             </div>
                     </div>
      
+                        
+                <div class="col-lg-12">
+                        <div class="modal fade" id="agregarEditarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="inputTitle"></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                        <form role="form" id="formAgregar">
+                                            <div class="form-group">
+                                                <label>Descripci&oacute;n</label>
+                                                <input class="form-control" id="inDescripcion" required="true"/>
+                                            </div>
+                                        </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                                            <input type="hidden" id="ide_item" value="0"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
 
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
