@@ -145,7 +145,7 @@
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_url" content="{{url('planindicador')}}"/>
-        <meta name="_urlTarget" content="{{url('producto')}}"/>
+        <meta name="_urlTarget" content="{{url('indicador')}}"/>
         <meta name="_proyecto" content="{{$ideProyecto}}"/>
         <meta name="_proyectometa" content="{{$ideProyectoMeta}}"/>
         <meta name="_proyectoobjetivo" content="{{$ideObjetivoMeta}}"/>

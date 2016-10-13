@@ -140,7 +140,7 @@ $(document).ready(function(){
                     var item;
                     for(var i in data){
                         item='<tr class="even gradeA" id="item'+data[i].ide_area_objetivo+'">';
-                        item+='<td><a href="'+url_target+'/'+data[i].ide_ide_area_objetivo+'">'+data[i].area.nombre+'</a></td>';
+                        item+='<td><a href="'+url_target+'/'+data[i].ide_area_objetivo+'">'+data[i].area.nombre+'</a></td>';
                         item+='<td><button class="btn btn-danger" value="'+data[i].ide_area_objetivo+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
