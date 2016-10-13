@@ -28,6 +28,7 @@ class ProyectoPlanificacion extends Controller
         Log::info("*******Antes de query,");
         $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
         Log::info("despues de query...");
+        Log::info($periodos);
         return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos));
     }
     
