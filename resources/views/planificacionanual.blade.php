@@ -109,7 +109,9 @@
                                             @if (isset($periodos))
                                             <select id="inPerido" class="form-control" value="5">
                                                    @for ($i=0;$i<count($periodos);$i++)
+                                                       @if ($periodos[$i]->codigo_lista==='TRI')
                                                        <option value="{{$i}}" >Option</option>
+                                                       @endif
                                                    @endfor
                                             </select>
                                             @endif
