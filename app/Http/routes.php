@@ -133,9 +133,19 @@ Route::put('/productos/{id}',['uses' => 'Productos@update', 'middleware' => 'aut
  * Planificacion 
  * 
  *  */
-//Planificacion anual
-Route::get('/planificacion_anual',['uses' => 'ProyectoPlanificacion@index', 'middleware' => 'auth'])->name('planificacion_anual');
-Route::post('/planificacion_anual',['uses' => 'ProyectoPlanificacion@addPlantilla', 'middleware' => 'auth']);
+//Plantilla
+Route::get('/proyecto',['uses' => 'PlantillaPlanificacion@index', 'middleware' => 'auth']);
+//Obtiene el proyecto
+Route::get('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@retrivePlantilla', 'middleware' => 'auth']);
+//borrar plantilla
+Route::delete('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@deletePlantilla', 'middleware' => 'auth']);
+//agrega plantilla
+Route::post('/planproyecto',['uses' => 'PlantillaPlanificacion@addPlantilla', 'middleware' => 'auth']);
+//actualiza plantilla
+Route::put('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@updatePlantilla', 'middleware' => 'auth']);
+
+
+
 
 //Metas
 Route::get('/plantilla/{id}',['uses' => 'ProyectoPlanificacion@metasProyecto', 'middleware' => 'auth']);

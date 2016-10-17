@@ -39,9 +39,10 @@
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
+                                            <th>Fecha Cierre</th>
                                             <th>Descripci&oacute;n</th>
-                                            <th>Usuario</th>
-                                            <th>Periodo Planificaci&oacute;n</th>
+                                            <th>Periodicidad</th>
+                                            <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -50,11 +51,12 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
                                             <td>{{$items[$i]->fecha_proyecto}}</td>
+                                            <td>{{$items[$i]->fecha_cierre}}</td>
                                             <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
-                                            <td>lpalma</td>
-                                            <td>Trimestral</td>
+                                            <td>{{$items[$i]->periodicidad->descripcion}}</td>
+                                            <td>{{$items[$i]->estado}}</td>
                                             <td>
-                                                <a href="{{url('/planificacion_metas')}}" class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
+                                                <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
                                         </tr>
@@ -106,17 +108,22 @@
                                                 <label>Descripci&oacute;n</label>
                                                 <input class="form-control" id="inDescripcion" required="true"/>
                                             </div>
-                                            @if (isset($periodos))
-                                            <select id="inPerido" class="form-control" value="5">
-                                                   @for ($i=0;$i<count($periodos);$i++)
-                                                       @if ($periodos[$i]->codigo_lista==='TRI')
-                                                       <option value="{{$periodos[$i]->ide_lista}}" selected>{{$periodos[$i]->descripcion}}</option>
-                                                       @else
-                                                       <option value="{{$periodos[$i]->ide_lista}}">{{$periodos[$i]->descripcion}}</option>
-                                                       @endif
-                                                   @endfor
-                                            </select>
-                                            @endif
+                                            <div class="form-group">
+                                                <label>Periodicidad</label>
+                                                @if (isset($periodos))
+                                                    <select id="inPeriodo" class="form-control" value="5">
+                                                           @for ($i=0;$i<count($periodos);$i++)
+                                                               @if ($periodos[$i]->codigo_lista==='TRI')
+                                                               <option value="{{$periodos[$i]->ide_lista}}" selected>{{$periodos[$i]->descripcion}}</option>
+                                                               @else
+                                                               <option value="{{$periodos[$i]->ide_lista}}">{{$periodos[$i]->descripcion}}</option>
+                                                               @endif
+                                                           @endfor
+                                                    </select>
+                                                @endif
+                                            </div>
+
+                                            
                                         </form>
                                         </div>
                                         <div class="modal-footer">
@@ -157,6 +164,8 @@
 @section('footer')
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
+        <meta name="_url" content="{{url('planproyecto')}}"/>
+        <meta name="_urlTarget" content="{{url('meta')}}"/>
         <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

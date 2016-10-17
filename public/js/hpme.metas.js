@@ -88,7 +88,7 @@ $(document).ready(function(){
         var state = $('#btnGuardar').val();
 
         var type = "POST"; //for creating new resource
-        var ide_item = $('#ide_item').val();;
+        var ide_item = $('#ide_item').val();
         var my_url = url;
 
         if (state == "update"){

@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTables-example').DataTable(window.lang);
+    var dataTable=$('#dataTableItems').DataTable({
+        "order": [[ 4, "asc" ]],
+        "language": window.lang.language
+    });
     var url = window.location;
     url=(""+url).replace("#","");
     
@@ -19,16 +22,16 @@ $(document).ready(function(){
         $('#loading').modal('show');
         //Se obtiene el id del elemento a eliminar
         var item_id = $(this).val();
-       
+        var my_url=$('meta[name="_url"]').attr('content');
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
-        })
+        });
         //Se hace el request con ajax a la url para eliminar el item
         $.ajax({
             type: "DELETE",
-            url: url + '/' + item_id,
+            url: my_url + '/' + item_id,
             success: function (data) {
                 console.log(data);
                 //$("#usuario" + user_id).remove();
@@ -38,8 +41,17 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('####Error:', data);
-                alert('Error borrado '+data);
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al borrar la plantilla.</li>';
+                }
+                console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show'); 
             }
         });
         
@@ -48,57 +60,62 @@ $(document).ready(function(){
     });
     
     //Agregar nuevo usuario
-    $('.btn').click(function(){
+    $('#btnAgregar').click(function(){
         $('#inputTitle').html("Nueva Plantilla");
         $('#formAgregar').trigger("reset");
+        $('#inPeriodo').prop("disabled",false);
         $('#btnGuardar').val('add');
         $('#agregarEditarModal').modal('show');
-        //alert('click');
     });
     
     $(document).on('click','.btn-editar',function(){
         $('#loading').modal('show');
         var ide_item=$(this).val();
         $('#inputTitle').html("Editar Plantilla");
-        $.get(url + '/' + ide_item, function (data) {
+        var my_url=$('meta[name="_url"]').attr('content');
+        $.get(my_url + '/' + ide_item, function (data) {
             //success data
             console.log(data);
-            $('#inNombre').val(data.nombre);
             $('#inDescripcion').val(data.descripcion);
+            $('#inPeriodo').val(data.ide_lista_periodicidad);
+            $('#inPeriodo').prop("disabled",true);
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
-            $('#ide_item').val(data.ide_meta);
+            $('#ide_item').val(data.ide_proyecto);
             $('#loading').modal('hide');
-        }) 
+        });
     });    
 
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {      
-        var formData = {
-            nombre: $('#inNombre').val(),
-            descripcion: $('#inDescripcion').val(),
-        };   
         $('#loading').modal('show');
+        var formData = {
+            descripcion: $('#inDescripcion').val(),
+            periodicidad:$('#inPeriodo').val()
+        };   
+              
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
         
-        //used to determine the http verb to use [add=POST], [update=PUT]
-        var state = $('#btnGuardar').val();
-
-        var type = "POST"; //for creating new resource
-        var ide_item = $('#ide_item').val();;
-        var my_url = url;
-
-        if (state == "update"){
-            type = "PUT"; //for updating existing resource
+        var type = "PUT"; //for creating new resource
+        var my_url = $('meta[name="_url"]').attr('content');
+        var target_url='';
+        var state=$(this).val();
+        var ide_item = $('#ide_item').val();
+                
+        if(state=='add'){
+            type='POST';          
+        }else{
             my_url += '/' + ide_item;
         }
-
+        
         console.log(formData);
         console.log("Enviando url "+my_url);
+        
+        //alert("type "+type+" url "+my_url);
         $.ajax({
             type: type,
             url: my_url,
@@ -106,34 +123,41 @@ $(document).ready(function(){
             dataType: 'json',
             success: function (data) {
                 console.log(data); 
-                var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
-                    item+='<td>'+data.nombre+'</td>'
-                    item+='<td>'+data.descripcion+'</td>';
-                    item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_meta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-                    item+='<button class="btn btn-danger" value="'+data.ide_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
+                var item='<tr class="even gradeA" id="item'+data.ide_proyecto+'">';
+                item+='<td>'+data.fecha_proyecto+'</td>';
+                item+='<td>'+(data.fecha_cierre?data.fecha_cierre:'')+'</td>';
+                item+='<td><a href="'+target_url+"/"+data.ide_proyecto+'">'+data.descripcion+'</a></td>';
+                item+='<td>'+data.periodicidad.descripcion+'</td>';
+                item+='<td>'+data.estado+'</td>';
+                item+='<td>';
+                item+='<button class="btn btn-primary btn-editar" value="'+data.ide_proyecto+'"><i class="icon-pencil icon-white" ></i> Editar</a>';
+                item+='<button class="btn btn-danger" value="'+data.ide_proyecto+'"><i class="icon-remove icon-white"></i> Eliminar</button>';
+                item+='</td>';
+                item+='</tr>';
+                
                 if (state == "add"){ 
                     dataTable.rows.add($(item)).draw();                    
                 }else{ 
                      dataTable.row( $('#item'+ide_item)).remove();
                      dataTable.rows.add($(item)).draw();
                 }
-                $('#formAgregar').trigger("reset");
+//                $('#formAgregar').trigger("reset");
                 $('#agregarEditarModal').modal('hide');
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
                 var errHTML="";
-                if(data.responseJSON.hasOwnProperty("nombre")){
-                  errHTML+="<li>"+data.responseJSON.nombre+"</li>";  
-                }
-                if(data.responseJSON.hasOwnProperty("descripcion")){
-                  errHTML+="<li>"+data.responseJSON.descripcion+"</li>";  
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar la plantilla.</li>';
                 }
                 console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
-                $('#erroresModal').modal('show');
-                //alert(data.responseJSON.nombre);                
+                $('#erroresModal').modal('show');                
             }
         });
     });

@@ -331,7 +331,7 @@
                        &nbsp; <span class="label label-default">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="component-nav">                   
-                        <li class=""><a href="{{url('planificacion_anual')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/> Planificaci&#243;n Anual</a></li>
+                        <li class=""><a href="{{url('proyecto')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/> Planificaci&#243;n Anual</a></li>
                          <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/> Planificaci&#243;n Afiliado</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>

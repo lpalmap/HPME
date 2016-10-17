@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\CfgProducto;
 use App\PlnProyectoPlanificacion;
-use App\CfgListaValor;
 use App\PlnProyectoMeta;
 use App\PlnObjetivoMeta;
 use App\CfgMeta;
@@ -16,21 +15,10 @@ use App\PlnAreaObjetivo;
 use App\CfgAreaAtencion;
 use App\PlnIndicadorArea;
 use App\CfgIndicador;
-use App\PlnProductoIndicador;
 
 class ProyectoPlanificacion extends Controller
 {
-    //
     //Obtiene metas y crea vista
-    public function index(){
-        $proyecto=new PlnProyectoPlanificacion();
-        $data=$proyecto->all(); 
-        Log::info("*******Antes de query,");
-        $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
-        Log::info("despues de query...");
-        Log::info($periodos);
-        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos));
-    }
     
     public function metasProyecto($ideProyecto){
         Log::info("Buscando proyecto $ideProyecto");
@@ -40,7 +28,7 @@ class ProyectoPlanificacion extends Controller
     }
     
     public function metasPorProyecto($ideProyecto){
-        $metas=  new CfgMeta();;
+        $metas=  new CfgMeta();
         $params = array("ideProyecto"=>$ideProyecto);
         return $metas->selectQuery(HPMEConstants::META_PROYECTO_QUERY,$params);
     }
@@ -116,13 +104,6 @@ class ProyectoPlanificacion extends Controller
     
     public function retrive($id){
         $item = CfgProducto::find($id);
-        return response()->json($item);
-    }
-    
-    public function addPlantilla(Request $request){
-        $this->validateRequest($request);
-        $data = $request->toArray();
-        $item =  CfgProducto::create($data);
         return response()->json($item);
     }
     
@@ -235,18 +216,5 @@ class ProyectoPlanificacion extends Controller
             $items[]=$nItem;
         }
         return response()->json($items);
-    }
-
-        public function validateRequest($request){
-        $rules=[
-        'nombre' => 'required|max:100',
-        'descripcion' => 'required|max:200',
-        ];
-        $messages=[
-        'required' => 'Debe ingresar :attribute.',
-        'max'  => 'La capacidad del campo :attribute es :max',
-        ];
-        $this->validate($request, $rules,$messages);        
-    }
-    
+    }    
 }

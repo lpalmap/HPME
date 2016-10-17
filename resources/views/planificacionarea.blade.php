@@ -29,7 +29,7 @@
                         
                          <div class="panel-body">
                             <ul class="nav nav-pills">
-                                <li><a href="{{url('/planificacion_anual')}}">Plantilla</a>
+                                <li><a href="{{url('/proyecto')}}">Plantilla</a>
                                 </li>
                                 <li><a href="{{url('/plantilla/'.$ideProyecto)}}">Metas</a>
                                 </li>

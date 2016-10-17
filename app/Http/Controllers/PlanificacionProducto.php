@@ -5,17 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\CfgProducto;
-use App\PlnProyectoPlanificacion;
-use App\CfgListaValor;
-use App\PlnProyectoMeta;
-use App\PlnObjetivoMeta;
-use App\CfgMeta;
-use App\CfgObjetivo;
 use App\HPMEConstants;
-use App\PlnAreaObjetivo;
-use App\CfgAreaAtencion;
 use App\PlnIndicadorArea;
-use App\CfgIndicador;
 use App\PlnProductoIndicador;
 
 class PlanificacionProducto extends Controller

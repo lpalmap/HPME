@@ -11,5 +11,9 @@ class HPMEConstants
     const PRODUCTO_INDICADOR_QUERY="SELECT p.ide_producto,p.nombre FROM cfg_producto p WHERE NOT EXISTS(SELECT i.ide_proyecto FROM pln_producto_indicador i where i.ide_producto=p.ide_producto and i.ide_indicador_area=:ideIndicadorArea)";
     const SI='S';
     const NO='N';
-    
+    const ABIERTO='ABIERTO';
+    const CERRADO='CERRADO';
+    const PUBLICADO='PUBLICADO';
+    const EJECUTADO='EJECUTADO';
+    const DATE_FORMAT='Y-m-d';
 }
