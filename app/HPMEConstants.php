@@ -16,4 +16,5 @@ class HPMEConstants
     const PUBLICADO='PUBLICADO';
     const EJECUTADO='EJECUTADO';
     const DATE_FORMAT='Y-m-d';
+    const HTTP_AJAX_ERROR=404;
 }

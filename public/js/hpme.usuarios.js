@@ -120,6 +120,7 @@ $(document).ready(function(){
     //Agregar nuevo usuario
     $('#btnAgregar').click(function(){
         $('#inputTitle').html("Agregar Usuario");
+        $('#lbPassword').html("Contrase&ntilde;a");
         $('#formAgregar').trigger("reset");
         $('#btnGuardar').val('add');
         $('#formModal').modal('show');
@@ -133,10 +134,11 @@ $(document).ready(function(){
             //success data
             console.log(data);
             $('#inUsuario').val(data.usuario);
-            $('#inPassword').val(data.password);
+            $('#inPassword').val('');
             $('#inNombres').val(data.nombres);
             $('#inApellidos').val(data.apellidos);
             $('#ide_usuario').val(data.ide_usuario);
+            $('#lbPassword').html("Contrase&ntilde;a (*Dejar en blanco si no desea modificar)");
             $('#btnGuardar').val('update');
             $('#formModal').modal('show');
             $('#loading').modal('hide');
@@ -155,7 +157,7 @@ $(document).ready(function(){
             usuario: $('#inUsuario').val(),
             password: $('#inPassword').val(),
             nombres: $('#inNombres').val(),
-            apellidos: $('#inApellidos').val(),
+            apellidos: $('#inApellidos').val()
         };
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -182,32 +184,31 @@ $(document).ready(function(){
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_usuario+ '"><td>' + data.usuario + '</td><td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
                     item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_usuario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
- 
-                if (state == "add"){ //if user added a new record
-                    
-                    //$('#lista-items').append(item);
-                    //dataTable.DataTable.add(item).draw();
-                    dataTable.rows.add($(item)).draw();
-                    //dataTable.DataTable().draw();
-                    
-                }else{ //if user updated an existing record
-                    //var d=dataTable.DataTable().row($('#usuario'+ide_usuario)).data();
-                    //$("#lista-items" + ide_usuario).replaceWith( item );
-                     //dataTable.DataTable.row(item).data().draw();
-                     //dataTable.DataTable().row($('#usuario'+ide_usuario)).data($(item)).draw();
+                if (state == "add"){ 
+                    dataTable.rows.add($(item)).draw();                    
+                }else{
                      dataTable.row( $('#usuario'+ide_usuario)).remove();
                      dataTable.rows.add($(item)).draw();
                 }
-
                 $('#formAgregar').trigger("reset");
-
                 $('#formModal').modal('hide');
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
                 console.log('Error:', data);
-                alert(data.responseText);
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar la plantilla.</li>';
+                }
+                console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');  
             }
         });
         

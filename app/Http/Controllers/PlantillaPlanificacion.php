@@ -15,31 +15,30 @@ class PlantillaPlanificacion extends Controller
 {
     //Obtiene las plantillas de planificacion
     public function index(){
-        //$proyecto=new PlnProyectoPlanificacion();
         $data=  PlnProyectoPlanificacion::with('periodicidad')->get(); 
         $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
-        Log::info($periodos);
         return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos));
     }
     
     public function addPlantilla(Request $request){
+        $count=  PlnProyectoPlanificacion::where('estado',  HPMEConstants::ABIERTO)->count();
+        if($count>0){
+            $error=array('error'=>'Se encuentra una plantilla abierta debe cerrarla para crear una nueva.');
+            return response()->json($error,  HPMEConstants::HTTP_AJAX_ERROR);
+        }      
         $this->validateRequest($request);
         $descripcion=$request->descripcion;
         $periodicidad=$request->periodicidad;
         $plantilla=new PlnProyectoPlanificacion();
         $plantilla->descripcion=$descripcion;
-        $plantilla->ide_lista_periodicidad=$periodicidad;
-//        Log::info('test fecha '.date(HPMEConstants::DATE_FORMAT,  time()));
-//        Log::info('test fecha 2'.date(HPMEConstants::DATE_FORMAT));
-//        Log::info('test fecha 3'.time());     
+        $plantilla->ide_lista_periodicidad=$periodicidad;     
         $plantilla->fecha_proyecto= date(HPMEConstants::DATE_FORMAT,  time());
         $authuser=Auth::user();
         $plantilla->ide_usuario_creacion=$authuser->ide_usuario;
         $plantilla->estado=  HPMEConstants::ABIERTO;
         Log::info("Antes de guardar");
         $plantilla->save();
-        //$error=array('error'=>'Error procesando solicitud');
-        //return response()->json($error, 400);
+        $plantilla->periodicidad;
         return response()->json($plantilla);
     }
     
