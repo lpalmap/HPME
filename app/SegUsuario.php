@@ -15,4 +15,8 @@ class SegUsuario extends BaseModel implements AuthenticatableContract, CanResetP
     protected $table = 'seg_usuario';
     protected $fillable = array('usuario','password', 'nombres', 'apellidos','ide_afiliado');
     public $timestamps = false;
+    
+    public function roles(){
+        return $this->belongsToMany('App\SegRol', 'seg_usuario_rol', 'ide_usuario', 'ide_rol');     
+    }
 }

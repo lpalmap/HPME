@@ -331,18 +331,18 @@
                        &nbsp; <span class="label label-default">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="component-nav">                   
-                        <li class=""><a href="{{url('proyecto')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/> Planificaci&#243;n Anual</a></li>
-                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/> Planificaci&#243;n Afiliado</a></li>
-                        <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
+                        <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
+                         <li class=""><a href="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+<!--                        <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_formato.png')}}"/> Generar Formato Internacional</a></li>
-                         <li class=""><a href=""><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/></i> Backup Planificaci&#243;n Anual</a></li>
+                         <li class=""><a href=""><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/></i> Backup Planificaci&#243;n Anual</a></li>-->
                     </ul>
                 </li>
                 
                  <!-- MENU MONITOREO -->
                  
-                <li class="panel ">
+<!--                <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_monitoreo.png')}}"/>  Monitoreo
 	   
@@ -358,11 +358,11 @@
                         <li class=""><a href="forms_fileupload.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_historial.png')}}"/>  Historial de Formatos </a></li>
                         <li class=""><a href="forms_editors.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/>  Backup Formato Trimestral </a></li>
                     </ul>
-                </li>
+                </li>-->
                 
                 <!-- MENU MONITOREO -->
 
-                <li class="panel">
+<!--                <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#pagesr-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_reportes.png')}}"/> Reportes
 	   
@@ -377,7 +377,7 @@
                         <li><a href="pages_social.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/grafico.png')}}"/>  Generar Gr&aacute;fico </a></li>
                         <li><a href="pages_pricing.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/rep_historial.png')}}"/>  Historial de Reportes </a></li>
                     </ul>
-                </li>
+                </li>-->
                 
                 
                 <!-- MENU CONFIGURACION -->
@@ -450,7 +450,7 @@
                     <ul class="collapse" id="chart-nav">
                         <li><a href="{{url('usuarios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
                         <li><a href="{{url('roles')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
-                        <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>
+<!--                        <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>-->
                     </ul>
                 </li>
                 

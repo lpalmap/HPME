@@ -83,7 +83,6 @@ $(document).ready(function(){
 //    });
     
     $( document ).on( 'click', '.btn-danger', function() {
-        alert(url);
         $('#btnEliminar').val($(this).val());
         $('#buttonedModal').modal('show');
     });
@@ -99,7 +98,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
-        })
+        });
         $.ajax({
             type: "DELETE",
             url: url + '/' + user_id,
@@ -110,8 +109,19 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('####Error:', data);
-                alert('Error borrado '+data);
+                console.log('Error:', data);
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al borrar el usuario.</li>';
+                }
+                console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');  
             }
         });
         $('#buttonedModal').modal('hide');
@@ -122,6 +132,7 @@ $(document).ready(function(){
         $('#inputTitle').html("Agregar Usuario");
         $('#lbPassword').html("Contrase&ntilde;a");
         $('#formAgregar').trigger("reset");
+        $('#inRol').val(0);
         $('#btnGuardar').val('add');
         $('#formModal').modal('show');
     });
@@ -138,6 +149,11 @@ $(document).ready(function(){
             $('#inNombres').val(data.nombres);
             $('#inApellidos').val(data.apellidos);
             $('#ide_usuario').val(data.ide_usuario);
+            if(data.hasOwnProperty("roles") && data.roles.length>0){
+                $('#inRol').val(data.roles[0].ide_rol);    
+            }else{
+                $('#inRol').val(0);
+            }           
             $('#lbPassword').html("Contrase&ntilde;a (*Dejar en blanco si no desea modificar)");
             $('#btnGuardar').val('update');
             $('#formModal').modal('show');
@@ -157,7 +173,8 @@ $(document).ready(function(){
             usuario: $('#inUsuario').val(),
             password: $('#inPassword').val(),
             nombres: $('#inNombres').val(),
-            apellidos: $('#inApellidos').val()
+            apellidos: $('#inApellidos').val(),
+            ide_rol: $('#inRol').val()
         };
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -182,6 +199,11 @@ $(document).ready(function(){
             success: function (data) {
                 console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_usuario+ '"><td>' + data.usuario + '</td><td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
+                    if(data.hasOwnProperty("roles") && data.roles.length>0){
+                        item+='<td>'+data.roles[0].nombre+'</td>';                          
+                    }else{
+                        item+='<td></td>';
+                    }
                     item += '<td><button class="btn btn-primary btn-editar" value="' + data.ide_usuario + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item += '<button class="btn btn-danger" value="' + data.ide_usuario + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 
@@ -204,7 +226,7 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al guardar la plantilla.</li>';
+                    errHTML+='<li>Error al guardar el usuario.</li>';
                 }
                 console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 

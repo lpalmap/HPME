@@ -22,11 +22,11 @@ Route::get('/home',['uses' => 'Home@index', 'middleware' => 'auth'])->name('home
 
 /* Mantenimiento de usuarios */
 
-Route::get('/usuarios','Usuarios@index')->name('usuarios');
-Route::delete('/usuarios/{id}','Usuarios@delete');
-Route::get('/usuarios/{id}','Usuarios@retrive');
-Route::post('/usuarios','Usuarios@add');
-Route::put('/usuarios/{id}','Usuarios@update');
+Route::get('/usuarios',['uses' => 'Usuarios@index', 'middleware' => 'auth'])->name('usuarios');
+Route::delete('/usuarios/{id}',['uses' => 'Usuarios@delete', 'middleware' => 'auth']);
+Route::get('/usuarios/{id}',['uses' => 'Usuarios@retrive', 'middleware' => 'auth']);
+Route::post('/usuarios',['uses' => 'Usuarios@add', 'middleware' => 'auth']);
+Route::put('/usuarios/{id}',['uses' => 'Usuarios@update', 'middleware' => 'auth']);
 
 /* Mantenimiento de metas */
 

@@ -33,6 +33,7 @@
                                             <th>Usuario</th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>
+                                            <th>Rol</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -43,6 +44,11 @@
                                             <td>{{$usuarios[$i]->usuario}}</td>
                                             <td>{{$usuarios[$i]->nombres}}</td>
                                             <td>{{$usuarios[$i]->apellidos}}</td>
+                                            @if(count($usuarios[$i]->roles)>0)
+                                            <td>{{$usuarios[$i]->roles[0]->nombre}}</td>
+                                            @else
+                                            <td></td>
+                                            @endif
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$usuarios[$i]->ide_usuario}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$usuarios[$i]->ide_usuario}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -106,11 +112,23 @@
                                                 <label>Nombres</label>
                                                 <input class="form-control" id="inNombres" required="true"/>
                                             </div>                                          
-                                               <div class="form-group">
+                                            <div class="form-group">
                                                 <label>Apellidos</label>
                                                 <input class="form-control" id="inApellidos" required="true"/>
-                                          </div>
-                                       
+                                            </div>
+                                            @if (isset($roles))
+                                            <div class="form-group">
+                                                <label>Rol</label>
+                                                
+                                                    <select id="inRol" class="form-control">
+                                                        <option value="0"></option>
+                                                           @for ($i=0;$i<count($roles);$i++)
+                                                               <option value="{{$roles[$i]->ide_rol}}">{{$roles[$i]->nombre}}</option>
+                                                           @endfor
+                                                    </select>
+                                                
+                                            </div>  
+                                            @endif                                       
                                     </form>
                                         </div>
                                         <div class="modal-footer">

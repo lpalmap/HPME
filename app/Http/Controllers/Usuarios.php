@@ -5,32 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\SegUsuario;
+use App\SegRol;
 
 class Usuarios extends Controller
 {
     //Obtiene usuarios y crea vista
     public function index(){
-        $usuarios=new SegUsuario();
-        $data=$usuarios->all(); 
-        return view('usuarios',array('usuarios'=>$data));
+        $usuarios=  SegUsuario::with("roles")->get(); 
+        $roles=SegRol::all();
+        return view('usuarios',array('usuarios'=>$usuarios,'roles'=>$roles));
     }
     
     public function delete($id){
-        $user = SegUsuario::destroy($id);
+        $user =  SegUsuario::find($id);
+        $user->roles()->detach();
+        SegUsuario::destroy($id);
         return response()->json($user);
     }
     
     public function retrive($id){
         $user = SegUsuario::find($id);
+        $user->roles;
         return response()->json($user);
     }
     
     public function add(Request $request){
-        //$request->attributes->set('password', bcrypt($request->password));
         $this->validateRequest($request);
         $data = $request->toArray();
         $data['password']=  bcrypt($data['password']);
         $user=  SegUsuario::create($data);
+        if($request->ide_rol>0){
+            $user->roles()->attach($request->ide_rol);
+        }
+        $user->roles;
         return response()->json($user);
     }
     
@@ -41,9 +48,16 @@ class Usuarios extends Controller
         if(strlen($request->password)>0){
             $user->password=  bcrypt($request->password);
         }
+        if($request->ide_rol>0){
+            $user->roles()->sync([$request->ide_rol]);
+        }else{
+            $user->roles()->detach();
+        }
+        
         $user->nombres=$request->nombres;
         $user->apellidos=$request->apellidos;
         $user->save();
+        $user->roles;
         return response()->json($user);       
     }
     
