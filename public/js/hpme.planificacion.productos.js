@@ -153,7 +153,7 @@ $(document).ready(function(){
                     var item;
                     for(var i in data){
                         item='<tr class="even gradeA" id="item'+data[i].ide_producto_indicador+'">';
-                        item+='<td><a class="btn2">'+data[i].producto.nombre+'</a></td>';
+                        item+='<td><label>'+data[i].producto.nombre+'</label></td>';
                         item+='<td><button class="btn btn-danger" value="'+data[i].ide_producto_indicador+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }

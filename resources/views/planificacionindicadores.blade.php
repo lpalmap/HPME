@@ -40,7 +40,9 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">Indicadores</a>
                                 </li>
                             </ul>
+                             @if(isset($rol) && $rol=='COORDINADOR')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar Indicador</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -56,7 +58,9 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_indicador_area}}">
                                             <td><a href="{{url('/indicador/'.$items[$i]->ide_indicador_area)}}">{{$items[$i]->indicador->nombre}}</a></td>
                                             <td>
+                                                @if(isset($rol) && $rol=='COORDINADOR')
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_indicador_area}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @endif
                                             </td>
                                         </tr>
                                             @endfor

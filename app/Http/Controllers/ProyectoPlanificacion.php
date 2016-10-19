@@ -24,7 +24,8 @@ class ProyectoPlanificacion extends Controller
         Log::info("Buscando proyecto $ideProyecto");
         $proyecto=  PlnProyectoPlanificacion::findOrFail($ideProyecto);
         $metas = PlnProyectoMeta::with("meta")->where('ide_proyecto', $ideProyecto)->get();
-        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto));
+        $rol=  request()->session()->get('rol');
+        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto,'rol'=>$rol));
     }
     
     public function metasPorProyecto($ideProyecto){
@@ -55,8 +56,9 @@ class ProyectoPlanificacion extends Controller
         $meta= PlnProyectoMeta::find($ideProyectoMeta);
         $meta->meta; 
         $ideProyecto=$meta->ide_proyecto;
-        $objetivos= PlnObjetivoMeta::with("objetivo")->where("ide_proyecto_meta",$ideProyectoMeta)->get();      
-        return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta));    
+        $objetivos= PlnObjetivoMeta::with("objetivo")->where("ide_proyecto_meta",$ideProyectoMeta)->get(); 
+        $rol=  request()->session()->get('rol');
+        return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'rol'=>$rol));    
     }
     
     public function areaObjetivo($ideObjetivoMeta){
@@ -65,8 +67,8 @@ class ProyectoPlanificacion extends Controller
         $ideProyecto=$objetivo->ide_proyecto;
         $ideProyectoMeta=$objetivo->ide_proyecto_meta;     
         $areas= PlnAreaObjetivo::with("area")->where("ide_objetivo_meta",$ideObjetivoMeta)->get();
-
-        return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta));    
+        $rol=  request()->session()->get('rol');
+        return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'rol'=>$rol));    
     }
     
     public function indicadorArea($ideAreaObjetivo){
@@ -79,7 +81,8 @@ class ProyectoPlanificacion extends Controller
         Log::info('atnes de query');
         $indicadores=PlnIndicadorArea::with("indicador")->where("ide_area_objetivo",$ideAreaObjetivo)->get();
         Log::info('fin traer indicador');
-        return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo));    
+        $rol=  request()->session()->get('rol');
+        return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'rol'=>$rol));    
     }
    
     public function deleteMeta($ideProyectoMeta){

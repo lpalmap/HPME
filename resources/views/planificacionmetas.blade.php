@@ -34,7 +34,9 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">Metas</a>
                                 </li>
                             </ul>
+                             @if(isset($rol) && $rol=='COORDINADOR')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar Meta</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -52,11 +54,17 @@
                                             <td><a href="{{url('/meta/'.($items[$i]->ide_proyecto_meta))}}">{{$items[$i]->meta->nombre}}</a></td>
                                             <td style="text-align: center">
                                                 <div class="checkbox">
-                                                    <input class="uniform" type="checkbox" value="{{$items[$i]->ide_proyecto_meta}}" {{$items[$i]->ind_obligatorio=='S'?'checked':''}}/>
+                                                    @if(isset($rol) && $rol=='COORDINADOR')
+                                                        <input class="uniform" type="checkbox" value="{{$items[$i]->ide_proyecto_meta}}" {{$items[$i]->ind_obligatorio=='S'?'checked':''}}/>
+                                                    @else
+                                                    <label value="{{$items[$i]->ide_proyecto_meta}}"> {{$items[$i]->ind_obligatorio=='S'?'SI':'NO'}}</label>
+                                                    @endif
                                                 </div>
                                             </td>
                                             <td>
-                                                <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @if(isset($rol) && $rol=='COORDINADOR')
+                                                    <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @endif
                                             </td>
                                         </tr>
                                             @endfor

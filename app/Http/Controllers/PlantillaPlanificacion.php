@@ -17,7 +17,14 @@ class PlantillaPlanificacion extends Controller
     public function index(){
         $data=  PlnProyectoPlanificacion::with('periodicidad')->get(); 
         $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
-        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos));
+        $user=Auth::user();
+        Log::info($user);
+        $ideUsuario=$user->ide_usuario;
+        Log::info("usuario logeado... ".$ideUsuario);
+        Log::info("Session ".request()->session()->get("mi session"));
+        //NOMBRE_ROL_POR_USUARIO
+        $rol=  request()->session()->get('rol');
+        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol));
     }
     
     public function addPlantilla(Request $request){

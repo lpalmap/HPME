@@ -58,7 +58,7 @@
                 <ul class="nav navbar-top-links navbar-right">
 
                     <!-- MESSAGES SECTION -->
-                    <li class="dropdown">
+<!--                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="label label-success">2</span>    <i class="icon-envelope-alt"></i>&nbsp; <i class="icon-chevron-down"></i>
                         </a>
@@ -118,11 +118,11 @@
                             </li>
                         </ul>
 
-                    </li>
+                    </li>-->
                     <!--END MESSAGES SECTION -->
 
                     <!--TASK SECTION -->
-                    <li class="dropdown">
+<!--                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="label label-danger">5</span>   <i class="icon-tasks"></i>&nbsp; <i class="icon-chevron-down"></i>
                         </a>
@@ -200,11 +200,11 @@
                             </li>
                         </ul>
 
-                    </li>
+                    </li>-->
                     <!--END TASK SECTION -->
 
                     <!--ALERTS SECTION -->
-                    <li class="chat-panel dropdown">
+<!--                    <li class="chat-panel dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="label label-info">8</span>   <i class="icon-comments"></i>&nbsp; <i class="icon-chevron-down"></i>
                         </a>
@@ -264,7 +264,7 @@
                             </li>
                         </ul>
 
-                    </li>
+                    </li>-->
                     <!-- END ALERTS SECTION -->
 
                     <!--ADMIN SETTINGS SECTIONS -->
@@ -331,8 +331,10 @@
                        &nbsp; <span class="label label-default">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="component-nav">                   
+                        @if(Session::get('rol')!='AFILIADO')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
-                         <li class=""><a href="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+                        @endif
+                        <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
 <!--                        <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_formato.png')}}"/> Generar Formato Internacional</a></li>
@@ -379,7 +381,7 @@
                     </ul>
                 </li>-->
                 
-                
+                @if (Session::get('rol')!='AFILIADO')
                 <!-- MENU CONFIGURACION -->
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#DDL-nav">
@@ -453,6 +455,7 @@
 <!--                        <li><a href="charts_pie.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>-->
                     </ul>
                 </li>
+                @endif
                 
             </ul>
 

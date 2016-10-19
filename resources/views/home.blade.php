@@ -6,7 +6,7 @@
             <div class="inner" style="min-height:1200px;">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Bienvenido.</h2>
+                        <h2>Bienvenido. {{Session::get('rol')}}</h2>
                     </div>
                 </div>
                 <hr />

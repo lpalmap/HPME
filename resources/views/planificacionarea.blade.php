@@ -38,7 +38,9 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">&Aacute;reas de Atenci&oacute;n</a>
                                 </li>
                             </ul>
+                             @if(isset($rol) && $rol=='COORDINADOR')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar &Aacute;rea</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -54,7 +56,9 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_area_objetivo}}">
                                             <td><a href="{{url('/area/'.$items[$i]->ide_area_objetivo)}}">{{$items[$i]->area->nombre}}</a></td>
                                             <td>
+                                                @if(isset($rol) && $rol=='COORDINADOR')
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_area_objetivo}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @endif
                                             </td>
                                         </tr>
                                             @endfor

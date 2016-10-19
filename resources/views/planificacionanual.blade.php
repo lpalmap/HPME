@@ -32,7 +32,9 @@
                                 <li class="active"><a href="#tableContent" data-toggle="tab">Plantillas</a>
                                 </li>
                             </ul>
+                             @if(isset($rol) && $rol=='COORDINADOR')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Nueva Plantilla</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -56,8 +58,10 @@
                                             <td>{{$items[$i]->periodicidad->descripcion}}</td>
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
+                                                @if(isset($rol) && $rol=='COORDINADOR' && $items[$i]->estado=='ABIERTO')
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @endif
                                             </td>
                                         </tr>
                                             @endfor

@@ -42,24 +42,34 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">Productos</a>
                                 </li>
                             </ul>
+                             @if(isset($rol) && $rol=='COORDINADOR')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar Producto</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
                                     <thead>
                                         <tr>
-                                            <th>Indicador</th>
-                                            <th>Acciones</th>
+                                            <th style="text-align: center">Producto</th>
+                                            @if(isset($rol) && $rol=='COORDINADOR')
+                                            <th style="text-align: center">Acciones</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
+                                            @if(isset($rol) && $rol=='AFILIADO')
                                             <td><a class="btn2">{{$items[$i]->producto->nombre}}</a></td>
-                                            <td>
-                                                <button class="btn btn-danger" value="{{$items[$i]->ide_producto_indicador}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                            @else
+                                            <td><label>{{$items[$i]->producto->nombre}}</label></td>
+                                            @endif
+                                            @if(isset($rol) && $rol=='COORDINADOR')
+                                            <td>                     
+                                                <button class="btn btn-danger" value="{{$items[$i]->ide_producto_indicador}}"><i class="icon-remove icon-white"></i> Eliminar</button>   
                                             </td>
+                                            @endif
                                         </tr>
                                             @endfor
                                         @endif
