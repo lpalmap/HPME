@@ -19,4 +19,8 @@ class SegUsuario extends BaseModel implements AuthenticatableContract, CanResetP
     public function roles(){
         return $this->belongsToMany('App\SegRol', 'seg_usuario_rol', 'ide_usuario', 'ide_rol');     
     }
+    
+    public function regiones(){
+        return $this->belongsToMany('App\CfgRegion', 'seg_usuario_region', 'ide_usuario', 'ide_region');     
+    }
 }

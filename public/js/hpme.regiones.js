@@ -24,7 +24,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
-        })
+        });
         //Se hace el request con ajax a la url para eliminar el item
         $.ajax({
             type: "DELETE",
@@ -49,8 +49,43 @@ $(document).ready(function(){
     
     //Agregar nuevo usuario
     $('#btnAgregar').click(function(){
+        $('#loading').modal('show');
         $('#inputTitle').html("Agregar Regi&oacute;n");
         $('#formAgregar').trigger("reset");
+        $('#inAdmin').val(0);
+        
+        var selectHTML='<option value="0"></option>';
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        var data={
+            operacion:"retrive"            
+        };
+        
+        $.ajax({
+            type: "POST",
+            url: url+'/admin',
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data); 
+                for(var u in data){
+                    console.log('t');
+                    selectHTML+='<option value="'+data[u].ide_usuario+'">'+data[u].usuario+'&nbsp;('+data[u].nombres+'&nbsp;'+data[u].apellidos+')</option>';
+                }
+                console.log(selectHTML);
+                $('#inAdmin').html(selectHTML); 
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                console.log('Error:', data); 
+                $('#inAdmin').html(selectHTML); 
+                $('#loading').modal('hide');
+            }
+        });
+          
         $('#btnGuardar').val('add');
         $('#agregarEditarModal').modal('show');
     });
@@ -62,20 +97,36 @@ $(document).ready(function(){
         $.get(url + '/' + ide_item, function (data) {
             //success data
             console.log(data);
-            $('#inNombre').val(data.nombre);
-            $('#inDescripcion').val(data.descripcion);
+            $('#inNombre').val(data.item.nombre);
+            $('#inDescripcion').val(data.item.descripcion);
+            var selectHTML='<option value="0"></option>';
+            if(data.item.hasOwnProperty("administradores") && data.item.administradores.length>0){
+                $('#inAdmin').val(data.item.administradores[0].ide_usuario);
+                selectHTML+='<option value="'+data.item.administradores[0].ide_usuario+'" selected>'+data.item.administradores[0].usuario+'&nbsp;('+data.item.administradores[0].nombres+'&nbsp;'+data.item.administradores[0].apellidos+')</option>';
+                console.log('admin '+data.item.administradores[0].ide_usuario);
+            }else{
+                $('#inAdmin').val(0);
+                console.log('no admin');
+            }
+            
+            for(var u in data.users){
+                selectHTML+='<option value="'+data.users[u].ide_usuario+'">'+data.users[u].usuario+'&nbsp;('+data.users[u].nombres+'&nbsp;'+data.users[u].apellidos+')</option>';
+            }
+            //$('#inAdmin').val(itemVal);
+            $('#inAdmin').html(selectHTML);          
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
-            $('#ide_item').val(data.ide_region);
+            $('#ide_item').val(data.item.ide_region);
             $('#loading').modal('hide');
-        }) 
+        }); 
     });    
 
     //create new task / update existing task
-    $("#btnGuardar").click(function (e) {      
+    $("#btnGuardar").click(function (e) {
         var formData = {
             nombre: $('#inNombre').val(),
             descripcion: $('#inDescripcion').val(),
+            ide_usuario: $('#inAdmin').val()
         };   
         $('#loading').modal('show');
         $.ajaxSetup({
@@ -105,9 +156,14 @@ $(document).ready(function(){
             dataType: 'json',
             success: function (data) {
                 console.log(data); 
-                var item = '<tr class="even gradeA" id="item'+data.ide_region+'">'
-                    item+='<td>'+data.nombre+'</td>'
+                var item = '<tr class="even gradeA" id="item'+data.ide_region+'">';
+                    item+='<td>'+data.nombre+'</td>';
                     item+='<td>'+data.descripcion+'</td>';
+                    if(data.hasOwnProperty("administradores") && data.administradores.length>0){
+                        item+='<td>'+data.administradores[0].usuario+'</td>';                          
+                    }else{
+                        item+='<td></td>';
+                    }
                     item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_region+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item+='<button class="btn btn-danger" value="'+data.ide_region+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 
@@ -123,11 +179,12 @@ $(document).ready(function(){
             error: function (data) {
                 $('#loading').modal('hide');
                 var errHTML="";
-                if(data.responseJSON.hasOwnProperty("nombre")){
-                  errHTML+="<li>"+data.responseJSON.nombre+"</li>";  
-                }
-                if(data.responseJSON.hasOwnProperty("descripcion")){
-                  errHTML+="<li>"+data.responseJSON.descripcion+"</li>";  
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar el usuario.</li>';
                 }
                 console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 

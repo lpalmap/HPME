@@ -8,4 +8,8 @@ class CfgRegion extends BaseModel
     protected $table = 'cfg_region';
     protected $fillable = array('nombre','descripcion');
     public $timestamps = false;
+    
+    public function administradores(){
+        return $this->belongsToMany('App\SegUsuario', 'seg_usuario_region', 'ide_region','ide_usuario');     
+    }  
 }

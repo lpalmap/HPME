@@ -43,6 +43,7 @@ Route::delete('/regiones/{id}',['uses' => 'Regiones@delete', 'middleware' => 'au
 Route::get('/regiones/{id}',['uses' => 'Regiones@retrive', 'middleware' => 'auth']);
 Route::post('/regiones',['uses' => 'Regiones@add', 'middleware' => 'auth']);
 Route::put('/regiones/{id}',['uses' => 'Regiones@update', 'middleware' => 'auth']);
+Route::post('/regiones/admin',['uses' => 'Regiones@retriveAllAdmin', 'middleware' => 'auth']);
 
 /* Mantenimiento de proyectos */
 

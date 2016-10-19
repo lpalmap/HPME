@@ -32,6 +32,7 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
+                                            <th>Administrador</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -41,6 +42,11 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_region}}">
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
+                                            @if(count($items[$i]->administradores)>0)
+                                            <td>{{$items[$i]->administradores[0]->usuario}}</td>
+                                            @else
+                                            <td></td>
+                                            @endif
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_region}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_region}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -100,7 +106,14 @@
                                                 <label>Descripci&oacute;n</label>
 <!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
                                                 <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
-                                                </div>
+                                            </div>
+                                           <div class="form-group">
+                                                <label>Administrador</label>
+                                                
+                                                    <select id="inAdmin" class="form-control">
+                                                    </select>
+                                                
+                                            </div>  
                                         </form>
                                         </div>
                                         <div class="modal-footer">
