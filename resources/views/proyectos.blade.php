@@ -43,7 +43,7 @@
                                             <td>{{$items[$i]->descripcion}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
-                                                <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                <button class="btn btn-danger btnEliminarItem" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
                                         </tr>
                                             @endfor
@@ -55,8 +55,11 @@
                         </div>
                     </div>
                 </div>
+            </div>              
             </div>
-            </div>
+            
+   
+            
         </div>
        <!--END PAGE CONTENT -->
 @endsection
@@ -102,6 +105,104 @@
                                                 <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
                                                 </div>
                                         </form>
+                                                  
+                                           <div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <header>
+                <h5>Seleccionar Regiones</h5>
+
+                <div class="toolbar">
+                    <ul class="nav pull-right">                       
+                        <li>
+                            <a class="accordion-toggle minimize-box" data-toggle="collapse" href="#div-3">
+                                <i class="icon-chevron-up"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </header>
+            <div id="div-3" class="accordion-body collapse in body">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input id="box1Filter" type="text" placeholder="Filter" class="form-control" />
+                                <span class="input-group-btn">
+                                    <button id="box1Clear" class="btn btn-warning" type="button">x</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select id="box1View" multiple="multiple" class="form-control" size="16">
+                                <option value="501649">2008-2009 "Mini" Baja</option>
+                                <option value="501497">AAPA - Asian American Psychological Association</option>
+                                <option value="501053">Academy of Film Geeks</option>
+                                <option value="500001">Accounting Association</option>
+                                <option value="501227">ACLU</option>
+                                <option value="501610">Active Minds</option>
+                                <option value="501514">Activism with A Reel Edge (A.W.A.R.E.)</option>
+                                <option value="501656">Adopt a Grandparent Program</option>
+                                <option value="501050">Africa Awareness Student Organization</option>
+                                <option value="501075">African Diasporic Cultural RC Interns</option>
+                                <option value="501493">Agape</option>
+                                <option value="501562">AGE-Alliance for Graduate Excellence</option>
+                                <option value="500676">AICHE (American Inst of Chemical Engineers)</option>
+                                <option value="501460">AIDS Sensitivity Awareness Project ASAP</option>
+                                <option value="500004">Aikido Club</option>
+                                <option value="500336">Akanke</option>
+                            </select>
+                            <hr>
+                            <div class="alert alert-block">
+                                <span id="box1Counter" class="countLabel"></span>
+                                <select id="box1Storage" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <div class="btn-group btn-group-vertical" style="white-space: normal;">
+                            <button id="to2" type="button" class="btn btn-primary">
+                                <i class="icon-chevron-right"></i>
+                            </button>
+                            <button id="allTo2" type="button" class="btn btn-primary">
+                                <i class="icon-forward"></i>
+                            </button>
+                            <button id="allTo1" type="button" class="btn btn-danger">
+                                <i class="icon-backward"></i>
+                            </button>
+                            <button id="to1" type="button" class="btn btn-danger">
+                                <i class=" icon-chevron-left icon-white"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input id="box2Filter" type="text" placeholder="Filter" class="form-control" />
+                                <span class="input-group-btn">
+                                    <button id="box2Clear" class="btn btn-warning" type="button">x</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <select id="box2View" multiple="multiple" class="form-control" size="16"></select>
+                        </div>
+                        <hr />
+
+                        <div class="alert alert-block">
+                            <span id="box2Counter" class="countLabel"></span>
+                            <select id="box2Storage" class="form-control"> </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                                            
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -144,5 +245,7 @@
         <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
-        <script src="{{asset('js/hpme.proyectos.js')}}"></script>
+        <script src="{{asset('js/hpme.proyectos.js')}}"></script>  
+         <script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/plugins/jquery.dualListbox-1.3/jquery.dualListBox-1.3.min.js"></script>
 @endsection

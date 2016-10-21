@@ -7,7 +7,55 @@ $(document).ready(function(){
     var dataTable=$('#dataTableItems').DataTable(window.lang);
     var url = window.location;
     url=(""+url).replace("#","");
+    var inVal;
+    var inVal2;
+    var inVal3;
+    var inVal4;
+     
+    function recalcTotal(){
+        inVal=parseInt($('#primerTrim').val());
+        if(isNaN(inVal) || inVal<0){
+            inVal=0;
+            $('#primerTrim').val('');
+        }
+        
+        inVal2=parseInt($('#segundoTrim').val());
+        if(isNaN(inVal2) || inVal2<0){
+            inVal2=0;
+            $('#segundoTrim').val('');
+        }
+        
+        inVal3=parseInt($('#tercerTrim').val());
+        if(isNaN(inVal3) || inVal3<0){
+            inVal3=0;
+            $('#tercerTrim').val('');
+        }
+            
+        inVal4=parseInt($('#cuartoTrim').val());
+        if(isNaN(inVal4) || inVal4<0){
+            inVal4=0;
+            $('#cuartoTrim').val('');
+        }
+        
+        $("#totalInput").val(inVal+inVal2+inVal3+inVal4);  
+        
+    };
+   
+    $("#primerTrim").keyup(function(){
+        recalcTotal();
+    });
     
+    $("#segundoTrim").keyup(function(){   
+        recalcTotal();
+    });
+    
+    $("#tercerTrim").keyup(function(){   
+        recalcTotal();
+    });
+    
+    $("#cuartoTrim").keyup(function(){   
+        recalcTotal();
+    });
     //Clic sobre el botón eliminar para un item de la tabla
     $( document ).on( 'click', '.btn-danger', function() {
         $('#btnEliminar').val($(this).val());

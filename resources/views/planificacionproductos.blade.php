@@ -176,11 +176,21 @@
                                     </thead>
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
-                                            <td><input class="form-control" required="true" value="0" /></td>
-                                            <td><input class="form-control" required="true" value="0" /></td>
-                                            <td><input class="form-control" required="true" value="0" /></td>
-                                            <td><input class="form-control" required="true" value="0" /></td>
-                                            <td><input class="form-control" disabled="true"  value="0" id="totalInput"/></td>
+                                            <td>
+                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="primerTrim" />  
+                                            </td>
+                                            <td>
+                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="segundoTrim" />
+                                            </td>
+                                            <td>
+                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="tercerTrim"/>
+                                            </td>
+                                            <td>
+                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="cuartoTrim"/>
+                                            </td>
+                                            <td>
+                                                <input align="right" class="form-control" disabled="true"  value="0" id="totalInput"/>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

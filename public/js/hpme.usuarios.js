@@ -219,7 +219,6 @@ $(document).ready(function(){
             error: function (data) {
                 $('#loading').modal('hide');
                 console.log('Error:', data);
-                $('#loading').modal('hide');
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
                     for( e in data.responseJSON){

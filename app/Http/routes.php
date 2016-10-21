@@ -52,7 +52,7 @@ Route::delete('/proyectos/{id}',['uses' => 'Proyectos@delete', 'middleware' => '
 Route::get('/proyectos/{id}',['uses' => 'Proyectos@retrive', 'middleware' => 'auth']);
 Route::post('/proyectos',['uses' => 'Proyectos@add', 'middleware' => 'auth']);
 Route::put('/proyectos/{id}',['uses' => 'Proyectos@update', 'middleware' => 'auth']);
-
+Route::post('/proyectos/regiones',['uses' => 'Proyectos@retriveAllRegiones', 'middleware' => 'auth']);
 
 /* Mantenimiento de indicadores */
 
