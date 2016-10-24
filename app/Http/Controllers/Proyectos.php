@@ -39,8 +39,9 @@ class Proyectos extends Controller
         $data = $request->toArray();
         $item =  CfgProyecto::create($data);
         $regiones=$request->regiones;
-        $item->regiones()->sync($regiones);
-        
+        if(count($regiones)>0){
+          $item->regiones()->sync($regiones);  
+        }     
         return response()->json($item);
     }
     
@@ -50,8 +51,12 @@ class Proyectos extends Controller
         $item->nombre=$request->nombre;
         $item->descripcion=$request->descripcion; 
         $regiones=$request->regiones;
-        Log::info("#### asta aca");
-        $item->regiones()->sync($regiones);
+        if(count($regiones)>0){
+            $item->regiones()->sync($regiones);   
+        }else{
+            $item->regiones()->detach();
+        }
+        
         $item->save();
         return response()->json($item);       
     }

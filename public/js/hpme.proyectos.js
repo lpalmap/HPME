@@ -178,7 +178,7 @@ $(document).ready(function(){
                     item+='<td>'+data.nombre+'</td>'
                     item+='<td>'+data.descripcion+'</td>';
                     item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_proyecto+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-                    item+='<button class="btn btn-danger" value="'+data.ide_proyecto+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
+                    item+='<button class="btn btn-danger btnEliminarItem" value="'+data.ide_proyecto+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 
                     dataTable.rows.add($(item)).draw();                    
                 }else{ 
@@ -198,7 +198,7 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al guardar el usuario.</li>';
+                    errHTML+='<li>Error al guardar el proyecto.</li>';
                 }
                 console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
