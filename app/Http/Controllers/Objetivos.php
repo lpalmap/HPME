@@ -43,8 +43,8 @@ class Objetivos extends Controller
     
     public function validateRequest($request){
         $rules=[
-        'nombre' => 'required|max:100',
-        'descripcion' => 'required|max:200',
+        'nombre' => 'required|max:250',
+        'descripcion' => 'required|max:250',
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',
