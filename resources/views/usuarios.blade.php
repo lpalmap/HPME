@@ -116,6 +116,10 @@
                                                 <label>Apellidos</label>
                                                 <input class="form-control" id="inApellidos" required="true"/>
                                             </div>
+                                                <div class="form-group">
+                                                <label>Email</label>
+                                                <input class="form-control" id="inEmail" required="true" placeholder="Email"/>
+                                            </div>
                                             @if (isset($roles))
                                             <div class="form-group">
                                                 <label>Rol</label>

@@ -56,6 +56,7 @@ class Usuarios extends Controller
         
         $user->nombres=$request->nombres;
         $user->apellidos=$request->apellidos;
+        $user->email=$request->email;
         $user->save();
         $user->roles;
         return response()->json($user);       
@@ -66,7 +67,8 @@ class Usuarios extends Controller
             'usuario' => 'unique:seg_usuario|required|max:50',
             'nombres' => 'required|max:100',
             'apellidos' => 'required|max:100',
-            'password' => 'required|max:200'    
+            'password' => 'required|max:200',
+            'email' => 'unique:seg_usuario|required|email|max:150'
         ];
         $messages=[
             'required' => 'Debe ingresar :attribute.',
@@ -94,7 +96,8 @@ class Usuarios extends Controller
         $rules=[
             'usuario' => 'required|max:100|unique:seg_usuario,usuario,'.$id.',ide_usuario',
             'nombres' => 'required|max:100',
-            'apellidos' => 'required|max:100'  
+            'apellidos' => 'required|max:100',
+            'email' => 'required|email|max:150|unique:seg_usuario,email,'.$id.',ide_usuario'
         ];
         $messages=[
             'required' => 'Debe ingresar :attribute.',

@@ -148,6 +148,7 @@ $(document).ready(function(){
             $('#inPassword').val('');
             $('#inNombres').val(data.nombres);
             $('#inApellidos').val(data.apellidos);
+            $('#inEmail').val(data.email);
             $('#ide_usuario').val(data.ide_usuario);
             if(data.hasOwnProperty("roles") && data.roles.length>0){
                 $('#inRol').val(data.roles[0].ide_rol);    
@@ -174,6 +175,7 @@ $(document).ready(function(){
             password: $('#inPassword').val(),
             nombres: $('#inNombres').val(),
             apellidos: $('#inApellidos').val(),
+            email: $('#inEmail').val(),       
             ide_rol: $('#inRol').val()
         };
 

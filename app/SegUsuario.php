@@ -13,7 +13,7 @@ class SegUsuario extends BaseModel implements AuthenticatableContract, CanResetP
 
     protected $primaryKey = 'ide_usuario';
     protected $table = 'seg_usuario';
-    protected $fillable = array('usuario','password', 'nombres', 'apellidos','ide_afiliado');
+    protected $fillable = array('usuario','password', 'nombres', 'apellidos','ide_afiliado','email');
     public $timestamps = false;
     
     public function roles(){
