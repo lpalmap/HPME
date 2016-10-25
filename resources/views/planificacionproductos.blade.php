@@ -93,7 +93,7 @@
                                             <h4 class="modal-title" id="H1">Eliminar Producto</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar el Producto se borrar&aacute; toda la planificaci&oacute;n asociada.
+                                            Esta seguro de eliminar el producto se borrar&aacute; toda la planificaci&oacute;n asociada.
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

@@ -156,7 +156,7 @@ $(document).ready(function(){
                             errHTML+="<li>"+data.responseJSON[e]+"</li>";
                         }
                     }else{
-                        errHTML+='<li>Error al guardar el Indicador</li>';
+                        errHTML+='<li>Error al guardar el indicador</li>';
                     }
                     $("#erroresContent").html(errHTML); 
                     $('#erroresModal').modal('show');                  

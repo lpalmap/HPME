@@ -20,9 +20,7 @@ class PlanificacionProducto extends Controller
         $ideProyectoMeta=$indicador->areaObjetivo->objetivoMeta->ide_proyecto_meta;
         $ideObjetivoMeta=$indicador->areaObjetivo->ide_objetivo_meta;
         $ideAreaObjetivo=$indicador->ide_area_objetivo;
-        Log::info('atnes de query');
         $productos=  PlnProductoIndicador::with("producto")->where("ide_indicador_area",$ideIndicadorArea)->get();
-        Log::info('fin traer productos');
         $rol=  request()->session()->get('rol');
         return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol));    
     }
@@ -31,6 +29,7 @@ class PlanificacionProducto extends Controller
         $listaItems=$request->items;
         $ideIndicadorArea=$request->ide_indicador_area;
         $indicadorArea= PlnIndicadorArea::find($ideIndicadorArea);
+        $this->validateRequest($request, $indicadorArea->ide_proyecto);
         $items=array();
         foreach($listaItems as $item){
             $nItem=new PlnProductoIndicador();
@@ -48,15 +47,15 @@ class PlanificacionProducto extends Controller
         return response()->json($items);
     }
     
-    public function producotPorIndicador($ideIndicadorArea){
+    public function producotPorIndicador($ideProyecto){
         $producto=  new CfgProducto();
-        $params = array("ideIndicadorArea"=>$ideIndicadorArea);
+        $params = array("ideProyecto"=>$ideProyecto);
         return $producto->selectQuery(HPMEConstants::PRODUCTO_INDICADOR_QUERY,$params);
     }
     
     public function retriveAllProductos(Request $request){
-        $ideIndicadorArea=$request->ide_indicador_area;
-        $productos=$this->producotPorIndicador($ideIndicadorArea);
+        $ideProyecto=$request->ide_proyecto;
+        $productos=$this->producotPorIndicador($ideProyecto);
         return response()->json($productos);
     }
     
@@ -65,4 +64,13 @@ class PlanificacionProducto extends Controller
         return response()->json($item);
     }
     
+    public function validateRequest($request,$ide_proyecto){
+        $rules=[
+            'items.*.ide_producto' => 'unique:pln_producto_indicador,ide_producto,NULL,ide_producto,ide_proyecto,'.$ide_proyecto,
+        ];
+        $messages=[
+            'unique' => 'El producto ya fue agregado por otro usuario/sessi&oacute;n.'
+        ];
+        $this->validate($request, $rules,$messages);        
+    }
 }

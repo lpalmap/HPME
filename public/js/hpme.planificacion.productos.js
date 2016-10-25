@@ -83,9 +83,9 @@ $(document).ready(function(){
         $('#formAgregar').empty();
         
         var my_url=(""+$('meta[name="_url"]').attr('content'))+"/all";
-        var ideIndicadorArea=$('meta[name="_proyectoindicador"]').attr('content');
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var formData = {
-            ide_indicador_area:ideIndicadorArea
+            ide_proyecto:ideProyecto
         };   
 
         $.ajaxSetup({
@@ -108,7 +108,7 @@ $(document).ready(function(){
                     if(item.length>0){
                        $('#formAgregar').html(item);
                     }else{
-                       $ ('#formAgregar').html("<li>No hay Productos pendientes de agregar.</li>");  
+                       $ ('#formAgregar').html("<li>No hay productos pendientes de agregar.</li>");  
                     }
                     $('#agregarEditarModal').modal('show'); 
                 },
@@ -116,7 +116,7 @@ $(document).ready(function(){
                     $('#loading').modal('hide');
                     console.log('Error:', data);
                     $('#agregarEditarModal').modal('hide'); 
-                    $("#erroresContent").html("<li>Error al agregar Producto</li>"); 
+                    $("#erroresContent").html("<li>Error al agregar producto</li>"); 
                     $('#erroresModal').modal('show');              
                 }
             });   
@@ -148,7 +148,7 @@ $(document).ready(function(){
             error: function (data) {
                 $('#loading').modal('hide');
                 console.log('Error borrando objetivo:', data);
-                $("#erroresContent").html("<li>Error al borrar el Producto</li>"); 
+                $("#erroresContent").html("<li>Error al borrar el producto</li>"); 
                 $('#erroresModal').modal('show');
             }
         });
@@ -211,15 +211,21 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar el Producto</li>"); 
-                    $('#erroresModal').modal('show');
-                    //alert(data.responseJSON.nombre);                
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( var e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al guardar el producto</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');               
                 }
             });
             
         }else{
-            $("#erroresContent").html("<li>Debe seleccionar un Producto</li>"); 
+            $("#erroresContent").html("<li>Debe seleccionar un producto</li>"); 
             $('#erroresModal').modal('show');
             $('#loading').modal('hide');
         }
