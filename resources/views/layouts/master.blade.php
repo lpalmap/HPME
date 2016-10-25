@@ -275,7 +275,7 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#"><i class="icon-user"></i> Perfil de usuario </a>
+                            <li><a href="{{url('perfil')}}"><i class="icon-user"></i> Perfil de usuario </a>
                             </li>
                             <li><a href="#"><i class="icon-gear"></i> Configuraci&#243;n </a>
                             </li>

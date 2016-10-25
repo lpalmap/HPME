@@ -20,6 +20,9 @@ Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
 Route::get('/home',['uses' => 'Home@index', 'middleware' => 'auth'])->name('home');
 
+/* Perfil de usuario */
+Route::get('/perfil',['uses' => 'Perfil@index', 'middleware' => 'auth'])->name('perfil');
+Route::post('/perfil/update',['uses' => 'Perfil@update', 'middleware' => 'auth']);
 /* Mantenimiento de usuarios */
 
 Route::get('/usuarios',['uses' => 'Usuarios@index', 'middleware' => 'auth'])->name('usuarios');
