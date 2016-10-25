@@ -22,9 +22,9 @@ $(document).ready(function(){
         $('#formAgregar').empty();
         
         var my_url=(""+$('meta[name="_url"]').attr('content')).replace("#","")+"/all";
-        var ideProyectoMeta=$('meta[name="_proyectometa"]').attr('content');
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var formData = {
-            ide_proyecto_meta:ideProyectoMeta
+            ide_proyecto:ideProyecto
         };   
 
         $.ajaxSetup({
@@ -53,10 +53,16 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $('#agregarEditarModal').modal('hide'); 
-                    $("#erroresContent").html("<li>Error al agregar objetivos</li>"); 
-                    $('#erroresModal').modal('show');              
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( var e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al guardar el objetivo.</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');                
                 }
             });   
         $('#loading').modal('hide');
@@ -73,7 +79,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
-        })
+        });
         //Se hace el request con ajax a la url para eliminar el item
         $.ajax({
             type: "DELETE",
@@ -110,9 +116,7 @@ $(document).ready(function(){
             //console.log( this.value + ":" + this.checked );
         });
         
-        
         if(seleccion){
-            //alert(text);
             var my_url=(""+$('meta[name="_url"]').attr('content'));
             var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
             var ide_proyecto_meta=$('meta[name="_proyectometa"]').attr('content');
@@ -129,7 +133,6 @@ $(document).ready(function(){
                 data: JSON.parse(text),
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
 //                    var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
 //                    item+='<td>'+data.nombre+'</td>'
 //                    item+='<td>'+data.descripcion+'</td>';
@@ -150,15 +153,21 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar objetivos</li>"); 
-                    $('#erroresModal').modal('show');
-                    //alert(data.responseJSON.nombre);                
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al guardar el objetivo ss.</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');                  
                 }
             });
             
         }else{
-            $("#erroresContent").html("<li>Debe seleccionar una objetivo</li>"); 
+            $("#erroresContent").html("<li>Debe seleccionar un objetivo</li>"); 
             $('#erroresModal').modal('show');
             $('#loading').modal('hide');
         }

@@ -152,25 +152,25 @@ Route::put('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@updatePlantil
 
 
 //Metas
-Route::get('/plantilla/{id}',['uses' => 'ProyectoPlanificacion@metasProyecto', 'middleware' => 'auth']);
+Route::get('/plantilla/{id}',['uses' => 'PlanificacionMeta@metasProyecto', 'middleware' => 'auth']);
 //Borrar meta
-Route::delete('/planmeta/{id}',['uses' => 'ProyectoPlanificacion@deleteMeta', 'middleware' => 'auth']);
+Route::delete('/planmeta/{id}',['uses' => 'PlanificacionMeta@deleteMeta', 'middleware' => 'auth']);
 //Agregar meta
-Route::post('/planmeta',['uses' => 'ProyectoPlanificacion@addMeta', 'middleware' => 'auth']);
+Route::post('/planmeta',['uses' => 'PlanificacionMeta@addMeta', 'middleware' => 'auth']);
 //Actualizar meta
-Route::put('/planmeta/{id}',['uses' => 'ProyectoPlanificacion@updateMeta', 'middleware' => 'auth']);
+Route::put('/planmeta/{id}',['uses' => 'PlanificacionMeta@updateMeta', 'middleware' => 'auth']);
 //Lista metas
-Route::post('/planmeta/all',['uses' => 'ProyectoPlanificacion@retriveAllMetas', 'middleware' => 'auth']);
+Route::post('/planmeta/all',['uses' => 'PlanificacionMeta@retriveAllMetas', 'middleware' => 'auth']);
 
 
 //Objetivos
-Route::get('/meta/{id}',['uses' => 'ProyectoPlanificacion@objetivoMeta', 'middleware' => 'auth']);
+Route::get('/meta/{id}',['uses' => 'PlanificacionObjetivo@objetivoMeta', 'middleware' => 'auth']);
 //Agregar objetivos
-Route::post('/planobjetivo',['uses' => 'ProyectoPlanificacion@addObjetivo', 'middleware' => 'auth']);
+Route::post('/planobjetivo',['uses' => 'PlanificacionObjetivo@addObjetivo', 'middleware' => 'auth']);
 //Lista objetivos
-Route::post('/planobjetivo/all',['uses' => 'ProyectoPlanificacion@retriveAllObjetivos', 'middleware' => 'auth']);
+Route::post('/planobjetivo/all',['uses' => 'PlanificacionObjetivo@retriveAllObjetivos', 'middleware' => 'auth']);
 //Borrar el objetivo
-Route::delete('/planobjetivo/{id}',['uses' => 'ProyectoPlanificacion@deleteObjetivo', 'middleware' => 'auth']);
+Route::delete('/planobjetivo/{id}',['uses' => 'PlanificacionObjetivo@deleteObjetivo', 'middleware' => 'auth']);
 
 
 

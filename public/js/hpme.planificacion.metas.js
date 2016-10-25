@@ -170,7 +170,6 @@ $(document).ready(function(){
         
         
         if(seleccion){
-            //alert(text);
             var my_url=(""+$('meta[name="_url"]').attr('content'));
             var ide_proyecto=$('meta[name="_proyecto"]').attr('content');
             var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
@@ -212,10 +211,16 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar metas</li>"); 
-                    $('#erroresModal').modal('show');
-                    //alert(data.responseJSON.nombre);                
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al guardar la meta.</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');                  
                 }
             });
             

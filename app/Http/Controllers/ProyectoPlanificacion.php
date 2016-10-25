@@ -36,7 +36,7 @@ class ProyectoPlanificacion extends Controller
     
     public function objetivoPorMeta($ideProyectoMeta){
         $objetivo=  new CfgObjetivo();
-        $params = array("ideProyectoMeta"=>$ideProyectoMeta);
+        $params = array("ideProyecto"=>$ideProyectoMeta);
         return $objetivo->selectQuery(HPMEConstants::OBJETIVO_META_QUERY,$params);
     }
     
@@ -117,8 +117,8 @@ class ProyectoPlanificacion extends Controller
     }
     
     public function retriveAllObjetivos(Request $request){
-        $ideProyectoMeta=$request->ide_proyecto_meta;
-        $objetivos=$this->objetivoPorMeta($ideProyectoMeta);
+        $ideProyecto=$request->ide_proyecto;
+        $objetivos=$this->objetivoPorMeta($ideProyecto);
         return response()->json($objetivos);
     }
     
