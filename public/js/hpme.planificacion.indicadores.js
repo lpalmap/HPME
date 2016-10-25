@@ -22,9 +22,9 @@ $(document).ready(function(){
         $('#formAgregar').empty();
         
         var my_url=(""+$('meta[name="_url"]').attr('content'))+"/all";
-        var ideAreaObjetivo=$('meta[name="_proyectoarea"]').attr('content');
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var formData = {
-            ide_area_objetivo:ideAreaObjetivo
+            ide_proyecto:ideProyecto
         };   
 
         $.ajaxSetup({
@@ -47,7 +47,7 @@ $(document).ready(function(){
                     if(item.length>0){
                        $('#formAgregar').html(item);
                     }else{
-                       $ ('#formAgregar').html("<li>No hay Indicadores pendientes de agregar.</li>");  
+                       $ ('#formAgregar').html("<li>No hay indicadores pendientes de agregar.</li>");  
                     }
                     $('#agregarEditarModal').modal('show'); 
                 },
@@ -55,7 +55,7 @@ $(document).ready(function(){
                     $('#loading').modal('hide');
                     console.log('Error:', data);
                     $('#agregarEditarModal').modal('hide'); 
-                    $("#erroresContent").html("<li>Error al agregar Indicador</li>"); 
+                    $("#erroresContent").html("<li>Error al agregar indicador</li>"); 
                     $('#erroresModal').modal('show');              
                 }
             });   
@@ -87,7 +87,7 @@ $(document).ready(function(){
             error: function (data) {
                 $('#loading').modal('hide');
                 console.log('Error borrando objetivo:', data);
-                $("#erroresContent").html("<li>Error al borrar el Indicador</li>"); 
+                $("#erroresContent").html("<li>Error al borrar el indicador</li>"); 
                 $('#erroresModal').modal('show');
             }
         });
@@ -150,15 +150,21 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar el Indicador</li>"); 
-                    $('#erroresModal').modal('show');
-                    //alert(data.responseJSON.nombre);                
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( var e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al guardar el Indicador</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');                  
                 }
             });
             
         }else{
-            $("#erroresContent").html("<li>Debe seleccionar un Indicador</li>"); 
+            $("#erroresContent").html("<li>Debe seleccionar un indicador</li>"); 
             $('#erroresModal').modal('show');
             $('#loading').modal('hide');
         }

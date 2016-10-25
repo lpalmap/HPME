@@ -185,13 +185,13 @@ Route::delete('/planarea/{id}',['uses' => 'PlanificacionArea@deleteArea', 'middl
 
 
 //Indicadores
-Route::get('/area/{id}',['uses' => 'ProyectoPlanificacion@indicadorArea', 'middleware' => 'auth']);
+Route::get('/area/{id}',['uses' => 'PlanificacionIndicador@indicadorArea', 'middleware' => 'auth']);
 //Agregar objetivos
-Route::post('/planindicador',['uses' => 'ProyectoPlanificacion@addIndicador', 'middleware' => 'auth']);
+Route::post('/planindicador',['uses' => 'PlanificacionIndicador@addIndicador', 'middleware' => 'auth']);
 //Lista objetivos
-Route::post('/planindicador/all',['uses' => 'ProyectoPlanificacion@retriveAllIndicadores', 'middleware' => 'auth']);
+Route::post('/planindicador/all',['uses' => 'PlanificacionIndicador@retriveAllIndicadores', 'middleware' => 'auth']);
 //Borrar el objetivo
-Route::delete('/planindicador/{id}',['uses' => 'ProyectoPlanificacion@deleteIndicador', 'middleware' => 'auth']);
+Route::delete('/planindicador/{id}',['uses' => 'PlanificacionIndicador@deleteIndicador', 'middleware' => 'auth']);
 
 //productos
 Route::get('/indicador/{id}',['uses' => 'PlanificacionProducto@productoArea', 'middleware' => 'auth']);

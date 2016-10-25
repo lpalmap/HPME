@@ -151,7 +151,7 @@ $(document).ready(function(){
                     $('#loading').modal('hide');
                     var errHTML="";
                     if((typeof data.responseJSON != 'undefined')){
-                        for( e in data.responseJSON){
+                        for(var e in data.responseJSON){
                             errHTML+="<li>"+data.responseJSON[e]+"</li>";
                         }
                     }else{
