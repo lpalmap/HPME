@@ -22,9 +22,9 @@ $(document).ready(function(){
         $('#formAgregar').empty();
         
         var my_url=(""+$('meta[name="_url"]').attr('content'))+"/all";
-        var ideObjetivoMeta=$('meta[name="_proyectoobjetivo"]').attr('content');
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var formData = {
-            ide_objetivo_meta:ideObjetivoMeta
+            ide_proyecto:ideProyecto
         };   
 
         $.ajaxSetup({
@@ -32,7 +32,6 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
         $.ajax({
                 type: 'POST',
                 url: my_url,
@@ -150,10 +149,16 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
-                    $("#erroresContent").html("<li>Error al agregar el &Aacute;rea de Atenci&oacute;n</li>"); 
-                    $('#erroresModal').modal('show');
-                    //alert(data.responseJSON.nombre);                
+                    var errHTML="";
+                    if((typeof data.responseJSON != 'undefined')){
+                        for( e in data.responseJSON){
+                            errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        }
+                    }else{
+                        errHTML+='<li>Error al agregar el &Aacute;rea de Atenci&oacute;n</li>';
+                    }
+                    $("#erroresContent").html(errHTML); 
+                    $('#erroresModal').modal('show');                  
                 }
             });
             

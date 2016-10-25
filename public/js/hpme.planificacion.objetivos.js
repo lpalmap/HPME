@@ -159,7 +159,7 @@ $(document).ready(function(){
                             errHTML+="<li>"+data.responseJSON[e]+"</li>";
                         }
                     }else{
-                        errHTML+='<li>Error al guardar el objetivo ss.</li>';
+                        errHTML+='<li>Error al guardar el objetivo</li>';
                     }
                     $("#erroresContent").html(errHTML); 
                     $('#erroresModal').modal('show');                  

@@ -80,7 +80,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar &Aacute;rea de Atenci&oac&oacute;n</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar &Aacute;rea de Atenci&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
                                             Esta seguro de eliminar el &Aacute;rea de Atenci&oacute;n se borrar&aacute; toda la planificaci&oacute;n asociada.

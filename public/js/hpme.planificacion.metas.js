@@ -115,7 +115,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
-        })
+        });
         //Se hace el request con ajax a la url para eliminar el item
         $.ajax({
             type: "DELETE",
@@ -148,7 +148,7 @@ $(document).ready(function(){
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.ide_meta);
             $('#loading').modal('hide');
-        }) 
+        }); 
     });    
 
     //create new task / update existing task
@@ -201,7 +201,7 @@ $(document).ready(function(){
                         item='<tr class="even gradeA" id="item'+data[i].ide_proyecto_meta+'">';
                         item+='<td><a href="'+url_target+'/'+data[i].ide_proyecto_meta+'">'+data[i].meta.nombre+'</a></td>';
                         item+='<td style="text-align: center"><div class="checkbox">';
-                        item+='<input class="uniform" type="checkbox" value="'+data[i].ide_proyecto_meta+'" checked/></div><td>'
+                        item+='<input class="uniform" type="checkbox" value="'+data[i].ide_proyecto_meta+'" checked/></div><td>';
                         item+='<button class="btn btn-danger" value="'+data[i].ide_proyecto_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
