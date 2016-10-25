@@ -27,7 +27,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label id="lbPassword">Contrase&ntilde;a (*Dejar en blanco si no desea modificar)</label>
-                                                <input class="form-control" id="inPassword" required="true" type="password"/>
+                                                <input class="form-control" id="inPassword" required="true" type="password" autocomplete="false"/>
                                             </div>
                                             <div class="form-group">
                                                 <label>Nombres</label>
