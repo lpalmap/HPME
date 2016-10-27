@@ -73,7 +73,8 @@ class Usuarios extends Controller
         $messages=[
             'required' => 'Debe ingresar :attribute.',
             'max'  => 'La capacidad del campo :attribute es :max',
-            'unique' => 'El :attribute ya ha sido utilizado'
+            'unique' => 'El :attribute ya ha sido utilizado',
+            'email' => 'La direcci&oacute;n de correo es inv&aacute;lida'
         ];
         $this->validate($request, $rules,$messages);        
     }
@@ -102,7 +103,8 @@ class Usuarios extends Controller
         $messages=[
             'required' => 'Debe ingresar :attribute.',
             'max'  => 'La capacidad del campo :attribute es :max',
-            'unique' => 'El :attribute ya ha sido utilizado'
+            'unique' => 'El :attribute ya ha sido utilizado',
+            'email' => 'La direcci&oacute;n de correo es inv&aacute;lida'
         ];
         $this->validate($request, $rules,$messages);        
     }
