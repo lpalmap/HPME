@@ -102,7 +102,7 @@ $(document).ready(function(){
         
         var type = "PUT"; //for creating new resource
         var my_url = $('meta[name="_url"]').attr('content');
-        var target_url='';
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
         var state=$(this).val();
         var ide_item = $('#ide_item').val();
                 
@@ -126,7 +126,7 @@ $(document).ready(function(){
                 var item='<tr class="even gradeA" id="item'+data.ide_proyecto+'">';
                 item+='<td>'+data.fecha_proyecto+'</td>';
                 item+='<td>'+(data.fecha_cierre?data.fecha_cierre:'')+'</td>';
-                item+='<td><a href="'+target_url+"/"+data.ide_proyecto+'">'+data.descripcion+'</a></td>';
+                item+='<td><a href="'+url_target+"/"+data.ide_proyecto+'">'+data.descripcion+'</a></td>';
                 item+='<td>'+data.periodicidad.descripcion+'</td>';
                 item+='<td>'+data.estado+'</td>';
                 item+='<td>';

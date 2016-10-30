@@ -83,7 +83,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Regi&oacute;n</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar Plantilla</h4>
                                         </div>
                                         <div class="modal-body">
                                             Esta seguro de eliminar la plantilla.
@@ -169,7 +169,7 @@
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_url" content="{{url('planproyecto')}}"/>
-        <meta name="_urlTarget" content="{{url('meta')}}"/>
+        <meta name="_urlTarget" content="{{url('plantilla')}}"/>
         <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

@@ -54,6 +54,7 @@ class PlantillaPlanificacion extends Controller
         $item= PlnProyectoPlanificacion::find($id);
         $item->descripcion=$request->descripcion;       
         $item->save();
+        $item->periodicidad;
         return response()->json($item);       
     }
     
