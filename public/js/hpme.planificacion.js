@@ -8,8 +8,6 @@ $(document).ready(function(){
         "order": [[ 4, "asc" ]],
         "language": window.lang.language
     });
-    var url = window.location;
-    url=(""+url).replace("#","");
     
     //Clic sobre el botón eliminar para un item de la tabla
     $( document ).on( 'click', '.btn-danger', function() {
