@@ -202,13 +202,17 @@ Route::post('/planproducto/all',['uses' => 'PlanificacionProducto@retriveAllProd
 //Borrar el objetivo
 Route::delete('/planproducto/{id}',['uses' => 'PlanificacionProducto@deleteProducto', 'middleware' => 'auth']);
 
+
+//Agrega un la planificación de un producto para la región de la que es administrador el usuario logueado.
+Route::post('/planproducto/addDetalle',['uses' => 'PlanificacionProducto@addDetalle', 'middleware' => 'auth']);
+
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 
 
-Route::get('/planificacion_objetivos',['uses' => 'ProyectoPlanificacion@objetivos', 'middleware' => 'auth']);
-Route::get('/planificacion_areas',['uses' => 'ProyectoPlanificacion@areas', 'middleware' => 'auth']);
-Route::get('/planificacion_indicadores',['uses' => 'ProyectoPlanificacion@indicadores', 'middleware' => 'auth']);
-Route::get('/planificacion_productos',['uses' => 'ProyectoPlanificacion@productos', 'middleware' => 'auth']);
+//Route::get('/planificacion_objetivos',['uses' => 'ProyectoPlanificacion@objetivos', 'middleware' => 'auth']);
+//Route::get('/planificacion_areas',['uses' => 'ProyectoPlanificacion@areas', 'middleware' => 'auth']);
+//Route::get('/planificacion_indicadores',['uses' => 'ProyectoPlanificacion@indicadores', 'middleware' => 'auth']);
+//Route::get('/planificacion_productos',['uses' => 'ProyectoPlanificacion@productos', 'middleware' => 'auth']);
 
 
 

@@ -61,7 +61,7 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
                                             @if(isset($rol) && $rol=='AFILIADO')
-                                            <td><a class="btn2">{{$items[$i]->producto->nombre}}</a></td>
+                                            <td><a class="btn2" title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</a></td>
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
                                             @endif

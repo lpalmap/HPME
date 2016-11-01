@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\CfgProducto;
 use App\HPMEConstants;
 use App\PlnIndicadorArea;
 use App\PlnProductoIndicador;
+use App\CfgRegion;
 
 class PlanificacionProducto extends Controller
 {
@@ -73,4 +75,23 @@ class PlanificacionProducto extends Controller
         ];
         $this->validate($request, $rules,$messages);        
     }
+    
+    public function addDetalle(Request $request){
+        $ideProyecto=$request->ideProyecto;
+        $user=Auth::user();
+        $ideUsuario=$user->ide_usuario;
+        Log::info("Proyecto $ideProyecto usuario $ideUsuario");
+        $regionQuery=new CfgRegion();
+        $params=array('ideUsuario'=>$ideUsuario);
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, $params);
+        Log::info($regiones);
+        if(count($regiones)>0){
+            $ideRegionAdmin=$regiones[0]->ide_region;
+            response()->json(array('region'=>$ideRegionAdmin));
+        }else{
+            response()->json(array('error'=>'El usuario no es adminitrador de una regi&oacute;n'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        
+    }
+    
 }
