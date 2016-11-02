@@ -203,8 +203,10 @@ Route::post('/planproducto/all',['uses' => 'PlanificacionProducto@retriveAllProd
 Route::delete('/planproducto/{id}',['uses' => 'PlanificacionProducto@deleteProducto', 'middleware' => 'auth']);
 
 
-//Agrega un la planificación de un producto para la región de la que es administrador el usuario logueado.
+//Agrega/actualiza la planificación de un producto para la región de la que es administrador el usuario logueado.
 Route::post('/planproducto/addDetalle',['uses' => 'PlanificacionProducto@addDetalle', 'middleware' => 'auth']);
+//Obtiene la planificacion para un producto.
+Route::post('/planproducto/retriveDetalle',['uses' => 'PlanificacionProducto@retriveDetalle', 'middleware' => 'auth']);
 
 //Route::get('/proyectos',['uses' => 'Proyectos@index', 'middleware' => 'auth'])->name('proyectos');
 

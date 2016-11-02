@@ -64,16 +64,94 @@ $(document).ready(function(){
     
     //Agregar nuevo usuario
     $(document).on('click','.btn2',function(){
-        $('#inputTitle2').html("Planificaci&oacute;n");
-        $('#formAgregar2').trigger("reset");
-        $('#btnGuardar2').val('add');
-        $('#agregarEditarModal2').modal('show');
-        //alert('click');
+        $('#loading').modal('show');
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
+        var ideProductoIndicador=$(this).val();
+        
+        var formData = {
+            ide_proyecto:ideProyecto,
+            ide_producto_indicador:ideProductoIndicador
+        }; 
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url=(""+$('meta[name="_url"]').attr('content'))+'/retriveDetalle';
+        
+        $('#formAgregarDetalle').trigger("reset");
+        $('#btnGuardarDetalle').val(ideProductoIndicador);
+        $('#ingresarDetalleModal').modal('show');
+        $('#inProyecto').val(0);
+        var HTMLProyectos='<option value="0"></option>';
+        $('#inProyecto').html(HTMLProyectos);
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                var proyectoSelected=0;
+                if(data.item){
+                    $('#inDescripcion').val(data.item.descripcion);
+                    for(var i in data.item.detalle){
+                        var value=parseInt(data.item.detalle[i].valor);
+                        if(data.item.detalle[i].num_detalle===1){
+                            $('#primerTrim').val(value);
+                        }else{
+                            if(data.item.detalle[i].num_detalle===2){
+                                $('#segundoTrim').val(value);
+                            }else{
+                                if(data.item.detalle[i].num_detalle===3){
+                                    $('#tercerTrim').val(value);
+                                }else{
+                                    $('#cuartoTrim').val(value);   
+                                }
+                            }
+                        }
+                    }
+                    if(data.item.ide_proyecto){
+                        proyectoSelected=data.item.ide_proyecto; 
+                    }else{
+                        $('#inProyecto').val(0);   
+                    }              
+               }
+               if(data.proyectos){
+                   for(var i in data.proyectos){
+                       var selected='';
+                       if(data.proyectos[i].ide_proyecto===proyectoSelected){
+                           selected='selected';
+                       }
+                       HTMLProyectos+='<option title="'+data.proyectos[i].descripcion+'" value="'+data.proyectos[i].ide_proyecto+'" '+selected+'>'+data.proyectos[i].nombre+'</option>';
+                   }
+                   console.log(HTMLProyectos);
+                   $('#inProyecto').html(HTMLProyectos);
+               }
+               recalcTotal();
+               $('#loading').modal('hide');
+           },   
+            error: function (data) {
+                console.log(data);
+                $('#ingresarDetalleModal').modal('hide');
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( var e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al obtener detalle del producto</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');  
+            }
+        });
+        
     });
-    
-//    function calc(val){
-//        $('#totalInput').html()
-//    }
     
     //Agregar nuevo
     $('#btnAgregar').click(function(){
@@ -230,4 +308,85 @@ $(document).ready(function(){
             $('#loading').modal('hide');
         }
     });
+    
+    $("#btnGuardarDetalle").click(function (e) { 
+        $('#loading').modal('show');
+        
+        
+        var ideProyecto=$('meta[name="_proyecto"]').attr('content');
+        var ideProductoIndicador=$("#btnGuardarDetalle").val();
+        var descripcion=$("#inDescripcion").val();
+        var proyecto=$('#inProyecto').val();
+        var item1=parseInt($('#primerTrim').val());
+        if(isNaN(item1) || item1<0){
+            item1=0;
+        }
+        
+        var item2=parseInt($('#segundoTrim').val());
+        if(isNaN(item2) || item2<0){
+            item2=0;
+        }
+        
+        var item3=parseInt($('#tercerTrim').val());
+        if(isNaN(item3) || item3<0){
+            item3=0;
+        }
+            
+        var item4=parseInt($('#cuartoTrim').val());
+        if(isNaN(item4) || item4<0){
+            item4=0;
+        }
+        
+        var items={
+            item1:item1,
+            item2:item2,
+            item3:item3,
+            item4:item4
+        };
+        
+        var formData = {
+            ide_proyecto:ideProyecto,
+            ide_producto_indicador:ideProductoIndicador,
+            descripcion:descripcion,
+            items:items,
+            proyecto:proyecto
+        }; 
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url=(""+$('meta[name="_url"]').attr('content'))+'/addDetalle';
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                $('#ingresarDetalleModal').modal('hide');
+                //console.log("test "+data.region);
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                console.log(data);
+                $('#ingresarDetalleModal').modal('hide');
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( var e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar el producto</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');  
+            }
+        });
+    });
+    
 });

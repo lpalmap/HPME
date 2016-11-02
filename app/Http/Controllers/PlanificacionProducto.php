@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\CfgProducto;
 use App\HPMEConstants;
 use App\PlnIndicadorArea;
 use App\PlnProductoIndicador;
 use App\CfgRegion;
+use App\PlnProyectoRegion;
+use App\PlnRegionProducto;
+use App\PlnRegionProductoDetalle;
 
 class PlanificacionProducto extends Controller
 {
@@ -76,22 +78,150 @@ class PlanificacionProducto extends Controller
         $this->validate($request, $rules,$messages);        
     }
     
+    public function retriveDetalle(Request $request){
+        $ideRegion=$this->regionUsuario($request->ide_proyecto);
+        if(!is_null($ideRegion)){
+            $region=  CfgRegion::find($ideRegion);
+            $proyectos=$region->proyectos;
+            $ideProyectoRegion=  PlnProyectoRegion::where(array("ide_region"=>$ideRegion,"ide_proyecto_planificacion"=>$request->ide_proyecto))->pluck('ide_proyecto_region')->first();  ;//$regionQuery->selectQuery(HPMEConstants::SI, $params);
+            if(!is_null($ideProyectoRegion)){
+                $ideRegionProducto=  PlnRegionProducto::where(array('ide_proyecto_region'=>$ideProyectoRegion,'ide_producto_indicador'=>$request->ide_producto_indicador))->pluck('ide_region_producto')->first();  
+                if(!is_null($ideRegionProducto)){
+                    $regionProducto=  PlnRegionProducto::find($ideRegionProducto);
+                    $regionProducto->detalle;
+                    return response()->json(array('item'=>$regionProducto,'proyectos'=>$proyectos));
+                }
+            }
+            return response()->json(array('proyectos'=>$proyectos));
+            //El usuario es administrador de una region pero no ha ingresado planificacion para un producto.
+        }
+        //El usuario no es administrador de una region
+        
+        return response()->json();              
+    }
+    
+    //Retorna el id de la region de la que el usuario es administador
+    private function proyectoRegionUsuario($ideProyecto){
+        $user=Auth::user();
+        $regionQuery=new CfgRegion();
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            $ideRegionAdmin=$regiones[0]->ide_region;
+            $ideProyectoRegion=  PlnProyectoRegion::where(array("ide_region"=>$ideRegionAdmin,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('ide_proyecto_region')->first();  ;//$regionQuery->selectQuery(HPMEConstants::SI, $params);
+            return $ideProyectoRegion;
+        }else{
+            return null;
+        }
+    }
+    
+    //Retorna el id de la region que el usuario es administrador...
+    private function regionUsuario($ideProyecto){
+        $user=Auth::user();
+        $regionQuery=new CfgRegion();
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            return $regiones[0]->ide_region;           
+        }else{
+            return null;
+        }
+    }
+    
     public function addDetalle(Request $request){
-        $ideProyecto=$request->ideProyecto;
+        $ideProyecto=$request->ide_proyecto;
+        $items=$request->items;
+        $proyecto=$request->proyecto;
         $user=Auth::user();
         $ideUsuario=$user->ide_usuario;
-        Log::info("Proyecto $ideProyecto usuario $ideUsuario");
         $regionQuery=new CfgRegion();
         $params=array('ideUsuario'=>$ideUsuario);
         $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, $params);
-        Log::info($regiones);
         if(count($regiones)>0){
             $ideRegionAdmin=$regiones[0]->ide_region;
-            response()->json(array('region'=>$ideRegionAdmin));
+            //['ide_region',$ideRegionAdmin],['ide_proyecto_planificacion',$ideProyecto]
+            $ideProyectoRegion=  PlnProyectoRegion::where(array("ide_region"=>$ideRegionAdmin,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('ide_proyecto_region')->first();  ;//$regionQuery->selectQuery(HPMEConstants::SI, $params);
+            $nuevo=false;
+            if(is_null($ideProyectoRegion)){
+                //return response()->json(array('error'=>'No se ha crado un proyecto para la region'),  HPMEConstants::HTTP_AJAX_ERROR);
+                //Si no se ha creado un proyecto para la region se crea uno nuevo
+                $proyectoRegion=new PlnProyectoRegion();
+                $proyectoRegion->ide_region=$ideRegionAdmin;
+                $proyectoRegion->ide_proyecto_planificacion=$ideProyecto;
+                $proyectoRegion->ide_usuario_creacion=$ideUsuario;
+                $proyectoRegion->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());;
+                $proyectoRegion->estado=HPMEConstants::ABIERTO;
+                $proyectoRegion->save();
+                $ideProyectoRegion=$proyectoRegion->ide_proyecto_region;      
+                $nuevo=true;                
+            }
+            
+            $ideRegionProducto=0;
+            $ideProductoIndicador=$request->ide_producto_indicador;
+            if($nuevo){
+                $ideRegionProducto=$this->createRegionProducto($ideProductoIndicador, $ideProyectoRegion, $request->descripcion,$proyecto);
+            }else{
+                //['ide_proyecto_region'=>$ideProyectoRegion],['ide_producto_indicador'=>$ideProductoIndicador]
+                $ideRegionProducto=  PlnRegionProducto::where(array('ide_proyecto_region'=>$ideProyectoRegion,'ide_producto_indicador'=>$ideProductoIndicador))->pluck('ide_region_producto')->first();  
+                if(is_null($ideRegionProducto)){
+                    $ideRegionProducto=$this->createRegionProducto($ideProductoIndicador, $ideProyectoRegion, $request->descripcion,$proyecto);
+                }
+                
+            }
+            
+            $regionProducto=  PlnRegionProducto::find($ideRegionProducto);
+            $detalles=$regionProducto->detalle;
+            if(!$nuevo){
+                $regionProducto->descripcion=$request->descripcion;
+                if($proyecto>0){
+                    $regionProducto->ide_proyecto=$proyecto;
+                }else{
+                    $regionProducto->ide_proyecto=null;
+                }
+                $regionProducto->save();
+            }
+            if(count($detalles)>0){
+                $this->updateDetalleProducto($detalles, $items);
+            }else{
+                $this->createDetalleProducto($ideRegionProducto, $items);
+            }       
+            return response()->json(array('region_producto'=>$ideRegionProducto));
         }else{
-            response()->json(array('error'=>'El usuario no es adminitrador de una regi&oacute;n'), HPMEConstants::HTTP_AJAX_ERROR);
+            return response()->json(array('error'=>'El usuario no es administrador de una regi&oacute;n'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         
+    }
+    
+    private function createRegionProducto($ideProductoIndicador,$ideProyectoRegion,$descripcion,$proyecto){
+        $regionProducto=new PlnRegionProducto();
+        $regionProducto->ide_producto_indicador=$ideProductoIndicador;
+        $regionProducto->ide_proyecto_region=$ideProyectoRegion;
+        $regionProducto->descripcion=$descripcion;
+        if($proyecto>0){
+            $regionProducto->ide_proyecto=$proyecto;
+        }
+        $regionProducto->save();
+        return $regionProducto->ide_region_producto;
+    }
+    
+    private function createDetalleProducto($ideRegionProducto,$items){
+        $itemsCount=count($items);
+        for ($i = 1; $i <=$itemsCount; $i++) {
+            $item=new PlnRegionProductoDetalle();
+            $item->ide_region_producto=$ideRegionProducto;
+            $item->num_detalle=$i;
+            $item->valor=$items['item'.$i];
+            $item->save();
+        } 
+    }
+    
+    private function updateDetalleProducto($detalles,$items){
+        foreach($detalles as $detalle){
+            $itemKey='item'.$detalle->num_detalle;
+            if(isset($items[$itemKey])){
+                $itemUpdate=PlnRegionProductoDetalle::find($detalle->ide_region_producto_detalle);
+                $itemUpdate->valor=$items[$itemKey];
+                $itemUpdate->save();
+            }
+        }
     }
     
 }

@@ -12,4 +12,8 @@ class CfgRegion extends BaseModel
     public function administradores(){
         return $this->belongsToMany('App\SegUsuario', 'seg_usuario_region', 'ide_region','ide_usuario');     
     }  
+    
+    public function proyectos(){
+        return $this->belongsToMany('App\CfgProyecto', 'cfg_proyecto_region','ide_region', 'ide_proyecto');     
+    }
 }

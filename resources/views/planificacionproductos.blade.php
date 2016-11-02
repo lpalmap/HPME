@@ -61,7 +61,7 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
                                             @if(isset($rol) && $rol=='AFILIADO')
-                                            <td><a class="btn2" title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</a></td>
+                                            <td><button class="btn2 btn btn-primary btn-round" value="{{$items[$i]->ide_producto_indicador}}"  title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</button></td>
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
                                             @endif
@@ -153,15 +153,15 @@
 </div>
 
 <div class="col-lg-12">
-                        <div class="modal fade" id="agregarEditarModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="ingresarDetalleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="inputTitle2"></h4>
+                                            <h4 class="modal-title">Planficaci&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
-                                       <form role="form" id="formAgregar2">
+                                       <form role="form" id="formAgregarDetalle">
                                            
                                            <div class="form-group">
                                                    <table class="table table-striped table-bordered table-hover" id="dataTableItems2">
@@ -199,13 +199,7 @@
                                                 
                                            <div class="form-group">
                                                 <label>Proyecto</label>
-                                                    <select id="inGrupoLista" class="form-control">
-                                                       <option value="0">Oportunidades y casas para Guatemala. GT11101</option>
-                                                       <option value="1">Pequeños saltos, grandes cambios GT11506</option>
-                                                       <option value="2">Colonia Amway GT10522</option>
-                                                       <option value="3">Colonia Skipper GT12002</option>
-                                                       <option value="4">Cosechadores de agua en la comunidad Macalajau GT1</option>
-                                                       <option value="5">Colonia Constructores de Esperanza GT14002</option>                                                      
+                                                    <select id="inProyecto" class="form-control">                                                   
                                                     </select>                                              
                                                 </div>
                                             <div class="form-group">
@@ -238,7 +232,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary" id="btnGuardar2">Guardar</button>
+                                            <button type="button" class="btn btn-primary" id="btnGuardarDetalle">Guardar</button>
                                             <input type="hidden" id="ide_item2" value="0"/>
                                         </div>
                                     </div>

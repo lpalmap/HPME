@@ -20,4 +20,8 @@ class PlnRegionProducto extends BaseModel
     public function proyecto(){
         return $this->belongsTo('App\CfgProyecto','ide_proyecto');
     }
+    
+    public function detalle(){
+        return $this->hasMany('App\PlnRegionProductoDetalle', 'ide_region_producto');
+    }
 }
