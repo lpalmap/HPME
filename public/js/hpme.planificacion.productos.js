@@ -14,28 +14,24 @@ $(document).ready(function(){
      
     function recalcTotal(){
         inVal=parseInt($('#primerTrim').val());
-        console.log("primtrim val "+inVal);
         if(isNaN(inVal) || inVal<0){
             inVal=0;
             $('#primerTrim').val('');
         }
         
         inVal2=parseInt($('#segundoTrim').val());
-        console.log("sectrim val "+inVal2);
         if(isNaN(inVal2) || inVal2<0){
             inVal2=0;
             $('#segundoTrim').val('');
         }
         
         inVal3=parseInt($('#tercerTrim').val());
-        console.log("tertrim val "+inVal3);
         if(isNaN(inVal3) || inVal3<0){
             inVal3=0;
             $('#tercerTrim').val('');
         }
             
         inVal4=parseInt($('#cuartoTrim').val());
-        console.log("cuartrim val "+inVal4);
         if(isNaN(inVal4) || inVal4<0){
             inVal4=0;
             $('#cuartoTrim').val('');
@@ -104,21 +100,18 @@ $(document).ready(function(){
                     $('#inDescripcion').val(data.item.descripcion);
                     for(var i in data.item.detalle){
                         var value=parseInt(data.item.detalle[i].valor);
-                        alert(value);
-                        if(data.item.detalle[i].num_detalle===1){
+                        var numItem=parseInt(data.item.detalle[i].num_detalle);
+                        alert(numItem);
+                        if(numItem===1){
                             $('#primerTrim').val(value);
-                            alert("primerTrim "+value);
                         }else{
-                            if(data.item.detalle[i].num_detalle===2){
+                            if(numItem===2){
                                 $('#segundoTrim').val(value);
-                                alert("segundoTrim "+value);
                             }else{
-                                if(data.item.detalle[i].num_detalle===3){
+                                if(numItem===3){
                                     $('#tercerTrim').val(value);
-                                    alert("tercerTrim "+value);
                                 }else{
                                     $('#cuartoTrim').val(value); 
-                                    alert("cuartoTrim "+value);
                                 }
                             }
                         }
