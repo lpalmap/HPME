@@ -101,7 +101,6 @@ $(document).ready(function(){
                     for(var i in data.item.detalle){
                         var value=parseInt(data.item.detalle[i].valor);
                         var numItem=parseInt(data.item.detalle[i].num_detalle);
-                        alert(numItem);
                         if(numItem===1){
                             $('#primerTrim').val(value);
                         }else{
