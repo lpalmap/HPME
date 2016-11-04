@@ -333,8 +333,10 @@
                     <ul class="collapse" id="component-nav">                   
                         @if(Session::get('rol')!='AFILIADO')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
-                        @endif
+                        <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+                        @else
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+                        @endif                        
 <!--                        <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_formato.png')}}"/> Generar Formato Internacional</a></li>
