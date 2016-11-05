@@ -14,7 +14,7 @@ class HPMEConstants
     const NOMBRE_ROL_POR_USUARIO="select r.nombre from seg_usuario_rol ur,seg_rol r where ur.ide_usuario=:ideUsuario and r.ide_rol=ur.ide_rol";
     const REGIONES_PROYECTO_QUERY="SELECT r.ide_region,r.nombre FROM cfg_region r WHERE NOT EXISTS(SELECT pr.ide_region FROM cfg_proyecto_region pr where pr.ide_region=r.ide_region AND pr.ide_proyecto=:ideProyecto)";
     const REGION_USUARIO_ADMINISTRADOR_QUERY=" SELECT ide_region FROM seg_usuario_region WHERE ide_usuario=:ideUsuario";
-    
+    const ULTIMO_PROYECTO_ABIERTO_QUERY="SELECT p.ide_proyecto FROM pln_proyecto_planificacion p WHERE p.estado=:estado";
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';

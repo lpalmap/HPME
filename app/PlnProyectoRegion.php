@@ -9,9 +9,9 @@ class PlnProyectoRegion extends BaseModel
     protected $fillable = array('ide_region','ide_proyecto_planificacion','ide_usuario_creacion','','fecha_ingreso','fecha_aprobacion','estado');
     public $timestamps = false;
     
-//    public function region(){
-//        return $this->belongsTo('App\CfgRegion','ide_region');
-//    }
+    public function region(){
+        return $this->belongsTo('App\CfgRegion','ide_region');
+    }
 //    
 //    public function proyecto(){
 //        return $this->belongsTo('App\PlnProyectoPlanificacion','ide_proyecto_planificacion');
