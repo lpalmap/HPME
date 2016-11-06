@@ -57,15 +57,77 @@ class PlanificacionRegion extends Controller
         }      
     } 
 
-    private function obtenerMetas($ideProyecto){
+    private function obtenerMetas($ideProyecto,$ideProyectoRegion=null){
         Log::info("### obtiniendo metas");
         $metas=  DB::select(HPMEConstants::PLN_METAS_POR_PROYECTO,array('ideProyecto'=>$ideProyecto));
         Log::info($metas);
+        $result=array();
         foreach($metas as $meta){
-            $objetivos=DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$meta->ide_proyecto_meta));
-            Log::info("## objetivos ".count($objetivos));
-            Log::info($objetivos);
+            $objetivos=$this->obtenerObjetivos($meta->ide_proyecto_meta);//DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$meta->ide_proyecto_meta));
+            //Log::info("## objetivos ".count($objetivos));
+            //Log::info($objetivos);
+            $result[]=array('meta'=>$meta,'objetivos'=>$objetivos);
         }        
-        return $metas;
+        return $result;
     }
+    
+    private function obtenerObjetivos($ideProyectoMeta,$ideProyectoRegion=null){
+        Log::info('Obteniendo objetivos');
+        $objetivos=DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$ideProyectoMeta));
+        $result=array();
+        foreach($objetivos as $objetivo){
+            $areas=$this->obtenerAreaAtencion($objetivo->ide_objetivo_meta);
+            $result[]=array('objetivo'=>$objetivo,'areas'=>$areas);
+        }
+        return $result;
+    }
+    
+    private function obtenerAreaAtencion($ideObjetivoMeta,$ideProyectoRegion=null){
+        Log::info('Obteniendo areas');
+        $areas=DB::select(HPMEConstants::PLN_AREAS_POR_OBJETIVO,array('ideObjetivoMeta'=>$ideObjetivoMeta));              
+        $result=array();
+        foreach ($areas as $area){
+            $indicadores=$this->obtenerIndicadores($area->ide_area_objetivo);
+            $result[]=array('area'=>$area,'indicadores'=>$indicadores);
+        }
+        return $result; 
+    }
+    
+    private function obtenerIndicadores($ideAreaObjetivo,$ideProyectoRegion=null){
+        Log::info('Obteniendo indicadores...');
+        $indicadores=DB::select(HPMEConstants::PLN_INDICADORES_POR_AREA,array('ideAreaObjetivo'=>$ideAreaObjetivo));
+        $result=array();
+        foreach ($indicadores as $indicador){
+            $productos=$this->obtenerProductos($indicador->ide_indicador_area);
+            $result[]=array('indicador'=>$indicador,'productos'=>$productos);
+        }
+        return $result;     
+    }
+    
+    private function obtenerProductos($ideIndicadorArea,$ideProyectoRegion=null){
+        Log::info('Obteniendo productos...');
+        $productos=DB::select(HPMEConstants::PLN_PRODUCTOS_POR_INDICADOR,array('ideIndicadorArea'=>$ideIndicadorArea));;    
+        $result=array();
+        foreach($productos as $producto){
+            $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
+            $result[]=array('producto'=>$producto,'detalles'=>$detalle);
+        }
+        return $productos;        
+    
+        
+    }
+    
+    private function obtenerDetalleProductoRegion($ideProductoIndicador,$ideProyectoRegion=null){
+        if(is_null($ideProyectoRegion)){
+            //Detalle consolidado
+            return array('consolidado'=>1);
+        }else{
+            $detalleProducto=DB::select(HPMEConstants::PLN_REGION_PRODUCTO,array('ideProductoIndicador'=>$ideProductoIndicador,'ideProyectoRegion'=>$ideProyectoRegion));
+                
+            $detalleProducto=DB::select(HPMEConstants::PLN_DETALLE_POR_PRODUCTO_REGION,array('ideProductoIndicador'=>$ideProductoIndicador,'ideProyectoRegion'=>$ideProyectoRegion));
+            
+            return $detalleProducto;
+        }       
+    }
+    
 }
