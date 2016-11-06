@@ -12,4 +12,9 @@ class PlnProyectoPlanificacion extends BaseModel
     public function periodicidad(){
         return $this->belongsTo('App\CfgListaValor','ide_lista_periodicidad');
     }
+    
+    public function metas(){
+        return $this->hasMany('App\PlnProyectoMeta','ide_proyecto');
+    }
+    
 }

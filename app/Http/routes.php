@@ -219,6 +219,7 @@ Route::post('/planproducto/retriveDetalle',['uses' => 'PlanificacionProducto@ret
 
 //Lista de planificaciones por regiones
 Route::get('/planificaciones',['uses' => 'PlanificacionRegion@planificacionRegion', 'middleware' => 'auth']);
+Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
 
 
 

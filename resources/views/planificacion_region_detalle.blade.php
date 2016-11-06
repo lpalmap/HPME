@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold">Regiones {{isset($proyecto)?$proyecto:''}}</span>
+                            <span style="font-weight: bold">Regiones</span>
                         </div>
                         
                          <div class="panel-body">
@@ -47,7 +47,7 @@
                                                 <td>{{$regiones[$i]->fecha_ingreso}}</td>
                                                 <td>{{$regiones[$i]->fecha_aprobacion}}</td>
                                                 <td>{{$regiones[$i]->estado}}</td>
-                                                <td><a href="{{asset('plandetalle/'.($regiones[$i]->ide_proyecto_region))}}" >
+                                                <td><a href="{{asset('home')}}" >
                                                 <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificac&oacute;n"/></a></td>
                                             </tr>
                                         @endfor

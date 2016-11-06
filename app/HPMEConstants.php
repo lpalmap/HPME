@@ -15,6 +15,14 @@ class HPMEConstants
     const REGIONES_PROYECTO_QUERY="SELECT r.ide_region,r.nombre FROM cfg_region r WHERE NOT EXISTS(SELECT pr.ide_region FROM cfg_proyecto_region pr where pr.ide_region=r.ide_region AND pr.ide_proyecto=:ideProyecto)";
     const REGION_USUARIO_ADMINISTRADOR_QUERY=" SELECT ide_region FROM seg_usuario_region WHERE ide_usuario=:ideUsuario";
     const ULTIMO_PROYECTO_ABIERTO_QUERY="SELECT p.ide_proyecto FROM pln_proyecto_planificacion p WHERE p.estado=:estado";
+    
+    //Querys reportes de planificacion
+    const PROYECTOS_REGION_QUERY="SELECT p.ide_proyecto_region,r.nombre,u.usuario,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM pln_proyecto_region p,cfg_region r,seg_usuario u WHERE p.ide_region=r.ide_region and p.ide_usuario_creacion=u.ide_usuario and p.ide_proyecto_planificacion=:ideProyecto ORDER BY r.nombre asc";
+    const PLN_METAS_POR_PROYECTO="SELECT p.ide_proyecto_meta,m.nombre FROM pln_proyecto_meta p,cfg_meta m WHERE p.ide_proyecto=:ideProyecto and p.ide_meta=m.ide_meta";
+    const PLN_OBJETIVOS_POR_META="SELECT p.ide_objetivo_meta,o.nombre FROM pln_objetivo_meta p,cfg_objetivo o WHERE o.ide_objetivo=p.ide_objetivo and p.ide_proyecto_meta=:ideProyectoMeta ORDER BY o.nombre";
+    const PLN_AREAS_POR_OBJETIVO="SELECT p.ide_area_objetivo,a.nombre FROM pln_area_objetivo p,cfg_area_atencion a where a.ide_area=p.ide_area and p.ide_objetivo_meta=:ideObjetivoMeta ORDER BY a.nombre";
+    
+    
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';
