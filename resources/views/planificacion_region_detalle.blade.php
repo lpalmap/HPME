@@ -21,71 +21,103 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold">Regiones</span>
+                            <span style="font-weight: bold">Regi&oacute;n {{$region}}/{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
                         </div>
                         
                          <div class="panel-body">
-                             @if(isset($regiones))                         
+                             @if(isset($plantilla))                         
                              <div class="table-responsive" id="tableContent">
                                  
-                                <table class="table table-striped table-bordered table-hover" id="dataTableItems">
+                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
                                     <thead>
                                         <tr>
-                                            <th style="text-align: center">Regi&oacute;n</th>
-                                            <th style="text-align: center"> Usuario</th>
-                                            <th style="text-align: center">Fecha Ingreso</th>
-                                            <th style="text-align: center">Fecha Aprobaci&oacute;n</th>
-                                            <th style="text-align: center">Estado</th>
-                                            <th style="text-align: center">Acciones</th>
+                                            <th style="text-align: left">Meta/Area/Objetivo</th>
+                                            <th style="text-align: left">Indicador</th>
+                                            <th style="text-align: left">Producto</th>
+                                            <th style="text-align: left">Proyecto</th>
+                                            <th style="text-align: left">Descripci&oacute;n</th>
+                                            <?php
+                                                foreach ($encabezados as $encabezado){
+                                            ?>
+                                                <th style="text-align: right">{{$encabezado}}</th>
+                                            <?php
+                                                }
+                                            ?>
+                                            <th style="text-align: right">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
-                                        @for ($i=0;$i<count($regiones);$i++)
-                                        <tr class="warning" style="text-align: center" >
-                                                <td>{{$regiones[$i]->nombre}}</td>
-                                                <td>{{$regiones[$i]->usuario}}</td>
-                                                <td>{{$regiones[$i]->fecha_ingreso}}</td>
-                                                <td>{{$regiones[$i]->fecha_aprobacion}}</td>
-                                                <td>{{$regiones[$i]->estado}}</td>
-                                                <td><a href="{{asset('home')}}" >
-                                                <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificac&oacute;n"/></a></td>
+                                        <?php
+                                            $metas=$plantilla['metas'];
+                                            foreach ($metas as $meta){
+                                                $objetivos=$meta['objetivos'];
+                                        ?>
+                                            <tr class="warning" style="text-align: center" >
+                                                <td style="background: darkblue;font-weight: bolder;color: white">{{$meta['meta']->nombre}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <?php 
+                                                    for($f=0;$f<$num_items;$f++){
+                                                        echo '<td></td>';
+                                                    } 
+                                                ?>
+                                                <td></td>
                                             </tr>
-                                        @endfor
-<!--                                        <tr class="active">
-                                            <td>Regi&oacute;n</td>
-                                            <td>Usuario</td>
-                                            <td>Fecha Ingreso</td>
-                                            <td>Fecha Aprobaci&oacute;n</td>
-                                            <td>Estado</td>
-                                        </tr>
-                                        <tr class="success">
-                                            <td>Regi&oacute;n</td>
-                                            <td>Usuario</td>
-                                            <td>Fecha Ingreso</td>
-                                            <td>Fecha Aprobaci&oacute;n</td>
-                                            <td>Estado</td>
-                                        </tr>
-                                        <tr class="warning">
-                                            <td>Regi&oacute;n</td>
-                                            <td>Usuario</td>
-                                            <td>Fecha Ingreso</td>
-                                            <td>Fecha Aprobaci&oacute;n</td>
-                                            <td>Estado</td>
-                                        </tr>
-                                        <tr class="danger">
-                                            <td>Regi&oacute;n</td>
-                                            <td>Usuario</td>
-                                            <td>Fecha Ingreso</td>
-                                            <td>Fecha Aprobaci&oacute;n</td>
-                                            <td>Estado</td>
-                                        </tr>
-                                        <tr class="info">
-                                            <td>Regi&oacute;n</td>
-                                            <td>Usuario</td>
-                                            <td>Fecha Ingreso</td>
-                                            <td>Fecha Aprobaci&oacute;n</td>
-                                            <td>Estado</td>
-                                        </tr>-->
+                                            <?php 
+                                                foreach($objetivos as $objetivo){
+                                                    $areas=$objetivo['areas'];
+                                                    foreach($areas as $area){
+                                                        $indicadores=$area['indicadores'];
+                                            ?>
+                                                <tr class="success" style="text-align: center" >
+                                                    <td style="background:  #008dc5;font-weight: bolder;color: white">{{$area['area']->nombre}}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <?php 
+                                                        for($f=0;$f<$num_items;$f++){
+                                                            echo '<td></td>';
+                                                        } 
+                                                    ?>
+                                                    <td></td>
+                                                </tr>
+                                                    <?php
+                                                        foreach($indicadores as $indicador){
+                                                            $productos=$indicador['productos'];
+                                                            foreach($productos as $producto){
+                                                                $detalles=$producto['detalles'];
+                                                                foreach ($detalles as $detalle){
+                                                                    $total=0;
+                                                                    $valores=$detalle['valores'];
+                                                    ?>
+                                                        <tr class="info" style="text-align: center" >
+                                                            <td>{{$objetivo['objetivo']->nombre}}</td>
+                                                            <td>{{$indicador['indicador']->nombre}}</td>
+                                                            <td>{{$producto['producto']->nombre}}</td>
+                                                            <td>{{$detalle['detalle']->proyecto}}</td>
+                                                            <td>{{$detalle['detalle']->descripcion}}</td>
+                                                            <?php
+                                                                foreach ($valores as $valor){
+                                                                    $total=$total+$valor->valor;
+                                                            ?>
+                                                            <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
+                                                            <?php
+                                                                }
+                                                            ?>
+                                                            <td style="text-align: right">{{$total}}</td>
+                                                        </tr>
+                                                    <?php
+                                                        }}}
+                                                    ?>
+                                                <?php                                              
+                                                }}
+                                                ?>    
+                                        <?php        
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

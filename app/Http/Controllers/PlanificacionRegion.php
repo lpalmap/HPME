@@ -38,7 +38,8 @@ class PlanificacionRegion extends Controller
             Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
             $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
             Log::info($proyectoPlanificacion->descripcion);
-            
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
 //            $metas=  DB::select(HPMEConstants::PLN_METAS_POR_PROYECTO,array('ideProyecto'=>$proyectoPlanificacion->ide_proyecto));
 //            //$plantilla[]=array('metas'=>$metas);
 //            foreach($metas as $meta){
@@ -50,12 +51,59 @@ class PlanificacionRegion extends Controller
             $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
             $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
             
-            Log::info($plantilla);
-            return view('planificacion_region_detalle');
+//            Log::info($plantilla);
+//            Log::info('#### recorriendo plantilla');
+//            Log::info($plantilla['metas']);
+//            for($i=0;$i<count($plantilla['metas']);$i++){
+//                Log::info('##### metas '.$i);
+//                Log::info($plantilla['metas'][$i]['meta']->nombre);
+//                Log::info('##### objetivos');
+//                //Log::info($plantilla['metas'][$i]['objetivos']);
+//                for($o=0;$o<count($plantilla['metas'][$i]['objetivos']);$o++){
+//                    Log::info("###### nuevo objetivo");
+//                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['objetivo']->nombre);
+//                    //Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas']);
+//                    for($a=0;$a<count($plantilla['metas'][$i]['objetivos'][$o]['areas']);$a++){
+//                        Log::info("Areas... ");
+//                        Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['area']->nombre);
+//                        for($in=0;$in<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores']);$in++){
+//                            Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['indicador']->nombre);
+//                            for($p=0;$p<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos']);$p++){
+//                                Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['producto']->nombre);
+//                                //Log::info('#### ide_producto_indicaodr'.$plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['producto']->ide_producto_indicador);
+//                                //$this->printt($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);
+//                                
+//                               // Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);
+//                                for($d=0;$d<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);$d++){
+//                                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles'][$d]['detalle']->proyecto);
+//                                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles'][$d]['valores']);
+//                                }
+//                            }
+//                        }
+//                        
+//                    }        
+//                }
+//                break;
+//            }
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados));
+            //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
         }      
     } 
+    
+    private function printt($detalles){
+        Log::info('### printllll '.count($detalles));
+        for($d=0;count($detalles);$d++){
+            Log::info($detalles[$d]['detalle']->proyecto);
+            Log::info("FINIIIIIIIII ");
+        }
+    }
 
     private function obtenerMetas($ideProyecto,$ideProyectoRegion=null){
         Log::info("### obtiniendo metas");
@@ -110,9 +158,10 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
+            Log::info('##### detalles '.count($detalle));
             $result[]=array('producto'=>$producto,'detalles'=>$detalle);
         }
-        return $productos;        
+        return $result;        
     
         
     }
@@ -140,6 +189,7 @@ class PlanificacionRegion extends Controller
     private function obtenerValoresItems($ideRegionProducto){
         Log::info('Obteniendo detalle items. '.$ideRegionProducto);
         $valores=DB::select(HPMEConstants::PLN_DETALLE_POR_PRODUCTO_REGION,array('ideRegionProducto'=>$ideRegionProducto));
+        Log::info('Count valores.... '.count($valores));
         return $valores;
     }
     

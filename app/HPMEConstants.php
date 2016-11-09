@@ -23,9 +23,9 @@ class HPMEConstants
     const PLN_AREAS_POR_OBJETIVO="SELECT p.ide_area_objetivo,a.nombre FROM pln_area_objetivo p,cfg_area_atencion a where a.ide_area=p.ide_area and p.ide_objetivo_meta=:ideObjetivoMeta ORDER BY a.nombre";
     const PLN_INDICADORES_POR_AREA="SELECT p.ide_indicador_area,i.nombre FROM pln_indicador_area p,cfg_indicador i WHERE i.ide_indicador=p.ide_indicador AND p.ide_area_objetivo=:ideAreaObjetivo ORDER BY i.nombre";
     const PLN_PRODUCTOS_POR_INDICADOR="SELECT p.ide_producto_indicador,c.nombre  FROM pln_producto_indicador p,cfg_producto c WHERE c.ide_producto=p.ide_producto AND p.ide_indicador_area=:ideIndicadorArea ORDER BY c.nombre ";
-    const PLN_REGION_PRODUCTO="SELECT r.ide_region_producto,p.nombre,r.descripcion FROM pln_region_producto r,cfg_proyecto p WHERE r.ide_proyecto=p.ide_proyecto AND r.ide_proyecto_region=:ideProyectoRegion AND r.ide_producto_indicador=:ideProductoIndicador";
+    const PLN_REGION_PRODUCTO="SELECT r.ide_region_producto,p.nombre as proyecto,r.descripcion FROM pln_region_producto r,cfg_proyecto p WHERE r.ide_proyecto=p.ide_proyecto AND r.ide_proyecto_region=:ideProyectoRegion AND r.ide_producto_indicador=:ideProductoIndicador";
     
-    const PLN_DETALLE_POR_PRODUCTO_REGION="SELECT d.num_detalle,sum(d.valor) FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto GROUP BY d.num_detalle ORDER BY d.num_detalle";
+    const PLN_DETALLE_POR_PRODUCTO_REGION="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto GROUP BY d.num_detalle ORDER BY d.num_detalle";
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';

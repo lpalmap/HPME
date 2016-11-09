@@ -169,7 +169,7 @@
                                         <tr>
                                             <th style="text-align: center">Ene-Mar</th>
                                             <th style="text-align: center">Abr-Jun</th>
-                                            <th style="text-align: center">Julio-Sep</th>
+                                            <th style="text-align: center">Jul-Sep</th>
                                             <th style="text-align: center">Oct-Dic</th>
                                             <th style="text-align: center">Total</th>
                                         </tr>
