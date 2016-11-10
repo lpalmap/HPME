@@ -15,6 +15,7 @@ class HPMEConstants
     const REGIONES_PROYECTO_QUERY="SELECT r.ide_region,r.nombre FROM cfg_region r WHERE NOT EXISTS(SELECT pr.ide_region FROM cfg_proyecto_region pr where pr.ide_region=r.ide_region AND pr.ide_proyecto=:ideProyecto)";
     const REGION_USUARIO_ADMINISTRADOR_QUERY=" SELECT ide_region FROM seg_usuario_region WHERE ide_usuario=:ideUsuario";
     const ULTIMO_PROYECTO_ABIERTO_QUERY="SELECT p.ide_proyecto FROM pln_proyecto_planificacion p WHERE p.estado=:estado";
+    const USUARIO_DEPARTAMENTO_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol rol WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=rol.ide_rol and rol.nombre=:usuarioRol and NOT EXISTS (SELECT d.ide_usuario_director FROM cfg_departamento d WHERE d.ide_usuario_director=s.ide_usuario) order by s.usuario";
     
     //Querys reportes de planificacion
     const PROYECTOS_REGION_QUERY="SELECT p.ide_proyecto_region,r.nombre,u.usuario,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM pln_proyecto_region p,cfg_region r,seg_usuario u WHERE p.ide_region=r.ide_region and p.ide_usuario_creacion=u.ide_usuario and p.ide_proyecto_planificacion=:ideProyecto ORDER BY r.nombre asc";
@@ -26,6 +27,8 @@ class HPMEConstants
     const PLN_REGION_PRODUCTO="SELECT r.ide_region_producto,p.nombre as proyecto,r.descripcion FROM pln_region_producto r,cfg_proyecto p WHERE r.ide_proyecto=p.ide_proyecto AND r.ide_proyecto_region=:ideProyectoRegion AND r.ide_producto_indicador=:ideProductoIndicador";
     
     const PLN_DETALLE_POR_PRODUCTO_REGION="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto GROUP BY d.num_detalle ORDER BY d.num_detalle";
+    const PLN_CONSOLIDADO_POR_PRODUCTO="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_producto_indicador=:ideProductoIndicador GROUP BY d.num_detalle ORDER BY d.num_detalle";
+    
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';

@@ -434,6 +434,12 @@
                                 <li>
                                     <a href="{{url('recursos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/conf_recurso.png')}}"/> Recursos</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('departamentos')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/organizacion.png')}}"/> Departamentos</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('colaboradores')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/colaborador.png')}}"/> Colaboradores</a>
+                                </li>
                             </ul>
 
                         </li>

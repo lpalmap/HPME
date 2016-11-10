@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Planificaci&oacute;n por Regi&oacute;n</h2>
+                        <h2>Planificaci&oacute;n Consolidada</h2>
                     </div>
                 </div>
 
@@ -24,7 +24,7 @@
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold">Regi&oacute;n {{$region}}/{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
+                            <span style="font-weight: bold">{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
                         </div>
                         
                          <div class="panel-body">
@@ -37,8 +37,6 @@
                                             <th style="text-align: left">Meta/Area/Objetivo</th>
                                             <th style="text-align: left">Indicador</th>
                                             <th style="text-align: left">Producto</th>
-                                            <th style="text-align: left">Proyecto</th>
-                                            <th style="text-align: left">Descripci&oacute;n</th>
                                             <?php
                                                 foreach ($encabezados as $encabezado){
                                             ?>
@@ -59,8 +57,6 @@
                                                 <td style="background: darkblue;font-weight: bolder;color: white">{{$meta['meta']->nombre}}</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
                                                 <?php 
                                                     for($f=0;$f<$num_items;$f++){
                                                         echo '<td></td>';
@@ -78,8 +74,6 @@
                                                     <td style="background:  #008dc5;font-weight: bolder;color: white">{{$area['area']->nombre}}</td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td></td>
-                                                    <td></td>
                                                     <?php 
                                                         for($f=0;$f<$num_items;$f++){
                                                             echo '<td></td>';
@@ -92,35 +86,28 @@
                                                             $productos=$indicador['productos'];
                                                             foreach($productos as $producto){
                                                                 $detalles=$producto['detalles'];
-                                                                foreach ($detalles as $detalle){
-                                                                    $total=0;
-                                                                    $valores=$detalle['valores'];
+                                                                $total=0;
                                                     ?>
                                                         <tr class="info" style="text-align: center" >
                                                             <td>{{$objetivo['objetivo']->nombre}}</td>
                                                             <td>{{$indicador['indicador']->nombre}}</td>
                                                             <td>{{$producto['producto']->nombre}}</td>
-                                                            <td>{{$detalle['detalle']->proyecto}}</td>
-                                                            <td>{{$detalle['detalle']->descripcion}}</td>
                                                             <?php
-                                                                foreach ($valores as $valor){
-                                                                    $total=$total+$valor->valor;
+                                                                foreach ($detalles as $detalle){
+                                                                    $total=$total+$detalle->valor;
                                                             ?>
-                                                            <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
+                                                            <td style="text-align: right;background: #BDD7EE;">{{intval($detalle->valor)}}</td>
                                                             <?php
                                                                 }
                                                             ?>
                                                             <td style="text-align: right">{{$total}}</td>
                                                         </tr>
                                                     <?php
-                                                        }}}
+                                                       }}}
                                                     ?>
                                                 <?php                                              
                                                 }}
                                                 ?>    
-                                        <?php        
-                                            }
-                                        ?>
                                     </tbody>
                                 </table>
                             </div>

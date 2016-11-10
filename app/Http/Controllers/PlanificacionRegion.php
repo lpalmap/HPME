@@ -15,29 +15,47 @@ class PlanificacionRegion extends Controller
 {    
     public function planificacionRegion(){
         $ultimoProyecto=PlnProyectoPlanificacion::where(array('estado'=>  HPMEConstants::ABIERTO))->first(['ide_proyecto','descripcion']);
-        Log::info("ultimo ".$ultimoProyecto);
+        //Log::info("ultimo ".$ultimoProyecto);
         if(!is_null($ultimoProyecto)){
-            Log::info('No es null '.$ultimoProyecto);
+            //Log::info('No es null '.$ultimoProyecto);
             //$regionQuery=new PlnProyectoRegion();
             $regiones=  DB::select(HPMEConstants::PROYECTOS_REGION_QUERY,array('ideProyecto'=>$ultimoProyecto->ide_proyecto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
-            Log::info("count ".count($regiones));
-            Log::info($regiones);
-            foreach ($regiones as $region){
-                Log::info('proyecto region: '.$region->ide_proyecto_region);
-            }
+            //Log::info("count ".count($regiones));
+            //Log::info($regiones);
+//            foreach ($regiones as $region){
+//                Log::info('proyecto region: '.$region->ide_proyecto_region);
+//            }
             if(count($regiones)>0){
-                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion));
+                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto));
             }          
         }        
         return view('planificacionregion');
+    }
+    
+    public function planificacionConsolidada($ideProyecto){
+        if(!is_null($ideProyecto)){
+            //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
+            $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto);         
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            return view('planificacion_detalle_consolidado',array('plantilla'=>$plantilla,'num_items'=>count($encabezados),'encabezados'=>$encabezados));
+        }else{
+            return view('home');
+        } 
+        
     }
 
     public function planificacionRegionDetalle($id){ 
         $proyectoRegion=  PlnProyectoRegion::find($id);
         if(!is_null($proyectoRegion)){
-            Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
+            //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
             $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
-            Log::info($proyectoPlanificacion->descripcion);
+            //Log::info($proyectoPlanificacion->descripcion);
             $proyectoRegion->region;
             $nombreRegion=$proyectoRegion->region->nombre;
 //            $metas=  DB::select(HPMEConstants::PLN_METAS_POR_PROYECTO,array('ideProyecto'=>$proyectoPlanificacion->ide_proyecto));
@@ -98,17 +116,17 @@ class PlanificacionRegion extends Controller
     } 
     
     private function printt($detalles){
-        Log::info('### printllll '.count($detalles));
+        //Log::info('### printllll '.count($detalles));
         for($d=0;count($detalles);$d++){
-            Log::info($detalles[$d]['detalle']->proyecto);
-            Log::info("FINIIIIIIIII ");
+          //  Log::info($detalles[$d]['detalle']->proyecto);
+            //Log::info("FINIIIIIIIII ");
         }
     }
 
     private function obtenerMetas($ideProyecto,$ideProyectoRegion=null){
-        Log::info("### obtiniendo metas");
+        //Log::info("### obtiniendo metas");
         $metas=  DB::select(HPMEConstants::PLN_METAS_POR_PROYECTO,array('ideProyecto'=>$ideProyecto));
-        Log::info($metas);
+        //Log::info($metas);
         $result=array();
         foreach($metas as $meta){
             $objetivos=$this->obtenerObjetivos($meta->ide_proyecto_meta,$ideProyectoRegion);//DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$meta->ide_proyecto_meta));
@@ -120,7 +138,7 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerObjetivos($ideProyectoMeta,$ideProyectoRegion=null){
-        Log::info('Obteniendo objetivos');
+        //Log::info('Obteniendo objetivos');
         $objetivos=DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$ideProyectoMeta));
         $result=array();
         foreach($objetivos as $objetivo){
@@ -131,7 +149,7 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerAreaAtencion($ideObjetivoMeta,$ideProyectoRegion=null){
-        Log::info('Obteniendo areas');
+        //Log::info('Obteniendo areas');
         $areas=DB::select(HPMEConstants::PLN_AREAS_POR_OBJETIVO,array('ideObjetivoMeta'=>$ideObjetivoMeta));              
         $result=array();
         foreach ($areas as $area){
@@ -142,7 +160,7 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerIndicadores($ideAreaObjetivo,$ideProyectoRegion=null){
-        Log::info('Obteniendo indicadores...');
+        //Log::info('Obteniendo indicadores...');
         $indicadores=DB::select(HPMEConstants::PLN_INDICADORES_POR_AREA,array('ideAreaObjetivo'=>$ideAreaObjetivo));
         $result=array();
         foreach ($indicadores as $indicador){
@@ -153,12 +171,12 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerProductos($ideIndicadorArea,$ideProyectoRegion=null){
-        Log::info('Obteniendo productos...');
+        //Log::info('Obteniendo productos...');
         $productos=DB::select(HPMEConstants::PLN_PRODUCTOS_POR_INDICADOR,array('ideIndicadorArea'=>$ideIndicadorArea));;    
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
-            Log::info('##### detalles '.count($detalle));
+            //Log::info('##### detalles '.count($detalle));
             $result[]=array('producto'=>$producto,'detalles'=>$detalle);
         }
         return $result;        
@@ -167,17 +185,15 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerDetalleProductoRegion($ideProductoIndicador,$ideProyectoRegion=null){
-        Log::info('Obteniendo detalles,,,,,');
+        //Log::info('Obteniendo detalles,,,,,');
         if(is_null($ideProyectoRegion)){
-            //Detalle consolidado
-            Log::info('Consolidado #####');
-            return array('consolidado'=>1);
+            return DB::select(HPMEConstants::PLN_CONSOLIDADO_POR_PRODUCTO,array('ideProductoIndicador'=>$ideProductoIndicador));
         }else{
             //$detalleProducto=DB::select(HPMEConstants::PLN_REGION_PRODUCTO,array('ideProductoIndicador'=>$ideProductoIndicador,'ideProyectoRegion'=>$ideProyectoRegion));             
-            Log::info('Obteniendo detalle###### '.$ideProyectoRegion.' proyecto '.$ideProductoIndicador);
+            //Log::info('Obteniendo detalle###### '.$ideProyectoRegion.' proyecto '.$ideProductoIndicador);
             $detalleProducto=DB::select(HPMEConstants::PLN_REGION_PRODUCTO,array('ideProductoIndicador'=>$ideProductoIndicador,'ideProyectoRegion'=>$ideProyectoRegion));
             $result=array();
-            Log::info('Detalles....  '.count($detalleProducto));
+            //Log::info('Detalles....  '.count($detalleProducto));
             foreach($detalleProducto as $detalle){
                 $items=$this->obtenerValoresItems($detalle->ide_region_producto);
                 $result[]=array('detalle'=>$detalle,'valores'=>$items);
@@ -187,9 +203,9 @@ class PlanificacionRegion extends Controller
     }
     
     private function obtenerValoresItems($ideRegionProducto){
-        Log::info('Obteniendo detalle items. '.$ideRegionProducto);
+        //Log::info('Obteniendo detalle items. '.$ideRegionProducto);
         $valores=DB::select(HPMEConstants::PLN_DETALLE_POR_PRODUCTO_REGION,array('ideRegionProducto'=>$ideRegionProducto));
-        Log::info('Count valores.... '.count($valores));
+        //Log::info('Count valores.... '.count($valores));
         return $valores;
     }
     

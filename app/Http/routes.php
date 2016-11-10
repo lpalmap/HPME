@@ -131,6 +131,24 @@ Route::get('/productos/{id}',['uses' => 'Productos@retrive', 'middleware' => 'au
 Route::post('/productos',['uses' => 'Productos@add', 'middleware' => 'auth']);
 Route::put('/productos/{id}',['uses' => 'Productos@update', 'middleware' => 'auth']);
 
+/* Mantenimiento departamentos */
+
+Route::get('/departamentos',['uses' => 'Departamentos@index', 'middleware' => 'auth'])->name('departamentos');
+Route::delete('/departamentos/{id}',['uses' => 'Departamentos@delete', 'middleware' => 'auth']);
+Route::get('/departamentos/{id}',['uses' => 'Departamentos@retrive', 'middleware' => 'auth']);
+Route::post('/departamentos',['uses' => 'Departamentos@add', 'middleware' => 'auth']);
+Route::put('/departamentos/{id}',['uses' => 'Departamentos@update', 'middleware' => 'auth']);
+Route::post('/departamentos/admin',['uses' => 'Departamentos@retriveAllAdmin', 'middleware' => 'auth']);
+
+/*  Mantenimiento de colaboradores */
+
+Route::get('/colaboradores',['uses' => 'Colaboradores@index', 'middleware' => 'auth'])->name('colaboradores');
+Route::delete('/colaboradores/{id}',['uses' => 'Colaboradores@delete', 'middleware' => 'auth']);
+Route::get('/colaboradores/{id}',['uses' => 'Colaboradores@retrive', 'middleware' => 'auth']);
+Route::post('/colaboradores',['uses' => 'Colaboradores@add', 'middleware' => 'auth']);
+Route::put('/colaboradores/{id}',['uses' => 'Colaboradores@update', 'middleware' => 'auth']);
+Route::post('/colaboradores/admin',['uses' => 'Colaboradores@retriveAllAdmin', 'middleware' => 'auth']);
+
 
 /*
  *
@@ -220,7 +238,7 @@ Route::post('/planproducto/retriveDetalle',['uses' => 'PlanificacionProducto@ret
 //Lista de planificaciones por regiones
 Route::get('/planificaciones',['uses' => 'PlanificacionRegion@planificacionRegion', 'middleware' => 'auth']);
 Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
-
+Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 
 
 

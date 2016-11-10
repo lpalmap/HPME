@@ -25,7 +25,10 @@
                         </div>
                         
                          <div class="panel-body">
-                             @if(isset($regiones))                         
+                             @if(isset($regiones))
+                             <a href="{{url('planconsolidado/'.$ideProyecto)}}" >
+                                                <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>
+<!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
