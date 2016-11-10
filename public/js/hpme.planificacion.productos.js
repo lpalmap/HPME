@@ -124,7 +124,7 @@ $(document).ready(function(){
                if(data.proyectos){
                    for(var i in data.proyectos){
                        var selected='';
-                       if(data.proyectos[i].ide_proyecto===proyectoSelected){
+                       if(data.proyectos[i].ide_proyecto==proyectoSelected){
                            selected='selected';
                        }
                        HTMLProyectos+='<option title="'+data.proyectos[i].descripcion+'" value="'+data.proyectos[i].ide_proyecto+'" '+selected+'>'+data.proyectos[i].nombre+'</option>';
