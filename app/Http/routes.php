@@ -149,6 +149,13 @@ Route::post('/colaboradores',['uses' => 'Colaboradores@add', 'middleware' => 'au
 Route::put('/colaboradores/{id}',['uses' => 'Colaboradores@update', 'middleware' => 'auth']);
 Route::post('/colaboradores/admin',['uses' => 'Colaboradores@retriveAllAdmin', 'middleware' => 'auth']);
 
+/* Mantenimiento de cuentas */
+
+Route::get('/cuentas/{id?}',['uses' => 'Cuentas@index', 'middleware' => 'auth'])->name('colaboradores')->name('cuentas');
+Route::delete('/cuenta/{id}',['uses' => 'Cuentas@delete', 'middleware' => 'auth']);
+Route::get('/cuenta/{id}',['uses' => 'Cuentas@retrive', 'middleware' => 'auth']);
+Route::post('/cuenta',['uses' => 'Cuentas@add', 'middleware' => 'auth']);
+Route::put('/cuenta/{id}',['uses' => 'Cuentas@update', 'middleware' => 'auth']);
 
 /*
  *

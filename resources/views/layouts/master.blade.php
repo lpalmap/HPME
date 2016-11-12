@@ -440,6 +440,9 @@
                                 <li>
                                     <a href="{{url('colaboradores')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/colaborador.png')}}"/> Colaboradores</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('cuentas')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/account.png')}}"/> Cuentas</a>
+                                </li>
                             </ul>
 
                         </li>
