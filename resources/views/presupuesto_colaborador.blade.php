@@ -53,8 +53,10 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_presupuesto_colaborador}}">
                                             <td style="text-align: center">{{$items[$i]->fecha_ingreso}}</td>
-                                            <td style="text-align: center"><a href="{{url('/colaborador/'.$items[$i]->ide_presupuesto_colaborador)}}">{{$items[$i]->nombre}}</a></td>
-                                            <td style="text-align: center"><a href="{{url('planconsolidado/'.$items[$i]->ide_presupuesto_colaborador)}}" >
+                                            <td style="text-align: center"><a href="{{url('/colaborador/'.$items[$i]->ide_presupuesto_colaborador)}}">{{$items[$i]->nombres.' '.$items[$i]->apellidos}}</a></td>
+                                            <td style="text-align: center">
+                                                <button title="Eliminar" class="btn btn-danger btnEliminarItem" value="{{$items[$i]->ide_presupuesto_colaborador}}"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;
+                                                <a href="{{url('planconsolidado/'.$items[$i]->ide_presupuesto_colaborador)}}" >
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a></td>
                                         </tr>
                                             @endfor
@@ -145,7 +147,8 @@
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_url" content="{{url('departamento')}}" />
         <meta name="_departamento" content="{{$idePresupuestoDepartamento}}" />
-        <meta name="_urlTarget" content="{{url('departamento')}}" />
+        <meta name="_urlTarget" content="{{url('colaborador')}}" />
+        <meta name="_imgConsolidado" content="{{asset('images/consolidado.png')}}" />
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

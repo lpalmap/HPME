@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\PlnProyectoPlanificacion;
 use App\PlnPresupuestoDepartamento;
+use App\PlnPresupuestoColaborador;
 use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
 use Illuminate\Support\Facades\Auth;
@@ -84,4 +85,28 @@ class ProyectoPresupuesto extends Controller
         $presupuesto->ide_proyecto_planificacion=$p->ide_proyecto;
         $presupuesto->create($presupuesto->toArray());
     }
+    
+    public function addColaborador(Request $request){
+        $idePresupuestoDepartamento=$request->ide_presupuesto_departamento;      
+        $this->validateRequest($request, $idePresupuestoDepartamento);
+        $colaborador=new PlnPresupuestoColaborador();
+        $colaborador->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+        $colaborador->ide_colaborador=$request->ide_colaborador;
+        $colaborador->ide_presupuesto_departamento=$idePresupuestoDepartamento;
+        $colaborador->save();
+        $colaborador->colaborador;
+        $result=array('ide_presupuesto_colaborador'=>$colaborador->ide_presupuesto_colabo,'fecha_ingreso'=>$colaborador->fecha_ingreso,'nombres'=>$colaborador->colaborador->nombres,'apellidos'=>$colaborador->colaborador->apellidos);
+        return response()->json($result);
+    }
+    
+    public function validateRequest($request,$idePresupuestoDepartamento){
+        $rules=[
+            'ide_colaborador' => 'unique:pln_presupuesto_colaborador,ide_colaborador,NULL,ide_colaborador,ide_presupuesto_departamento,'.$idePresupuestoDepartamento,
+        ];
+        $messages=[
+            'unique' => 'El colaborador ya fue agregado al presupuesto del departamento.'
+        ];
+        $this->validate($request, $rules,$messages);        
+    }
+    
 }
