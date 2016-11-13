@@ -32,12 +32,13 @@ class HPMEConstants
     const PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION="SELECT p.ide_proyecto_presupuesto FROM pln_proyecto_presupuesto p WHERE p.ide_proyecto_planificacion=:ideProyecto";
     
     const PLN_PROYECTO_PRESUPUESTO_POR_DEPARTAMENTO="SELECT p.ide_presupuesto_departamento FROM pln_presupuesto_departamento p WHERE p.ide_proyecto_presupuesto=:ideProyectoPresupuesto and p.ide_departamento=:ideDepartamento";
-    const PLN_DEPARTAMENTO_POR_USUARIO="SELECT d.ide_departamento FROM cfg_departamento d WHERE d.ide_usuario_director=:ideUsuario";
-    
+    const PLN_DEPARTAMENTO_POR_USUARIO="SELECT d.ide_departamento FROM cfg_departamento d WHERE d.ide_usuario_director=:ideUsuario";    
     const PLN_PRESUPUESTO_POR_DEPARTAMENTO="SELECT p.ide_presupuesto_departamento,d.nombre,p.fecha_ingreso,p.fecha_aprobacion,p.estado FROM pln_presupuesto_departamento p,cfg_departamento d WHERE p.ide_departamento=d.ide_departamento AND p.ide_proyecto_presupuesto=:ideProyectoPresupuesto AND d.ide_departamento=:ideDepartamento";
-    //cuentas
+    const PLN_PRESUPUESTO_COLABORADOR_DEPARTAMENTO="SELECT p.ide_presupuesto_colaborador,c.nombres,c.apellidos FROM pln_presupuesto_colaborador p,cfg_colaborador c where p.ide_colaborador=c.ide_colaborador and p.ide_presupuesto_departamento=:idePresupuestoDepartamento";
+    const PLN_PRESUPUESTO_COLABORADORES_DEPARTAMENTO="SELECT c.ide_colaborador,c.nombres,c.apellidos FROM cfg_colaborador c WHERE c.ide_departamento=:ideDepartamento AND NOT EXISTS(SELECT p.ide_colaborador FROM pln_presupuesto_colaborador p where p.ide_colaborador=c.ide_colaborador AND p.ide_presupuesto_departamento=:idePresupuestoDepartamento)";
+   //cuentas
     const CFG_CUENTAS_PARENT="SELECT T2.ide_cuenta, T2.nombre FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
-
+    
 
     const SI='S';
     const NO='N';

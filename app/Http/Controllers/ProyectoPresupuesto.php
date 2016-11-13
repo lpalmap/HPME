@@ -35,7 +35,7 @@ class ProyectoPresupuesto extends Controller
                 $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
                 $presupuesto->ide_departamento=$ideDepartamento;
                 $presupuesto->save();
-                $items[]=$presupuesto;
+                $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
             }
         }       
         Log::info($items);
@@ -55,10 +55,25 @@ class ProyectoPresupuesto extends Controller
     }
     
     public function retriveColaboradores($idePresupuestoDepartamento){
-        
-        
+        $departamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        if(!is_null($departamento)){
+            $ideProyectoPresupuesto=$departamento->ide_proyecto_presupuesto;
+            //Validación departamento/director
+            $colaboradores=DB::select(HPMEConstants::PLN_PRESUPUESTO_COLABORADOR_DEPARTAMENTO,array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
+            return view('presupuesto_colaborador',array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'items'=>$colaboradores));
+        }
+        return view('home');
     }
 
+    //Devuelve la lista de colaboradores que se pueden agregar al presupuesto del departamento
+    public function retriveAllColaboradores(Request $request){
+        $idePresupuestoDepartamento=$request->ide_presupuesto_departamento;
+        $ideDepartamento=  PlnPresupuestoDepartamento::where('ide_presupuesto_departamento',$idePresupuestoDepartamento)->pluck('ide_departamento')->first();
+        Log::info('OOO... departamento... '.$ideDepartamento);
+        $colaboradores=DB::select(HPMEConstants::PLN_PRESUPUESTO_COLABORADORES_DEPARTAMENTO,array('ideDepartamento'=>$ideDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
+        Log::info($colaboradores);
+        return $colaboradores;    
+    } 
 
     private function crearProyectoPresupuesto(PlnProyectoPlanificacion $p){
         Log::info($p);
