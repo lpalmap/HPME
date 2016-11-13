@@ -32,8 +32,9 @@ class HPMEConstants
     const PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION="SELECT p.ide_proyecto_presupuesto FROM pln_proyecto_presupuesto p WHERE p.ide_proyecto_planificacion=:ideProyecto";
     
     const PLN_PROYECTO_PRESUPUESTO_POR_DEPARTAMENTO="SELECT p.ide_presupuesto_departamento FROM pln_presupuesto_departamento p WHERE p.ide_proyecto_presupuesto=:ideProyectoPresupuesto and p.ide_departamento=:ideDepartamento";
-    const PLN_DEPARTAMENTO_POR_USUARIO="SELECT * FROM cfg_departamento d WHERE d.ide_usuario_director=:ideUsuario";
+    const PLN_DEPARTAMENTO_POR_USUARIO="SELECT d.ide_departamento FROM cfg_departamento d WHERE d.ide_usuario_director=:ideUsuario";
     
+    const PLN_PRESUPUESTO_POR_DEPARTAMENTO="SELECT p.ide_presupuesto_departamento,d.nombre,p.fecha_ingreso,p.fecha_aprobacion,p.estado FROM pln_presupuesto_departamento p,cfg_departamento d WHERE p.ide_departamento=d.ide_departamento AND p.ide_proyecto_presupuesto=:ideProyectoPresupuesto AND d.ide_departamento=:ideDepartamento";
     //cuentas
     const CFG_CUENTAS_PARENT="SELECT T2.ide_cuenta, T2.nombre FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
 

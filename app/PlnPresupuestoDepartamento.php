@@ -2,7 +2,7 @@
 
 namespace App;
 
-class PlnPrespuestoDepartamento extends BaseModel
+class PlnPresupuestoDepartamento extends BaseModel
 {
     protected $primaryKey = 'ide_presupuesto_departamento';
     protected $table = 'pln_presupuesto_departamento';

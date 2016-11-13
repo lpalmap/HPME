@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\PlnProyectoPlanificacion;
-use App\CfgListaValor;
+use App\PlnPresupuestoDepartamento;
 use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +20,42 @@ class ProyectoPresupuesto extends Controller
         return view('proyectopresupuesto',array('items'=>$data,'rol'=>$rol));
     }
     
-    public function retriveDepartamentos(){
-        $user=Auth::user();
-               
+    public function retriveDepartamentos($ideProyectoPresupuesto){
+        $ideDepartamento=$this->regionDirector();
+        Log::info('Region director '.$ideDepartamento);   
+        $items=array();
+        if(!is_null($ideDepartamento)){
+            $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
+            if(count($presupuestos)>0){
+                return view('presupuesto_departamentos',array('items'=>$presupuestos));
+            }else{
+                $presupuesto=new PlnPresupuestoDepartamento();
+                $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+                $presupuesto->estado= HPMEConstants::ABIERTO;
+                $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
+                $presupuesto->ide_departamento=$ideDepartamento;
+                $presupuesto->save();
+                $items[]=$presupuesto;
+            }
+        }       
+        Log::info($items);
+        return view('presupuesto_departamentos',array('items'=>$items));
     }
     
+    
     private function regionDirector(){
+        $user=Auth::user();       
+        $regiones=DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            return $regiones[0]->ide_departamento;
+        }else{
+            return null;
+        }
+        
+    }
+    
+    public function retriveColaboradores($idePresupuestoDepartamento){
+        
         
     }
 

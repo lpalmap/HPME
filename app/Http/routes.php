@@ -249,6 +249,7 @@ Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacion
 
 /*   PRESUPUESTO    */
 Route::get('/presupuestos',['uses' => 'ProyectoPresupuesto@index', 'middleware' => 'auth']);
+Route::get('/presupuestos/{id}',['uses' => 'ProyectoPresupuesto@retriveDepartamentos', 'middleware' => 'auth']);
 
 
 Route::get('/insert', function() {
