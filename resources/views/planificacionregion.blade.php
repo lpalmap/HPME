@@ -35,7 +35,7 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Regi&oacute;n</th>
-                                            <th style="text-align: center"> Usuario</th>
+                                            <th style="text-align: center">Usuario</th>
                                             <th style="text-align: center">Fecha Ingreso</th>
                                             <th style="text-align: center">Fecha Aprobaci&oacute;n</th>
                                             <th style="text-align: center">Estado</th>

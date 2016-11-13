@@ -33,7 +33,7 @@ class Login extends Controller
                 if(count($roles)>0){
                     $rol=$roles[0]->nombre;
                 }
-                Log::info('rol.... '.$rol);
+                //Log::info('rol.... '.$rol);
                 $request->session()->put("rol", $rol);
                 return redirect()->route('home');
             

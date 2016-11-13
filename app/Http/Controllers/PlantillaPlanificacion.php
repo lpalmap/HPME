@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Log;
 use App\PlnProyectoPlanificacion;
 use App\CfgListaValor;
 use App\HPMEConstants;
-use App\PlnAreaObjetivo;
-use App\PlnIndicadorArea;
+use App\PlnProyectoPresupuesto;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PlantillaPlanificacion extends Controller
 {
@@ -17,11 +17,11 @@ class PlantillaPlanificacion extends Controller
     public function index(){
         $data=  PlnProyectoPlanificacion::with('periodicidad')->get(); 
         $periodos=  CfgListaValor::all()->where('grupo_lista', 'PERIODO_PLANIFICACION');
-        $user=Auth::user();
-        Log::info($user);
-        $ideUsuario=$user->ide_usuario;
-        Log::info("usuario logeado... ".$ideUsuario);
-        Log::info("Session ".request()->session()->get("mi session"));
+        //$user=Auth::user();
+        //Log::info($user);
+        //$ideUsuario=$user->ide_usuario;
+        //Log::info("usuario logeado... ".$ideUsuario);
+        //Log::info("Session ".request()->session()->get("mi session"));
         //NOMBRE_ROL_POR_USUARIO
         $rol=  request()->session()->get('rol');
         return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol));
@@ -43,10 +43,22 @@ class PlantillaPlanificacion extends Controller
         $authuser=Auth::user();
         $plantilla->ide_usuario_creacion=$authuser->ide_usuario;
         $plantilla->estado=  HPMEConstants::ABIERTO;
-        Log::info("Antes de guardar");
+        //Log::info("Antes de guardar");
         $plantilla->save();
         $plantilla->periodicidad;
+        //Crea el proyecto de presupuesto al momento de crear la plantilla
+        $this->crearProyectoPresupuesto($plantilla);
         return response()->json($plantilla);
+    }
+    
+    private function crearProyectoPresupuesto(PlnProyectoPlanificacion $p){
+        Log::info($p);
+        $presupuesto=new PlnProyectoPresupuesto;
+        $presupuesto->fecha_proyecto=$p->fecha_proyecto;
+        $presupuesto->descripcion=$p->descripcion;
+        $presupuesto->estado=$p->estado;
+        $presupuesto->ide_proyecto_planificacion=$p->ide_proyecto;
+        $presupuesto->create($presupuesto->toArray());
     }
     
     public function updatePlantilla(Request $request,$id){
@@ -64,7 +76,13 @@ class PlantillaPlanificacion extends Controller
     }
     
     public function deletePlantilla($ideProyecto){
-        Log::info("Borando plantilla ".$ideProyecto);
+        //Log::info("Borando plantilla ".$ideProyecto);
+        //Se busca si la plantilla tiene un proyecto de presupusto para eliminarlo junto a la plantilla.
+        $presupuesto=DB::select(HPMEConstants::PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION,array('ideProyecto'=>$ideProyecto));
+        if(count($presupuesto)>0){
+            Log::info($presupuesto[0]->ide_proyecto_presupuesto);
+            PlnProyectoPresupuesto::destroy($presupuesto[0]->ide_proyecto_presupuesto);
+        }       
         $item = PlnProyectoPlanificacion::destroy($ideProyecto);
         return response()->json($item);      
     }
