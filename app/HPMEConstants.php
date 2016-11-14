@@ -36,14 +36,17 @@ class HPMEConstants
     const PLN_PRESUPUESTO_POR_DEPARTAMENTO="SELECT p.ide_presupuesto_departamento,d.nombre,p.fecha_ingreso,p.fecha_aprobacion,p.estado FROM pln_presupuesto_departamento p,cfg_departamento d WHERE p.ide_departamento=d.ide_departamento AND p.ide_proyecto_presupuesto=:ideProyectoPresupuesto AND d.ide_departamento=:ideDepartamento";
     const PLN_PRESUPUESTO_COLABORADOR_DEPARTAMENTO="SELECT p.ide_presupuesto_colaborador,p.fecha_ingreso,c.nombres,c.apellidos FROM pln_presupuesto_colaborador p,cfg_colaborador c where p.ide_colaborador=c.ide_colaborador and p.ide_presupuesto_departamento=:idePresupuestoDepartamento";
     const PLN_PRESUPUESTO_COLABORADORES_DEPARTAMENTO="SELECT c.ide_colaborador,c.nombres,c.apellidos FROM cfg_colaborador c WHERE c.ide_departamento=:ideDepartamento AND NOT EXISTS(SELECT p.ide_colaborador FROM pln_presupuesto_colaborador p where p.ide_colaborador=c.ide_colaborador AND p.ide_presupuesto_departamento=:idePresupuestoDepartamento)";
-   //cuentas
+    const PLN_PRESUPUESTO_DETALLE_COLABORADOR="SELECT c.nombres,c.apellidos,p.ide_presupuesto_departamento,d.ide_proyecto_presupuesto FROM pln_presupuesto_colaborador p,cfg_colaborador c,pln_presupuesto_departamento d WHERE p.ide_colaborador=c.ide_colaborador AND p.ide_presupuesto_departamento=d.ide_presupuesto_departamento AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    //cuentas
     const CFG_CUENTAS_PARENT="SELECT T2.ide_cuenta, T2.nombre FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
-    
+    const PLN_CUENTAS_HIJAS_ACTIVAS="SELECT c1.ide_cuenta,c1.cuenta,c1.nombre,c1.descripcion, COUNT(c2.ide_cuenta) hijas FROM cfg_cuenta c1 LEFT JOIN cfg_cuenta c2 ON c1.ide_cuenta = c2.ide_cuenta_padre and c2.estado='ACTIVA' where c1.ide_cuenta_padre=:ideCuentaPadre and c1.estado='ACTIVA'  GROUP BY c1.ide_cuenta";
 
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';
     const CERRADO='CERRADO';
+    const ACTIVA='ACTIVA';
+    const INACTIVA='INACTIVA';
     const PUBLICADO='PUBLICADO';
     const EJECUTADO='EJECUTADO';
     const DATE_FORMAT='Y-m-d';

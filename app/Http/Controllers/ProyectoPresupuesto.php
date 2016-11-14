@@ -9,6 +9,7 @@ use App\PlnPresupuestoDepartamento;
 use App\PlnPresupuestoColaborador;
 use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
+use App\CfgCuenta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -75,6 +76,37 @@ class ProyectoPresupuesto extends Controller
         Log::info($colaboradores);
         return $colaboradores;    
     } 
+
+    public function deleteColaborador($idePresupuestoColaborador){
+        $colaborador=  PlnPresupuestoColaborador::destroy($idePresupuestoColaborador);
+        return response()->json($colaborador);        
+    }
+    
+    public function colaboradorCuenta($idePresupuestoColaborador,$id=null){
+        $cuentas=array();
+        $ideCuentaPadre=0;
+        $parents=array();
+        $detalleColaborador=DB::select(HPMEConstants::PLN_PRESUPUESTO_DETALLE_COLABORADOR,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        $idePresupuestoDepartamento=0;
+        $ideProyectoPresupuesto=0;
+        $nombreColaborador='Colaborador';
+        if(count($detalleColaborador)>0){
+            $idePresupuestoDepartamento=$detalleColaborador[0]->ide_presupuesto_departamento;
+            $ideProyectoPresupuesto=$detalleColaborador[0]->ide_proyecto_presupuesto;
+            $nombreColaborador=$detalleColaborador[0]->nombres." ".$detalleColaborador[0]->apellidos;
+        }
+        if(is_null($id)){
+            $cuentas= CfgCuenta::where(array('ide_cuenta_padre'=>null,'estado'=>HPMEConstants::ACTIVA))->get();
+        }else{
+            //$cuentas= CfgCuenta::where(array('ide_cuenta_padre'=>$id,'estado'=>HPMEConstants::ACTIVA))->get();
+            $cuentas=DB::select(HPMEConstants::PLN_CUENTAS_HIJAS_ACTIVAS,array('ideCuentaPadre'=>$id));
+            Log::info($cuentas);
+            $ideCuentaPadre=$id;
+            $parents=DB::select(HPMEConstants::CFG_CUENTAS_PARENT,array('ideCuenta'=>$id));            
+        }
+        return view('presupuesto_colaborador_cuenta',array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'nombreColaborador'=>$nombreColaborador,'cuentas'=>$cuentas,'ideCuentaPadre'=>$ideCuentaPadre,'parents'=>$parents));
+    }
+
 
     private function crearProyectoPresupuesto(PlnProyectoPlanificacion $p){
         Log::info($p);

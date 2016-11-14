@@ -177,16 +177,16 @@
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
                                             <td>
-                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="primerTrim" />  
+                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="primerTrim" />  
                                             </td>
                                             <td>
-                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="segundoTrim" />
+                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="segundoTrim" />
                                             </td>
                                             <td>
-                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="tercerTrim"/>
+                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="tercerTrim"/>
                                             </td>
                                             <td>
-                                                <input maxlength="5" align="right" class="form-control" type="text" data-mask="999999" id="cuartoTrim"/>
+                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="cuartoTrim"/>
                                             </td>
                                             <td>
                                                 <input align="right" class="form-control" disabled="true"  value="0" id="totalInput"/>

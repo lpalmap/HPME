@@ -253,6 +253,11 @@ Route::get('/presupuestos/{id}',['uses' => 'ProyectoPresupuesto@retriveDepartame
 Route::get('/departamento/{id}',['uses' => 'ProyectoPresupuesto@retriveColaboradores', 'middleware' => 'auth']);
 Route::post('/departamento/all',['uses' => 'ProyectoPresupuesto@retriveAllColaboradores', 'middleware' => 'auth']);
 Route::put('/departamento/colaborador',['uses' => 'ProyectoPresupuesto@addColaborador', 'middleware' => 'auth']);
+Route::delete('/departamento/{id}',['uses' => 'ProyectoPresupuesto@deleteColaborador', 'middleware' => 'auth']);
+
+//Presupuesto cuentas
+Route::get('/colaborador/{colaborador}/cuenta/{id?}',['uses' => 'ProyectoPresupuesto@colaboradorCuenta', 'middleware' => 'auth']);
+
 
 Route::get('/insert', function() {
     App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

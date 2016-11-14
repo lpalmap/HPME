@@ -74,7 +74,7 @@ $(document).ready(function(){
         $('#loading').modal('show');
         //Se obtiene el id del elemento a eliminar
         var item_id = $(this).val();
-        url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
+        var url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
        
         $.ajaxSetup({
             headers: {
