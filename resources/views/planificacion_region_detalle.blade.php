@@ -36,9 +36,8 @@
                                         <tr>
                                             <th style="text-align: left">Meta/Area/Objetivo</th>
                                             <th style="text-align: left">Indicador</th>
-                                            <th style="text-align: left">Producto</th>
                                             <th style="text-align: left">Proyecto</th>
-                                            <th style="text-align: left">Descripci&oacute;n</th>
+                                            <th style="text-align: left">Producto</th>
                                             <?php
                                                 foreach ($encabezados as $encabezado){
                                             ?>
@@ -60,7 +59,6 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
                                                 <?php 
                                                     for($f=0;$f<$num_items;$f++){
                                                         echo '<td></td>';
@@ -76,7 +74,6 @@
                                             ?>
                                                 <tr class="success" style="text-align: center" >
                                                     <td style="background:  #008dc5;font-weight: bolder;color: white">{{$area['area']->nombre}}</td>
-                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -99,9 +96,8 @@
                                                         <tr class="info" style="text-align: center" >
                                                             <td>{{$objetivo['objetivo']->nombre}}</td>
                                                             <td>{{$indicador['indicador']->nombre}}</td>
-                                                            <td>{{$producto['producto']->nombre}}</td>
                                                             <td>{{$detalle['detalle']->proyecto}}</td>
-                                                            <td>{{$detalle['detalle']->descripcion}}</td>
+                                                            <td>{{$producto['producto']->nombre}}</td>
                                                             <?php
                                                                 foreach ($valores as $valor){
                                                                     $total=$total+$valor->valor;

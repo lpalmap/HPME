@@ -201,33 +201,7 @@
                                                 <label>Proyecto</label>
                                                     <select id="inProyecto" class="form-control">                                                   
                                                     </select>                                              
-                                                </div>
-                                            <div class="form-group">
-                                                <label>Breve Descripci&oacute;n</label>
-<!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
-                                                <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                <label>Recursos</label>
-<!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
-                                                    <div class="checkbox anim-checkbox">
-            <input type="checkbox" id="ch1" />
-            <label for="ch1">Economicos</label>
-        </div>
-        <div class="checkbox anim-checkbox">
-            <input type="checkbox" id="ch2" class="primary" />
-            <label for="ch2">Financieros</label>
-        </div>
-        <div class="checkbox anim-checkbox">
-            <input type="checkbox" id="ch3" class="success" />
-            <label for="ch3">Humanos</label>
-        </div>
-        <div class="checkbox anim-checkbox">
-            <input type="checkbox" id="ch4" class="warning" />
-            <label for="ch4">Equipo</label>
-        </div>
-                                                </div>
-                                       
+                                                </div>                                     
                                        </form>
                                         </div>
                                         <div class="modal-footer">

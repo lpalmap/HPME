@@ -97,7 +97,7 @@ $(document).ready(function(){
                 console.log(data);
                 var proyectoSelected=0;
                 if(data.item){
-                    $('#inDescripcion').val(data.item.descripcion);
+                    //$('#inDescripcion').val(data.item.descripcion);
                     for(var i in data.item.detalle){
                         var value=parseInt(data.item.detalle[i].valor);
                         var numItem=parseInt(data.item.detalle[i].num_detalle);
@@ -316,7 +316,7 @@ $(document).ready(function(){
         
         var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var ideProductoIndicador=$("#btnGuardarDetalle").val();
-        var descripcion=$("#inDescripcion").val();
+        var descripcion='';//$("#inDescripcion").val();
         var proyecto=$('#inProyecto').val();
         var item1=parseInt($('#primerTrim').val());
         if(isNaN(item1) || item1<0){
