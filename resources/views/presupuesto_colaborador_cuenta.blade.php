@@ -89,6 +89,8 @@
                                         </div>
                                         <div class="modal-body">
                                        <form role="form" id="formAgregar">
+                                           <div><span style="font-weight: bolder">Monto:</span><input id="itemReplicar" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/>&nbsp;&nbsp;<span>Replicar monto en todos los meses</span><input type="checkbox" id="replicar" value="1"/></div>
+                                           <hr/>
                                            <table class="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
@@ -100,59 +102,59 @@
                                                 <tbody>
                                                     <tr>
                                                         <td rowspan="3" style="vertical-align: middle">1er. Trimestre</td>
-                                                        <td>Enero</td>
-                                                        <td><input id="itemVal1" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="1"/><span>Enero</span></div></td>
+                                                        <td><input class="input-action" id="itemVal1" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Febrero</td>
-                                                        <td><input id="itemVal2" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="2"/><span>Febrero</span></div></td>
+                                                        <td><input class="input-action" id="itemVal2" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Marzo</td>
-                                                        <td><input id="itemVal3" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="3"/><span>Marzo</span></div></td>
+                                                        <td><input class="input-action" id="itemVal3" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
                                                         <td rowspan="3" style="vertical-align: middle">2do. Trimestre</td>
-                                                        <td>Abril</td>
-                                                        <td><input id="itemVal4" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="4"/><span>Abril</span></div></td>
+                                                        <td><input class="input-action" id="itemVal4" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Mayo</td>
-                                                        <td><input id="itemVal5" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="5"/><span>Mayo</span></div></td>
+                                                        <td><input class="input-action" id="itemVal5" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Junio</td>
-                                                        <td><input id="itemVal6" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="6"/><span>Junio</span></div></td>
+                                                        <td><input class="input-action" id="itemVal6" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
                                                         <td rowspan="3" style="vertical-align: middle">3er. Trimestre</td>
-                                                        <td>Julio</td>
-                                                        <td><input id="itemVal7" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action"type="checkbox" name="ckItem" value="7"/><span>Julio</span></div></td>
+                                                        <td><input class="input-action" id="itemVal7" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Agosto</td>
-                                                        <td><input id="itemVal7" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="8"/><span>Agosto</span></div></td>
+                                                        <td><input class="input-action" id="itemVal8" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Septiembre</td>
-                                                        <td><input id="itemVal9" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="9"/><span>Septiembre</span></div></td>
+                                                        <td><input class="input-action" id="itemVal9" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
                                                         <td rowspan="3" style="vertical-align: middle">4to. Trimestre</td>
-                                                        <td>Octubre</td>
-                                                        <td><input id="itemVal10" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="10"/><span>Octubre</span></div></td>
+                                                        <td><input class="input-action" id="itemVal10" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Noviembre</td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="11"/><span>Noviembre</span></div></td>
                                                         <td><input id="itemVal11" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Diciembre</td>
-                                                        <td><input id="itemVal12" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="12"/><span>Diciembre</span></div></td>
+                                                        <td><input class="input-action" id="itemVal12" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr style="font-weight: bolder">
-                                                        <td></td>
-                                                        <td>Total</td>
+<!--                                                        <td></td>-->
+                                                        <td colspan="2" style="text-align: right">Total</td>
                                                         <td><input id="total" disabled="true" maxlength="13" style="text-align: right;width: 110px;"  type="text" value=""/></td>
                                                     </tr>
                                                 </tbody>
