@@ -172,7 +172,7 @@ $(document).ready(function(){
         
         var cuenta=$(this).val();
         var idePresupuestoColaborador=(""+$('meta[name="_presupuestoColaborador"]').attr('content'));
-        
+  
         var formData = {
             ide_cuenta: cuenta,
             ide_presupuesto_colaborador: idePresupuestoColaborador,

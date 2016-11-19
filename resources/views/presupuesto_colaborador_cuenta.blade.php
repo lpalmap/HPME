@@ -146,7 +146,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="11"/><span>Noviembre</span></div></td>
-                                                        <td><input id="itemVal11" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
+                                                        <td><input class="input-action" id="itemVal11" maxlength="12" style="text-align: right;width: 100px;"  type="text" value=""/></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="text-align: left"><div>&nbsp;&nbsp;<input class="ck-action" type="checkbox" name="ckItem" value="12"/><span>Diciembre</span></div></td>
