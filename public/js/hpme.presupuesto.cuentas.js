@@ -100,16 +100,59 @@ $(document).ready(function(){
         $('#agregarEditarModal').modal('show');
         $('#formAgregar').trigger("reset");
         $('#btnGuardar').val($(this).val());
-        $('#loading').modal('hide');
+        
+        var cuenta=$(this).val();
+        var idePresupuestoColaborador=(""+$('meta[name="_presupuestoColaborador"]').attr('content'));
+        
+        var formData = {
+            ide_cuenta: cuenta,
+            ide_presupuesto_colaborador: idePresupuestoColaborador
+        }; 
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        var url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
+        url+="/getDetalle";
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                var recalc=false;
+                for(var e in data){
+                    $('#itemVal'+data[e].num_detalle).val(data[e].valor);
+                    recalc=true;
+                }
+                if(recalc){
+                    recalcTotal();  
+                }
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( var e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar la meta.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');              
+            }
+        });      
     });    
 
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {   
         $('#loading').modal('show');
-        alert('guardar');
-        var ideCuenta=$(this).val();
         
-        alert(ideCuenta);
         var items='{"items":[';
         var seleccion=true;
         $(".input-action").each(function() {
@@ -123,26 +166,20 @@ $(document).ready(function(){
                 }else{
                     items+=',{"item":"'+$(this).prop('id')+'","value":"'+monto.toFixed(2)+'"}';                  
                 }
-                
-                //alert('fin push');
             }
         });
         items+="]}";
-        console.log(items);
-        alert(JSON.parse(items));
-        if(2>1)return;
-        var cuenta_padre=(""+$('meta[name="_cuentaPadre"]').attr('content')).replace("#","");
+        
+        var cuenta=$(this).val();
+        var idePresupuestoColaborador=(""+$('meta[name="_presupuestoColaborador"]').attr('content'));
         
         var formData = {
-            cuenta: $('#inCuenta').val(),
-            nombre: $('#inNombre').val(),
-            descripcion: $('#inDescripcion').val(),
-            ind_consolidar:1,
-            estado: $('#inEstado').val(),
-            ide_cuenta_padre: cuenta_padre
+            ide_cuenta: cuenta,
+            ide_presupuesto_colaborador: idePresupuestoColaborador,
+            items:JSON.parse(items)
         };   
         
-        $('#loading').modal('show');
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -150,47 +187,14 @@ $(document).ready(function(){
         });
         
         var url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
-        var urlTarget=(""+$('meta[name="_urlTarget"]').attr('content')).replace("#","");
-        //used to determine the http verb to use [add=POST], [update=PUT]
-        var state = $('#btnGuardar').val();
+        url+="/addDetalle";
 
-        var type = "POST"; //for creating new resource
-        var ide_item = $('#ide_item').val();;
-
-        if (state == "update"){
-            type = "PUT"; //for updating existing resource
-            url += '/' + ide_item;
-        }
         $.ajax({
-            type: type,
+            type: 'POST',
             url: url,
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
-                var item = '<tr class="even gradeA" id="item'+data.ide_cuenta+'">';
-                    item+='<td>'+data.cuenta+'</td>';
-                    item+='<td><a href="'+urlTarget+'/'+data.ide_cuenta+'">'+data.nombre+'</a></td>';
-                    item+='<td>'+data.descripcion+'</td>';
-                    if(data.ind_consolidar=='S'){
-                        item+='<td>SI</td>';
-                    }else{
-                        item+='<td>NO</td>';
-                    }
-                    if(data.estado=='ACTIVA'){
-                        item+='<td>Activa</td>';
-                    }else{
-                        item+='<td>Inactiva</td>';
-                    }                   
-                    item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_cuenta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-                    item+='<button class="btn btn-danger" value="'+data.ide_cuenta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
-                if (state == "add"){ 
-                    dataTable.rows.add($(item)).draw();                    
-                }else{ 
-                     dataTable.row( $('#item'+ide_item)).remove();
-                     dataTable.rows.add($(item)).draw();
-                }
-                $('#formAgregar').trigger("reset");
                 $('#agregarEditarModal').modal('hide');
                 $('#loading').modal('hide');
             },

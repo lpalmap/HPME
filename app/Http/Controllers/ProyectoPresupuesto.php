@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 use App\PlnProyectoPlanificacion;
 use App\PlnPresupuestoDepartamento;
 use App\PlnPresupuestoColaborador;
+use App\PlnColaboradorCuenta;
+use App\PlnColaboradorCuentaDetalle;
 use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
 use App\CfgCuenta;
@@ -23,8 +25,7 @@ class ProyectoPresupuesto extends Controller
     }
     
     public function retriveDepartamentos($ideProyectoPresupuesto){
-        $ideDepartamento=$this->regionDirector();
-        Log::info('Region director '.$ideDepartamento);   
+        $ideDepartamento=$this->regionDirector();  
         $items=array();
         if(!is_null($ideDepartamento)){
             $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
@@ -40,7 +41,6 @@ class ProyectoPresupuesto extends Controller
                 $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
             }
         }       
-        Log::info($items);
         return view('presupuesto_departamentos',array('items'=>$items));
     }
     
@@ -71,9 +71,7 @@ class ProyectoPresupuesto extends Controller
     public function retriveAllColaboradores(Request $request){
         $idePresupuestoDepartamento=$request->ide_presupuesto_departamento;
         $ideDepartamento=  PlnPresupuestoDepartamento::where('ide_presupuesto_departamento',$idePresupuestoDepartamento)->pluck('ide_departamento')->first();
-        Log::info('OOO... departamento... '.$ideDepartamento);
         $colaboradores=DB::select(HPMEConstants::PLN_PRESUPUESTO_COLABORADORES_DEPARTAMENTO,array('ideDepartamento'=>$ideDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
-        Log::info($colaboradores);
         return $colaboradores;    
     } 
 
@@ -100,7 +98,6 @@ class ProyectoPresupuesto extends Controller
         }else{
             //$cuentas= CfgCuenta::where(array('ide_cuenta_padre'=>$id,'estado'=>HPMEConstants::ACTIVA))->get();
             $cuentas=DB::select(HPMEConstants::PLN_CUENTAS_HIJAS_ACTIVAS,array('ideCuentaPadre'=>$id));
-            Log::info($cuentas);
             $ideCuentaPadre=$id;
             $parents=DB::select(HPMEConstants::CFG_CUENTAS_PARENT,array('ideCuenta'=>$id));            
         }
@@ -109,7 +106,6 @@ class ProyectoPresupuesto extends Controller
 
 
     private function crearProyectoPresupuesto(PlnProyectoPlanificacion $p){
-        Log::info($p);
         $presupuesto=new PlnProyectoPresupuesto;
         $presupuesto->fecha_proyecto=$p->fecha_proyecto;
         $presupuesto->descripcion=$p->descripcion;
@@ -140,5 +136,77 @@ class ProyectoPresupuesto extends Controller
         ];
         $this->validate($request, $rules,$messages);        
     }
+    
+    public function addDetalleCuenta(Request $request){
+        $items=$request->items['items'];
+        $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
+        $detalles=array();
+        if(is_null($ideColaboradorCuenta)){
+            $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
+            $nuevoColaboradorCuenta->ide_cuenta=$request->ide_cuenta;
+            $nuevoColaboradorCuenta->ide_presupuesto_colaborador=$request->ide_presupuesto_colaborador;
+            $nuevoColaboradorCuenta->save();
+            $ideColaboradorCuenta=$nuevoColaboradorCuenta->ide_colaborador_cuenta;           
+        }else{
+            $detalles=DB::select(HPMEConstants::PLN_COLABORADOR_CUENTA_DETALLE,array('ideColaboradorCuenta'=>$ideColaboradorCuenta));
+        }
+        $ideColaboradorCuentaDetalle;
+        $detallesPersistidos=array();
+        foreach ($items as $item){
+            $numItem=str_replace('itemVal', "", $item['item']);
+            $itemValue=$item['value'];
+            $ideColaboradorCuentaDetalle=$this->cuentaColaboradorDetalle($detalles, $numItem);
+            if(is_null($ideColaboradorCuentaDetalle)){
+                $nuevoDetalle=new PlnColaboradorCuentaDetalle();
+                $nuevoDetalle->ide_colaborador_cuenta=$ideColaboradorCuenta;
+                $nuevoDetalle->num_detalle=$numItem;
+                $nuevoDetalle->valor=$itemValue;
+                $nuevoDetalle->save();
+            }else{
+                $detalleCuenta=PlnColaboradorCuentaDetalle::find($ideColaboradorCuentaDetalle);
+                $detalleCuenta->valor=$itemValue;
+                $detalleCuenta->save();
+            } 
+           $detallesPersistidos[]=$numItem;
+        }
+        $this->eliminarDetallesNoUtilizados($detalles, $detallesPersistidos);  
+        return response()->json(array('SUCCESS'=>true));
+    }
+    
+    
+    private function cuentaColaborador($ideCuenta,$idePresupuestoColaborador){
+        $cuentas=DB::select(HPMEConstants::PLN_COLABORADOR_CUENTA,array('ideCuenta'=>$ideCuenta,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        if(count($cuentas)>0){
+            return $cuentas[0]->ide_colaborador_cuenta;
+        }else{
+            return null;
+        }     
+    }
+    
+    private function cuentaColaboradorDetalle($detalles,$numDetalle){
+        $numDetalle=$numDetalle.intValue();
+        foreach ($detalles as $detalle){
+            if($detalle->num_detalle==$numDetalle){
+                return $detalle->ide_colaborador_cuenta_detalle;
+            }
+        }
+        return null;
+    }
+    
+    public function eliminarDetallesNoUtilizados($detalles,$detallesPersistidos){
+        foreach($detalles as $detalle){
+            if(!in_array($detalle->num_detalle,$detallesPersistidos)){
+                PlnColaboradorCuentaDetalle::destroy($detalle->ide_colaborador_cuenta_detalle);
+            }
+        }      
+    }
+    
+    public function getDetalleCuenta(Request $request){
+        $ideCuenta=$request->ide_cuenta;
+        $idePresupuestoColaborador=$request->ide_presupuesto_colaborador;
+        $result=DB::select(HPMEConstants::PLN_COLABORADOR_CUENTA_DETALLE_VALORES,array('ideCuenta'=>$ideCuenta,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        return response()->json($result);
+    }
+    
     
 }

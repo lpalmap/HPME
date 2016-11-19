@@ -40,7 +40,13 @@ class HPMEConstants
     //cuentas
     const CFG_CUENTAS_PARENT="SELECT T2.ide_cuenta, T2.nombre FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
     const PLN_CUENTAS_HIJAS_ACTIVAS="SELECT c1.ide_cuenta,c1.cuenta,c1.nombre,c1.descripcion, COUNT(c2.ide_cuenta) hijas FROM cfg_cuenta c1 LEFT JOIN cfg_cuenta c2 ON c1.ide_cuenta = c2.ide_cuenta_padre and c2.estado='ACTIVA' where c1.ide_cuenta_padre=:ideCuentaPadre and c1.estado='ACTIVA'  GROUP BY c1.ide_cuenta";
-
+    
+    //cuenta colaboardor
+    const PLN_COLABORADOR_CUENTA="SELECT c.ide_colaborador_cuenta FROM pln_colaborador_cuenta c WHERE c.ide_cuenta=:ideCuenta AND c.ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    const PLN_COLABORADOR_CUENTA_DETALLE="SELECT d.ide_colaborador_cuenta_detalle,num_detalle FROM pln_colaborador_cuenta_detalle d WHERE d.ide_colaborador_cuenta=:ideColaboradorCuenta";
+    const PLN_COLABORADOR_CUENTA_DETALLE_VALORES="SELECT d.num_detalle,d.valor FROM pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta c where c.ide_colaborador_cuenta=d.ide_colaborador_cuenta and c.ide_cuenta=:ideCuenta and c.ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    
+    
     const SI='S';
     const NO='N';
     const ABIERTO='ABIERTO';
