@@ -56,7 +56,7 @@
                                             <td style="text-align: center"><a href="{{url('/colaborador/'.$items[$i]->ide_presupuesto_colaborador.'/cuenta')}}">{{$items[$i]->nombres.' '.$items[$i]->apellidos}}</a></td>
                                             <td style="text-align: center">
                                                 <button title="Eliminar" class="btn btn-danger btnEliminarItem" value="{{$items[$i]->ide_presupuesto_colaborador}}"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;
-                                                <a href="{{url('planconsolidado/'.$items[$i]->ide_presupuesto_colaborador)}}" >
+                                                <a href="{{url('/presupuestocolaborador/'.$items[$i]->ide_presupuesto_colaborador)}}" >
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a></td>
                                         </tr>
                                             @endfor

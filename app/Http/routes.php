@@ -261,6 +261,10 @@ Route::get('/colaborador/{colaborador}/cuenta/{id?}',['uses' => 'ProyectoPresupu
 Route::post('/cuenta/addDetalle',['uses' => 'ProyectoPresupuesto@addDetalleCuenta', 'middleware' => 'auth']);
 Route::post('/cuenta/getDetalle',['uses' => 'ProyectoPresupuesto@getDetalleCuenta', 'middleware' => 'auth']);
 
+//Presupuesto consolidado 
+Route::get('/presupuestocolaborador/{id}',['uses' => 'PresupuestoConsolidado@consolidadoColaborador', 'middleware' => 'auth']);
+//Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
+//Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 
 
 Route::get('/insert', function() {
