@@ -2,7 +2,7 @@
 @section('globalStyles')
     @parent
         <!-- PAGE LEVEL STYLES -->
-<!--    <link href="assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />-->
+    <link href="{{asset('assets/plugins/dataTables/dataTables.bootstrap.css')}}" rel="stylesheet" />
     <!-- END PAGE LEVEL  STYLES -->
 @endsection
 @section('content')
@@ -31,24 +31,53 @@
                              @if(isset($cuentas))                         
                              <div class="table-responsive" id="tableContent">
                                  
-                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
+                                 <table class="tbl table table-striped table-bordered table-hover table-buget" id="dataTableItems">
                                     <thead>
                                         <tr>
-                                            <th>Cuenta</th>
-                                            <th>Nombre</th>
-                                            <th>c1</th>
-                                            <th>c2</th>
-                                            <th>c3</th>
+                                            <th style="text-align: center"></th>
+                                            <th style="text-align: center"></th>
+                                            <th>%</th>
+                                            <th>Enero</th>
+                                            <th>Febrero</th>
+                                            <th>Marzo</th>
+                                            <th>Abril</th>
+                                            <th>Mayo</th>
+                                            <th>Junio</th>
+                                            <th>Julio</th>
+                                            <th>Agosto</th>
+                                            <th>Septiembre</th>
+                                            <th>Octubre</th>
+                                            <th>Noviembre</th>
+                                            <th>Diciembre</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="lista-items" name="lista-items">
+                                        <tbody id="lista-items" name="lista-items">
+                                        @for ($i=0;$i<count($cuentas);$i++)
                                             <tr class="warning" style="text-align: center" >
+                                                @if(is_null($cuentas[$i]['cuenta']) || strlen($cuentas[$i]['cuenta'])==0)
+                                                <td style="text-align: center">{{$cuentas[$i]['nombre']}}</td>
                                                 <td></td>
+                                                @else
+                                                <td style="text-align: center">{{$cuentas[$i]['cuenta']}}</td>
+                                                <td style="text-align: center">{{$cuentas[$i]['nombre']}}</td>
+                                                @endif
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>{{isset($cuentas[$i]['item1'])?$cuentas[$i]['item1']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item2'])?$cuentas[$i]['item2']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item3'])?$cuentas[$i]['item3']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item4'])?$cuentas[$i]['item4']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item5'])?$cuentas[$i]['item5']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item6'])?$cuentas[$i]['item6']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item7'])?$cuentas[$i]['item7']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item8'])?$cuentas[$i]['item8']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item9'])?$cuentas[$i]['item9']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item10'])?$cuentas[$i]['item10']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item11'])?$cuentas[$i]['item11']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item12'])?$cuentas[$i]['item12']:'0'}}</td>
                                                 <td></td>
                                             </tr>
+                                        @endfor    
                                     </tbody>
                                 </table>
                             </div>
@@ -92,9 +121,11 @@
 @endsection
 @section('footer')
     @parent
-<!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-        <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+<!--        <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>-->
+<!--        <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>-->
+<!--         <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>-->
+<!--        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript"></script>-->
+        <script src="{{asset('assets/plugins/dataTables/jquery.freezeheader.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
-        <script src="{{asset('js/hpme.planificacion.js')}}"></script>-->
-<!--        <script src="{{asset('js/hpme.proyectos.js')}}"></script>-->
+        <script src="{{asset('js/hpme.presupuesto.consolidado.js')}}"></script>
 @endsection

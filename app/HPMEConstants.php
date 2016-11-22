@@ -50,7 +50,7 @@ class HPMEConstants
     const PLN_COLABORADOR_CUENTA_DETALLE_VALORES="SELECT d.num_detalle,d.valor FROM pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta c where c.ide_colaborador_cuenta=d.ide_colaborador_cuenta and c.ide_cuenta=:ideCuenta and c.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     
     //
-    const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_PADRE_COLABORADOR="SELECT distinct c.ide_cuenta_padre FROM pln_colaborador_cuenta p,cfg_cuenta c where p.ide_cuenta=c.ide_cuenta AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_PADRE_COLABORADOR="SELECT distinct c.ide_cuenta_padre FROM pln_colaborador_cuenta p,cfg_cuenta c where p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre IS NOT NULL AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_RAIZ_COLABORADOR="SELECT distinct c.ide_cuenta FROM pln_colaborador_cuenta p,cfg_cuenta c where p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre is null AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     
     //reporte consolidado

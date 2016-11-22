@@ -10,3 +10,17 @@
 .table-center th,td{
     text-align: center;
 }
+
+.table-buget td{
+    text-align: right;
+}
+
+/*.table-buget tbody {
+   overflow: auto;
+   height: 30px;
+}*/
+
+.scroll {
+    max-height: 100px;
+    overflow: auto;
+}

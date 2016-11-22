@@ -11,19 +11,26 @@ class PresupuestoConsolidado extends Controller
 {
     //Obtiene usuarios y crea vista
     public function consolidadoColaborador($idePresupuestoColaborador){
-        $this->buildConsolidado($idePresupuestoColaborador);
-        return view('presupuesto_consolidado',array('cuentas'=>array()));
+        $consolidado=$this->buildConsolidado($idePresupuestoColaborador);
+        
+        return view('presupuesto_consolidado',array('cuentas'=>$consolidado));
     }
     
     public function buildConsolidado($idePresupuestoColaborador){
         Log::info('consolidado '.$idePresupuestoColaborador);
+        //Log::info("**************** MEME");
+        //Log::info(memory_get_usage(true) );
+        //Cuentas padre originales no se cuentan los nodos que son raíz
         $query=HPMEConstants::PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_PADRE_COLABORADOR;
         $cuentasPadre=array();
         $cuentasPadreIngresadas=DB::select($query,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
-        Log::info($cuentasPadreIngresadas);
+        //Log::info($cuentasPadreIngresadas);
+        //Cuentas padre originales se deben consolidar
+        $cuentasConsolidar=array();
+        
         foreach($cuentasPadreIngresadas as $cuenta){
             if(!is_null($cuenta->ide_cuenta_padre)){
-                $cuentasPadre[]=$cuenta->ide_cuenta_padre;
+                $cuentasConsolidar[]=$cuenta->ide_cuenta_padre;
                 $padres=DB::select(HPMEConstants::CFG_CUENTAS_PARENT_SOLO_ID,array("ideCuenta"=>$cuenta->ide_cuenta_padre));
                 foreach ($padres as $padre){
                     if(!in_array($padre->ide_cuenta, $cuentasPadre)){
@@ -32,8 +39,8 @@ class PresupuestoConsolidado extends Controller
                 }
             }
         }
-        Log::info('*******CUENTAS PADRE********');
-        Log::info($cuentasPadre);     
+        //Log::info('*******CUENTAS PADRE********');
+        //Log::info($cuentasPadre);     
         $queryRaiz=HPMEConstants::PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_RAIZ_COLABORADOR;
         $cuentasRaiz=DB::select($queryRaiz,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
         //Se agrega los nodos raiz.
@@ -42,42 +49,114 @@ class PresupuestoConsolidado extends Controller
                 $cuentasPadre[]=$raiz->ide_cuenta;
             }
         } 
-        Log::info('*******CUENTAS PADRE ACTUALIZADAS ********');
-        $this->cuentas(null, $cuentasPadre, $idePresupuestoColaborador);
-        Log::info("****************** FIN ******************");
+        
+        return $this->buildConsolidadoInicial($cuentasPadre, $cuentasConsolidar, array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        //Log::info('*******CUENTAS PADRE ACTUALIZADAS ********');
+       //$this->cuentas(null, $cuentasPadre,$cuentasConsolidar, $idePresupuestoColaborador);
+        //Log::info("****************** FIN ******************");
+       // Log::info('********************END MEM');
+       // Log::info(memory_get_usage(true) );
     }
     
     
-    public function cuentas($ideCuentaPadre,$padres,$idePresupuestoColaborador){
-        $query='';
-        $params=array();
-        if(is_null($ideCuentaPadre)){
-            $query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ;
+//    public function cuentas($ideCuentaPadre,$padres,$cuentasConsolidar,$idePresupuestoColaborador){
+//        $query='';
+//        $params=array();
+//        if(is_null($ideCuentaPadre)){
+//            $query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ;
+//        }else{
+//            $query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA;
+//            $params=array('ideCuentaPadre'=>$ideCuentaPadre);
+//        }
+//        Log::info("****************t1");
+//        $cuentasHijas=DB::select($query,$params);
+//        Log::info($cuentasHijas);
+//        foreach ($cuentasHijas as $hija){
+//            if(in_array($hija->ide_cuenta, $padres)){
+//                $resultHijas=$this->cuentas($hija->ide_cuenta, $padres,$idePresupuestoColaborador);
+//                if(is_null($resultHijas)){
+//                    //Consolidar
+//                    return $this->consolidarCuenta($hija, $idePresupuestoColaborador);
+//                }
+//            }else{
+//                Log::info("****** CUENTA NO EN PADRES**********");
+//                Log::info($hija->nombre);
+//            }
+//        }        
+//        return null;        
+//    }
+       
+    public function buildConsolidadoInicial($cuentasPadre,$cuentasConsolidar,$parameterQuery){     
+        //Log::info("**** CONSOLIDADO INICIAL ******");
+        $cuentasIniciales=DB::select($query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ);
+        //Log::info($cuentasIniciales);
+        $result=array();
+        foreach ($cuentasIniciales as $root){
+             $result_cuenta=$this->buildReporteCuenta($root, $cuentasPadre, $cuentasConsolidar, $parameterQuery);
+             if(!is_null($result_cuenta)){
+                $result=array_merge($result, $result_cuenta);
+             }
+        }    
+        //Log::info("**************** ROOT ********************");
+        //Log::info($result);
+        //Log::info("**************** END ROOT ********************");
+    
+        return $result;
+    }
+    
+    public function buildReporteCuenta($cuenta,$cuentasPadre,$cuentasConsolidar,$parameterQuery){
+        if(in_array($cuenta->ide_cuenta,$cuentasConsolidar)){
+            //Log::info("Cuenta $cuenta->nombre en consolidar.");
+            return $this->consolidarCuenta($cuenta, $parameterQuery);
         }else{
-            $query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA;
-            $params=array('ideCuentaPadre'=>$ideCuentaPadre);
-        }
-        Log::info("****************t1");
-        $cuentasHijas=DB::select($query,$params);
-        Log::info($cuentasHijas);
-        foreach ($cuentasHijas as $hija){
-            if(in_array($hija->ide_cuenta, $padres)){
-                $resultHijas=$this->cuentas($hija->ide_cuenta, $padres,$idePresupuestoColaborador);
-                if(is_null($resultHijas)){
-                    //Consolidar
-                    return $this->consolidarCuenta($hija, $idePresupuestoColaborador);
+            if(in_array($cuenta->ide_cuenta, $cuentasPadre)){
+                //Log::info("Cuenta $cuenta->nombre en cuentas padre.");
+                $cuentaHijas=DB::select(HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA,array('ideCuentaPadre'=>$cuenta->ide_cuenta));
+                    $result=array();
+                    $itemCuenta['cuenta']=$cuenta->cuenta;
+                    $itemCuenta['nombre']=$cuenta->nombre;
+                    $result[]=$itemCuenta; 
+                    foreach($cuentaHijas as $hija){
+                        //Log::info('buscando hija..... '.$hija->nombre);
+                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery);
+                        //Log::info("*****result hija ");
+                        //Log::info($result_hija);
+                        if(!is_null($result_hija)){
+                            //sumariazar
+                            $itemCuenta=$this->totalizar($itemCuenta, $result_hija[0]);
+                            $result=array_merge($result,$result_hija);
+                        }
+                    }
+                    //Log::info("*********** print array "); 
+                    //Log::info($itemCuenta);
+                    $result[0]=$itemCuenta;
+                    //Log::info($result);
+                    return $result;
+            }
+        }       
+        return null;
+    }
+    
+    
+    private function totalizar($itemCuenta,$itemTotal){
+        for($i=1;$i<=12;$i++){
+            if(isset($itemTotal['item'.$i])){
+                if(isset($itemCuenta['item'.$i])){
+                    $itemCuenta['item'.$i]=$itemCuenta['item'.$i]+$itemTotal['item'.$i];
+                }else{
+                    $itemCuenta['item'.$i]=$itemTotal['item'.$i];
                 }
-            }else{
-                Log::info("****** CUENTA NO EN PADRES**********");
-                Log::info($hija->nombre);
             }
         }        
-        return null;        
+        //Log::info("***********ITEM CUENTA********************");
+        //Log::info($itemCuenta);
+        return $itemCuenta;
     }
-    
-    public function consolidarCuenta($cuenta,$idePresupuestoColaborador){
+
+
+    public function consolidarCuenta($cuenta,$parameterQuery){
         $result=array();
-        $cuentasHijas=DB::select(HPMEConstants::CONSOLIDADO_COLABORADOR_CUENTA_PADRE,array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'ideCuentaPadre'=>$cuenta->ide_cuenta));
+        $cuentasHijas=DB::select(HPMEConstants::CONSOLIDADO_COLABORADOR_CUENTA_PADRE,array('idePresupuestoColaborador'=>$parameterQuery['idePresupuestoColaborador'],'ideCuentaPadre'=>$cuenta->ide_cuenta));
         Log::info($cuentasHijas);
         $item1=0.0;
         $item2=0.0;
