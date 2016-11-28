@@ -132,7 +132,9 @@ class PlanificacionRegion extends Controller
             $objetivos=$this->obtenerObjetivos($meta->ide_proyecto_meta,$ideProyectoRegion);//DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$meta->ide_proyecto_meta));
             //Log::info("## objetivos ".count($objetivos));
             //Log::info($objetivos);
-            $result[]=array('meta'=>$meta,'objetivos'=>$objetivos);
+            if(!empty($objetivos)){
+                $result[]=array('meta'=>$meta,'objetivos'=>$objetivos);
+            }
         }        
         return $result;
     }
@@ -143,7 +145,9 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach($objetivos as $objetivo){
             $areas=$this->obtenerAreaAtencion($objetivo->ide_objetivo_meta,$ideProyectoRegion);
-            $result[]=array('objetivo'=>$objetivo,'areas'=>$areas);
+            if(!empty($areas)){
+                $result[]=array('objetivo'=>$objetivo,'areas'=>$areas);
+            } 
         }
         return $result;
     }
@@ -154,7 +158,9 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach ($areas as $area){
             $indicadores=$this->obtenerIndicadores($area->ide_area_objetivo,$ideProyectoRegion);
-            $result[]=array('area'=>$area,'indicadores'=>$indicadores);
+            if(!empty($indicadores)){
+                $result[]=array('area'=>$area,'indicadores'=>$indicadores);
+            }   
         }
         return $result; 
     }
@@ -165,7 +171,9 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach ($indicadores as $indicador){
             $productos=$this->obtenerProductos($indicador->ide_indicador_area,$ideProyectoRegion);
-            $result[]=array('indicador'=>$indicador,'productos'=>$productos);
+            if(!empty($productos)){
+                $result[]=array('indicador'=>$indicador,'productos'=>$productos);
+            }
         }
         return $result;     
     }
@@ -176,8 +184,9 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
-            //Log::info('##### detalles '.count($detalle));
-            $result[]=array('producto'=>$producto,'detalles'=>$detalle);
+            if(!empty($detalle)){
+                $result[]=array('producto'=>$producto,'detalles'=>$detalle);
+            }          
         }
         return $result;        
     
