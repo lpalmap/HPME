@@ -277,8 +277,8 @@
                         <ul class="dropdown-menu dropdown-user">
                             <li><a href="{{url('perfil')}}"><i class="icon-user"></i> Perfil de usuario </a>
                             </li>
-                            <li><a href="#"><i class="icon-gear"></i> Configuraci&#243;n </a>
-                            </li>
+<!--                            <li><a href="#"><i class="icon-gear"></i> Configuraci&#243;n </a>
+                            </li>-->
                             <li class="divider"></li>
                             <li><a href="{{url('logout')}}"><i class="icon-signout"></i> Salir </a>
                             </li>
@@ -331,14 +331,17 @@
                        &nbsp; <span class="label label-default">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="component-nav">                   
-                        @if(Session::get('rol')!='AFILIADO')
+                        @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
                         <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
-                        @else
+                        @endif
+                        @if(Session::get('rol')=='AFILIADO')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
                         @endif 
+                        @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO')
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
-<!--                        <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
+                        @endif
+<!--                    <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_formato.png')}}"/> Generar Formato Internacional</a></li>
                          <li class=""><a href=""><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/></i> Backup Planificaci&#243;n Anual</a></li>-->
@@ -384,7 +387,7 @@
                     </ul>
                 </li>-->
                 
-                @if (Session::get('rol')!='AFILIADO')
+                @if (Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
                 <!-- MENU CONFIGURACION -->
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#DDL-nav">
