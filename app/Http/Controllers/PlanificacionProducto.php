@@ -12,6 +12,7 @@ use App\CfgRegion;
 use App\PlnProyectoRegion;
 use App\PlnRegionProducto;
 use App\PlnRegionProductoDetalle;
+use Illuminate\Support\Facades\DB;
 
 class PlanificacionProducto extends Controller
 {
@@ -26,7 +27,17 @@ class PlanificacionProducto extends Controller
         $ideAreaObjetivo=$indicador->ide_area_objetivo;
         $productos=  PlnProductoIndicador::with("producto")->where("ide_indicador_area",$ideIndicadorArea)->get();
         $rol=  request()->session()->get('rol');
-        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol));    
+        $produtosIngresados=array();
+        if($rol=='AFILIADO'){
+            $region=$this->regionUsuario($indicador->ide_proyecto);
+            if(!is_null($region)){
+                $ingresados=DB::select(HPMEConstants::PLN_PRODUCTOS_COMPLETADOS,array('ideIndicadorArea'=>$ideIndicadorArea,'ideRegion'=>$region));
+                foreach($ingresados as $ingresado){
+                    $produtosIngresados[]=$ingresado->ide_producto_indicador;
+                }
+            }
+        }
+        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol,'ingresados'=>$produtosIngresados));    
     }
     
     public function addProducto(Request $request){

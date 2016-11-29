@@ -28,6 +28,11 @@ class HPMEConstants
     const PLN_DETALLE_POR_PRODUCTO_REGION="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto GROUP BY d.num_detalle ORDER BY d.num_detalle";
     const PLN_CONSOLIDADO_POR_PRODUCTO="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_producto_indicador=:ideProductoIndicador GROUP BY d.num_detalle ORDER BY d.num_detalle";
     
+    //Query validaciones planificacion
+    const PLN_PRODUCTOS_COMPLETADOS="SELECT rp.ide_producto_indicador FROM pln_producto_indicador p,pln_region_producto rp,pln_proyecto_region r where p.ide_producto_indicador=rp.ide_producto_indicador and rp.ide_proyecto_region=r.ide_proyecto_region and p.ide_indicador_area=:ideIndicadorArea and r.ide_region=:ideRegion";
+    
+    
+    
     //Presupuesto
     const PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION="SELECT p.ide_proyecto_presupuesto FROM pln_proyecto_presupuesto p WHERE p.ide_proyecto_planificacion=:ideProyecto";
     
