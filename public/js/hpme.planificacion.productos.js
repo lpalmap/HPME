@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTableItems').DataTable(window.lang);
+    var dataTable=$('#dataTableItems').DataTable({"language":window.lang.language,
+    "iDisplayLength": 50});
     var url = window.location;
     url=(""+url).replace("#","");
     var inVal;
