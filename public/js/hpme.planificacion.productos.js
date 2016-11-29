@@ -63,6 +63,26 @@ $(document).ready(function(){
         $('#eliminarModal').modal('show');
     });
     
+    $('#ingresarDetalleModal').on('shown.bs.modal', function () {
+         //$('#primerTrim').focus();
+         $( "#primerTrim" ).select();
+    });
+        
+    $( document ).on( 'keypress', '.TabOnEnter', function(e) {
+        if( e.keyCode ===  13 )
+        {
+           var nextElement = $('input[tabindex="' + (this.tabIndex+1)  + '"]');
+
+           if(nextElement.length ){
+                nextElement.select();  
+           }else{
+              $('#inProyecto').focus();
+                //$('input[tabindex="1"]').select();  //this is for first element  
+           }
+            
+        } 
+    });
+    
     //Agregar nuevo usuario
     $(document).on('click','.btn2',function(){
         $('#loading').modal('show');
@@ -87,15 +107,14 @@ $(document).ready(function(){
         $('#ingresarDetalleModal').modal('show');
         $('#inProyecto').val(0);
         var HTMLProyectos='<option value="0"></option>';
-        $('#inProyecto').html(HTMLProyectos);
-        
+        $('#inProyecto').html(HTMLProyectos);  
         $.ajax({
             type: 'POST',
             url: url,
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 var proyectoSelected=0;
                 if(data.item){
                     //$('#inDescripcion').val(data.item.descripcion);
@@ -130,14 +149,15 @@ $(document).ready(function(){
                        }
                        HTMLProyectos+='<option title="'+data.proyectos[i].descripcion+'" value="'+data.proyectos[i].ide_proyecto+'" '+selected+'>'+data.proyectos[i].nombre+'</option>';
                    }
-                   console.log(HTMLProyectos);
+                   //console.log(HTMLProyectos);
                    $('#inProyecto').html(HTMLProyectos);
                }
                recalcTotal();
+               $('#primerTrim').focus();
                $('#loading').modal('hide');
            },   
             error: function (data) {
-                console.log(data);
+                //console.log(data);
                 $('#ingresarDetalleModal').modal('hide');
                 $('#loading').modal('hide');
                 var errHTML="";
@@ -152,7 +172,7 @@ $(document).ready(function(){
                 $('#erroresModal').modal('show');  
             }
         });
-        
+        $('#primerTrim').focus();
     });
     
     //Agregar nuevo
@@ -180,7 +200,7 @@ $(document).ready(function(){
                 data: formData,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     var item='';
                     for(var i in data){
                         item+='<div class="checkbox"><input type="checkbox" name="ckItem" value="'+data[i].ide_producto+'"/><label>'+data[i].nombre+'</label></div>'; 
@@ -194,7 +214,7 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
+                    //console.log('Error:', data);
                     $('#agregarEditarModal').modal('hide'); 
                     $("#erroresContent").html("<li>Error al agregar producto</li>"); 
                     $('#erroresModal').modal('show');              
@@ -220,14 +240,14 @@ $(document).ready(function(){
             type: "DELETE",
             url: url + '/' + item_id,
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 dataTable.row( $('#item'+item_id)).remove().draw();
                 $('#eliminarModal').modal('hide');
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error borrando objetivo:', data);
+                //console.log('Error borrando objetivo:', data);
                 $("#erroresContent").html("<li>Error al borrar el producto</li>"); 
                 $('#erroresModal').modal('show');
             }
@@ -270,7 +290,7 @@ $(document).ready(function(){
                 data: JSON.parse(text),
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
 //                    var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
 //                    item+='<td>'+data.nombre+'</td>'
 //                    item+='<td>'+data.descripcion+'</td>';
@@ -368,13 +388,14 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 $('#ingresarDetalleModal').modal('hide');
                 //console.log("test "+data.region);
+                $("#btn"+ideProductoIndicador).removeClass('btn-primary').addClass('btn-success');
                 $('#loading').modal('hide');
             },
             error: function (data) {
-                console.log(data);
+                //console.log(data);
                 $('#ingresarDetalleModal').modal('hide');
                 $('#loading').modal('hide');
                 var errHTML="";

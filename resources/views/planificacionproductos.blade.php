@@ -61,7 +61,7 @@
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
                                             @if(isset($rol) && $rol=='AFILIADO')
-                                            <td><button class="btn2 btn btn-primary btn-round" value="{{$items[$i]->ide_producto_indicador}}"  title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</button></td>
+                                            <td><button id="btn{{$items[$i]->ide_producto_indicador}}" class="btn2 btn btn-primary btn-round" value="{{$items[$i]->ide_producto_indicador}}"  title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</button></td>
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
                                             @endif
@@ -177,16 +177,16 @@
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
                                             <td>
-                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="primerTrim" />  
+                                                <input maxlength="7" tabindex="1" autofocus="true" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="primerTrim" />  
                                             </td>
                                             <td>
-                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="segundoTrim" />
+                                                <input maxlength="7" tabindex="2" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="segundoTrim" />
                                             </td>
                                             <td>
-                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="tercerTrim"/>
+                                                <input maxlength="7" tabindex="3" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="tercerTrim"/>
                                             </td>
                                             <td>
-                                                <input maxlength="7" align="right" class="form-control" type="text" data-mask="999999" id="cuartoTrim"/>
+                                                <input maxlength="7" tabindex="4" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="cuartoTrim"/>
                                             </td>
                                             <td>
                                                 <input align="right" class="form-control" disabled="true"  value="0" id="totalInput"/>
@@ -199,14 +199,14 @@
                                                 
                                            <div class="form-group">
                                                 <label>Proyecto</label>
-                                                    <select id="inProyecto" class="form-control">                                                   
+                                                    <select tabindex="5" id="inProyecto" class="form-control">                                                   
                                                     </select>                                              
                                                 </div>                                     
                                        </form>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                            <button type="button" class="btn btn-primary" id="btnGuardarDetalle">Guardar</button>
+                                            <button type="button" tabindex="6" class="btn btn-primary" id="btnGuardarDetalle">Guardar</button>
                                             <input type="hidden" id="ide_item2" value="0"/>
                                         </div>
                                     </div>
