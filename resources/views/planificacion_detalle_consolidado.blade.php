@@ -100,7 +100,7 @@
                                                             <?php
                                                                 }
                                                             ?>
-                                                            <td style="text-align: right">{{$total}}</td>
+                                                            <td style="text-align: right;background: greenyellow;">{{$total}}</td>
                                                         </tr>
                                                     <?php
                                                        }}}
