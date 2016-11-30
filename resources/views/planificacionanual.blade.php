@@ -59,8 +59,7 @@
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
                                                 @if(isset($rol) && $rol=='COORDINADOR' && $items[$i]->estado=='ABIERTO')
-                                                <img class="menu-imagen-big" src="{{asset('images/publicar.png')}}" title="Publicar Proyecto"/>
-                                                <button class="btn btn-success btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</a>
+                                                <button class="btn btn-success btn-publicar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</a>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                                 @endif
@@ -141,6 +140,35 @@
                                 </div>
                             </div>
                     </div>
+
+
+
+@if(isset($rol) && $rol=='COORDINADOR')
+    <div class="modal fade" id="publicarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="inputTitle">Publicar plantilla planificaci&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+               <form role="form" id="formPublicar">
+                   <div class="form-group">
+                       <p>
+                           Esta seguro de publicar la plantilla de planificaci&oacute;n&quest; Ya no podr&aacute; modicar la plantilla. 
+                       </p>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnPublicar">Publicar</button>
+                    <input type="hidden" id="ide_item" value="0"/>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">

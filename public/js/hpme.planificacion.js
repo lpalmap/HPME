@@ -82,8 +82,58 @@ $(document).ready(function(){
             $('#ide_item').val(data.ide_proyecto);
             $('#loading').modal('hide');
         });
-    });    
-
+    });
+    
+    $(document).on('click','.btn-publicar',function(){
+        $('#loading').modal('show');
+        $('#btnPublicar').val($(this).val());
+        $('#publicarModal').modal('show');
+        $('#loading').modal('hide');
+    }); 
+      
+    //create new task / update existing task
+    $("#btnPublicar").click(function (e) { 
+        $('#loading').modal('show');
+        var ideProyecto=$(this).val();
+        var formData = {
+            ide_proyecto: ideProyecto
+        };   
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
+        url_target+='/publicar';
+        
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                $('#loading').modal('hide');
+                location.reload(true);
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al publicar la plantilla.</li>';
+                }
+                console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
+    
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {      
         $('#loading').modal('show');

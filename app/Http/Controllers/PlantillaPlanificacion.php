@@ -86,6 +86,22 @@ class PlantillaPlanificacion extends Controller
         $item = PlnProyectoPlanificacion::destroy($ideProyecto);
         return response()->json($item);      
     }
+    
+    public function publicarPlantilla(Request $request){
+        $rol=  request()->session()->get('rol');
+        if($rol!='COORDINADOR'){
+            return response()->json(array('error'=>'Solo el usuario autorizado puede publicar una plantilla.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
+        if($proyecto->estado==HPMEConstants::ABIERTO){
+            $proyecto->estado=  HPMEConstants::PUBLICADO;
+            $proyecto->save();
+            return response()->json(array('sts'=>'OK'));
+        }else{
+            return response()->json(array('error'=>'Solo se pueden publicar plantillas abiertas.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        
+    }
 
 
 //    public function addPlantilla(Request $request){

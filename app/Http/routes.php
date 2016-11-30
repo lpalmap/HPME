@@ -172,6 +172,8 @@ Route::delete('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@deletePlan
 Route::post('/planproyecto',['uses' => 'PlantillaPlanificacion@addPlantilla', 'middleware' => 'auth']);
 //actualiza plantilla
 Route::put('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@updatePlantilla', 'middleware' => 'auth']);
+//publicar la plantilla
+Route::post('/plantilla/publicar',['uses' => 'PlantillaPlanificacion@publicarPlantilla', 'middleware' => 'auth']);
 
 
 
