@@ -59,6 +59,8 @@
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
                                                 @if(isset($rol) && $rol=='COORDINADOR' && $items[$i]->estado=='ABIERTO')
+                                                <img class="menu-imagen-big" src="{{asset('images/publicar.png')}}" title="Publicar Proyecto"/>
+                                                <button class="btn btn-success btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</a>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                                 @endif
