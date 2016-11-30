@@ -13,6 +13,7 @@ use App\PlnProyectoRegion;
 use App\PlnRegionProducto;
 use App\PlnRegionProductoDetalle;
 use Illuminate\Support\Facades\DB;
+use App\PlnProyectoPlanificacion;
 
 class PlanificacionProducto extends Controller
 {
@@ -138,6 +139,10 @@ class PlanificacionProducto extends Controller
     }
     
     public function addDetalle(Request $request){
+        $stsProyecto= PlnProyectoPlanificacion::where(array('ide_proyecto'=>$request->ide_proyecto))->pluck('estado')->first();
+        if($stsProyecto!=HPMEConstants::PUBLICADO){
+            return response()->json(array('error'=>'El proyecto debe estar en estado '.HPMEConstants::PUBLICADO.' para ingresar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         $ideProyecto=$request->ide_proyecto;
         $items=$request->items;
         $proyecto=$request->proyecto;
@@ -149,9 +154,10 @@ class PlanificacionProducto extends Controller
         if(count($regiones)>0){
             $ideRegionAdmin=$regiones[0]->ide_region;
             //['ide_region',$ideRegionAdmin],['ide_proyecto_planificacion',$ideProyecto]
-            $ideProyectoRegion=  PlnProyectoRegion::where(array("ide_region"=>$ideRegionAdmin,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('ide_proyecto_region')->first();  ;//$regionQuery->selectQuery(HPMEConstants::SI, $params);
+            $ideProyectoRegion=-1;
+            $regionProyecto=PlnProyectoRegion::where(array("ide_region"=>$ideRegionAdmin,"ide_proyecto_planificacion"=>$ideProyecto))->select(['ide_proyecto_region','estado'])->get(); //$regionQuery->selectQuery(HPMEConstants::SI, $params);
             $nuevo=false;
-            if(is_null($ideProyectoRegion)){
+            if(count($regionProyecto)==0){
                 //return response()->json(array('error'=>'No se ha crado un proyecto para la region'),  HPMEConstants::HTTP_AJAX_ERROR);
                 //Si no se ha creado un proyecto para la region se crea uno nuevo
                 $proyectoRegion=new PlnProyectoRegion();
@@ -162,7 +168,12 @@ class PlanificacionProducto extends Controller
                 $proyectoRegion->estado=HPMEConstants::ABIERTO;
                 $proyectoRegion->save();
                 $ideProyectoRegion=$proyectoRegion->ide_proyecto_region;      
-                $nuevo=true;                
+                $nuevo=true;     
+            }else{
+                $ideProyectoRegion=$regionProyecto[0]['ide_proyecto_region'];
+                if($regionProyecto[0]['estado']!=HPMEConstants::ABIERTO){
+                    return response()->json(array('error'=>'La proyecto para la regi&oacute;n se encuentra '.$regionProyecto[0]['estado'].' debe estar '.HPMEConstants::ABIERTO.' para ingresar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
+                }
             }
             
             $ideRegionProducto=0;
