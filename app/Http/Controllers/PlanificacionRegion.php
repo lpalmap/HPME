@@ -9,14 +9,16 @@ use App\PlnProyectoPlanificacion;
 use App\PlnProyectoRegion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\CfgRegion;
 
 
 class PlanificacionRegion extends Controller
 {    
     public function planificacionRegion(){
-        $ultimoProyecto=PlnProyectoPlanificacion::where(array('estado'=>  HPMEConstants::ABIERTO))->first(['ide_proyecto','descripcion']);
+        $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion']);
         //Log::info("ultimo ".$ultimoProyecto);
-        if(!is_null($ultimoProyecto)){
+        $rol=  request()->session()->get('rol');
+        if(!is_null($ultimoProyecto) && $rol=='COORDINADOR'){
             //Log::info('No es null '.$ultimoProyecto);
             //$regionQuery=new PlnProyectoRegion();
             $regiones=  DB::select(HPMEConstants::PROYECTOS_REGION_QUERY,array('ideProyecto'=>$ultimoProyecto->ide_proyecto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
@@ -33,7 +35,8 @@ class PlanificacionRegion extends Controller
     }
     
     public function planificacionConsolidada($ideProyecto){
-        if(!is_null($ideProyecto)){
+        $rol=  request()->session()->get('rol');
+        if(!is_null($ideProyecto) && $rol=='COORDINADOR'){
             //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
             $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
             $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto);         
@@ -43,7 +46,7 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_detalle_consolidado',array('plantilla'=>$plantilla,'num_items'=>count($encabezados),'encabezados'=>$encabezados));
+            return view('planificacion_detalle_consolidado',array('plantilla'=>$plantilla,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
         }else{
             return view('home');
         } 
@@ -52,7 +55,18 @@ class PlanificacionRegion extends Controller
 
     public function planificacionRegionDetalle($id){ 
         $proyectoRegion=  PlnProyectoRegion::find($id);
+        $rol=  request()->session()->get('rol');
         if(!is_null($proyectoRegion)){
+            if($rol=='AFILIADO'){
+                $ideRegion=$this->regionUsuario();
+                if(is_null($ideRegion)){
+                    return view('home');
+                }else{
+                    if($ideRegion!=$proyectoRegion->ide_region){
+                        return view('home');
+                    }
+                }
+            }
             //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
             $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
             //Log::info($proyectoPlanificacion->descripcion);
@@ -108,18 +122,105 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
+            //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
+        }else{
+            return view('home');
+        }      
+    }
+    
+    public function planificacionProyectoDetalle($id){ 
+        $proyectoPlanificacion = PlnProyectoPlanificacion::find($id);     
+        $rol=  request()->session()->get('rol');
+        if(!is_null($proyectoPlanificacion) && $rol=='AFILIADO'){
+            $ideRegion=$this->regionUsuario();
+            if(is_null($ideRegion)){
+                return view('home');
+            }         
+            $ideProyectoRegion=PlnProyectoRegion::where(array("ide_region"=>$ideRegion,"ide_proyecto_planificacion"=>$id))->pluck('ide_proyecto_region')->first(); 
+            
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            
+            if(is_null($ideProyectoRegion)){
+                $region=  CfgRegion::find($ideRegion);
+                return view('planificacion_region_detalle',array('plantilla'=>array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> array()),'region'=>$region->nombre,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
+            }
+            
+            $proyectoRegion=  PlnProyectoRegion::find($ideProyectoRegion);
+            if(is_null($proyectoRegion)){
+                return view('home');
+            }
+            
+            //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
+            //$proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+            //Log::info($proyectoPlanificacion->descripcion);
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
+//            $metas=  DB::select(HPMEConstants::PLN_METAS_POR_PROYECTO,array('ideProyecto'=>$proyectoPlanificacion->ide_proyecto));
+//            //$plantilla[]=array('metas'=>$metas);
+//            foreach($metas as $meta){
+//                $objetivos=DB::select(HPMEConstants::PLN_OBJETIVOS_POR_META,array('ideProyectoMeta'=>$meta->ide_proyecto_meta));
+//                Log::info("## objetivos ".count($objetivos));
+//                Log::info($objetivos);
+//            }
+//            
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            
+//            Log::info($plantilla);
+//            Log::info('#### recorriendo plantilla');
+//            Log::info($plantilla['metas']);
+//            for($i=0;$i<count($plantilla['metas']);$i++){
+//                Log::info('##### metas '.$i);
+//                Log::info($plantilla['metas'][$i]['meta']->nombre);
+//                Log::info('##### objetivos');
+//                //Log::info($plantilla['metas'][$i]['objetivos']);
+//                for($o=0;$o<count($plantilla['metas'][$i]['objetivos']);$o++){
+//                    Log::info("###### nuevo objetivo");
+//                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['objetivo']->nombre);
+//                    //Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas']);
+//                    for($a=0;$a<count($plantilla['metas'][$i]['objetivos'][$o]['areas']);$a++){
+//                        Log::info("Areas... ");
+//                        Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['area']->nombre);
+//                        for($in=0;$in<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores']);$in++){
+//                            Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['indicador']->nombre);
+//                            for($p=0;$p<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos']);$p++){
+//                                Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['producto']->nombre);
+//                                //Log::info('#### ide_producto_indicaodr'.$plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['producto']->ide_producto_indicador);
+//                                //$this->printt($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);
+//                                
+//                               // Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);
+//                                for($d=0;$d<count($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles']);$d++){
+//                                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles'][$d]['detalle']->proyecto);
+//                                    Log::info($plantilla['metas'][$i]['objetivos'][$o]['areas'][$a]['indicadores'][$in]['productos'][$p]['detalles'][$d]['valores']);
+//                                }
+//                            }
+//                        }
+//                        
+//                    }        
+//                }
+//                break;
+//            }
+            
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
         }      
     } 
     
-    private function printt($detalles){
-        //Log::info('### printllll '.count($detalles));
-        for($d=0;count($detalles);$d++){
-          //  Log::info($detalles[$d]['detalle']->proyecto);
-            //Log::info("FINIIIIIIIII ");
+    private function regionUsuario(){
+        $user=Auth::user();
+        $regionQuery=new CfgRegion();
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            return $regiones[0]->ide_region;           
+        }else{
+            return null;
         }
     }
 

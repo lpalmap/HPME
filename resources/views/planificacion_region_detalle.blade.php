@@ -19,9 +19,13 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    <a href="{{url('planificaciones')}}" >
+                    @if(isset($rol) && $rol=='AFILIADO')
+                    <a href="{{url('proyecto')}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
-<!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
+                    @else
+                        <a href="{{url('planificaciones')}}" >
+                        <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
+                    @endif
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Regi&oacute;n {{$region}}/{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
