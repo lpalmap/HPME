@@ -29,6 +29,20 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Regi&oacute;n {{$region}}/{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
+                                                        &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            <a href="{{url('observaciones/'.$ideProyectoRegion)}}" >
+                                <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
+                            &nbsp;
+                            &nbsp;
+                            @if(isset($rol) && $rol=='COORDINADOR')
+                            <a href="" >
+                                <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Planificaci&oacute;n"/></a>
+                            @endif
                         </div>
                         
                          <div class="panel-body">
@@ -164,6 +178,8 @@
 @endsection
 @section('footer')
     @parent
+    <meta name="_urlTarget" content="{{url('area')}}"/>
+    <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

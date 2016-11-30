@@ -176,7 +176,8 @@ Route::put('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@updatePlantil
 Route::post('/plantilla/publicar',['uses' => 'PlantillaPlanificacion@publicarPlantilla', 'middleware' => 'auth']);
 //enviar a revision la plantilla
 Route::post('/plantilla/enviar',['uses' => 'PlantillaPlanificacion@enviarPlantilla', 'middleware' => 'auth']);
-
+//ver observaciones
+Route::get('/observaciones/{id}',['uses' => 'PlanificacionObservaciones@observacionesRegion', 'middleware' => 'auth']);
 
 
 //Metas

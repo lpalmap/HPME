@@ -12,8 +12,13 @@ use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 
 
-class PlanificacionRegion extends Controller
+class PlanificacionObservaciones extends Controller
 {    
+    
+    public function observacionesRegion($id){
+        return view('observaciones_planificacion');
+    }
+    
     public function planificacionRegion(){
         $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion']);
         //Log::info("ultimo ".$ultimoProyecto);
