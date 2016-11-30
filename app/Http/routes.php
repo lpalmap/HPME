@@ -174,7 +174,8 @@ Route::post('/planproyecto',['uses' => 'PlantillaPlanificacion@addPlantilla', 'm
 Route::put('/planproyecto/{id}',['uses' => 'PlantillaPlanificacion@updatePlantilla', 'middleware' => 'auth']);
 //publicar la plantilla
 Route::post('/plantilla/publicar',['uses' => 'PlantillaPlanificacion@publicarPlantilla', 'middleware' => 'auth']);
-
+//enviar a revision la plantilla
+Route::post('/plantilla/enviar',['uses' => 'PlantillaPlanificacion@enviarPlantilla', 'middleware' => 'auth']);
 
 
 

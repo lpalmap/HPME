@@ -10,6 +10,8 @@ use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\CfgRegion;
+use App\PlnProyectoRegion;
 
 class PlantillaPlanificacion extends Controller
 {
@@ -24,6 +26,25 @@ class PlantillaPlanificacion extends Controller
         //Log::info("Session ".request()->session()->get("mi session"));
         //NOMBRE_ROL_POR_USUARIO
         $rol=  request()->session()->get('rol');
+        if($rol=='AFILIADO'){
+            $ideProyecto=null;
+            foreach ($data as $proyecto){
+                if($proyecto['estado']=='PUBLICADO'){
+                    $ideProyecto=$proyecto['ide_proyecto'];
+                    break;
+                }
+            }
+            //Log::info("buscando ide_proyecto $ideProyecto");
+            $region=$this->regionUsuario();
+            if(!is_null($region) && !is_null($ideProyecto)){
+                $regionProyecto=PlnProyectoRegion::where(array("ide_region"=>$region,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('estado')->first(); 
+                if(!is_null($regionProyecto)){
+                    return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'estadoRegion'=>$regionProyecto));
+                }
+                
+            }
+            
+        }
         return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol));
     }
     
@@ -52,7 +73,7 @@ class PlantillaPlanificacion extends Controller
     }
     
     private function crearProyectoPresupuesto(PlnProyectoPlanificacion $p){
-        Log::info($p);
+        //Log::info($p);
         $presupuesto=new PlnProyectoPresupuesto;
         $presupuesto->fecha_proyecto=$p->fecha_proyecto;
         $presupuesto->descripcion=$p->descripcion;
@@ -80,7 +101,7 @@ class PlantillaPlanificacion extends Controller
         //Se busca si la plantilla tiene un proyecto de presupusto para eliminarlo junto a la plantilla.
         $presupuesto=DB::select(HPMEConstants::PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION,array('ideProyecto'=>$ideProyecto));
         if(count($presupuesto)>0){
-            Log::info($presupuesto[0]->ide_proyecto_presupuesto);
+            //Log::info($presupuesto[0]->ide_proyecto_presupuesto);
             PlnProyectoPresupuesto::destroy($presupuesto[0]->ide_proyecto_presupuesto);
         }       
         $item = PlnProyectoPlanificacion::destroy($ideProyecto);
@@ -101,6 +122,51 @@ class PlantillaPlanificacion extends Controller
             return response()->json(array('error'=>'Solo se pueden publicar plantillas abiertas.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         
+    }
+    
+    public function enviarPlantilla(Request $request){
+        $rol=  request()->session()->get('rol');
+        if($rol!='AFILIADO'){
+            return response()->json(array('error'=>'Solo los afiliados pueden enviar plantillas.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
+        if($proyecto->estado!=HPMEConstants::PUBLICADO){
+            return response()->json(array('error'=>'Solo se pueden enviar plantillas si el proyecto esta PUBLICADO.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $region=$this->regionUsuario();
+        if(!is_null($region)){
+            $ideProyectoRegion=PlnProyectoRegion::where(array("ide_region"=>$region,"ide_proyecto_planificacion"=>$request->ide_proyecto))->pluck('ide_proyecto_region')->first(); 
+            if(!is_null($ideProyectoRegion)){
+                $proyectoRegion=  PlnProyectoRegion::find($ideProyectoRegion);
+                if($proyectoRegion->estado!='ABIERTO'){
+                    return response()->json(array('error'=>'Solo se pueden enviar plantillas si el proyecto esta '.HPMEConstants::ABIERTO), HPMEConstants::HTTP_AJAX_ERROR);
+                }
+                $metasIncompletas=DB::select(HPMEConstants::PLN_METAS_NO_INGRESADAS,array('ideProyectoRegion'=>$ideProyectoRegion));
+                if(count($metasIncompletas)>0){
+                    $errores=array();
+                    foreach($metasIncompletas as $meta){
+                        //Log::info($meta['nombre']);
+                        $errores[]='Meta obligatoria incompleta '.$meta->nombre.'.';
+                    }
+                    return response()->json($errores,HPMEConstants::HTTP_AJAX_ERROR);
+                }else{
+                    $proyectoRegion->estado=  HPMEConstants::ENVIADO;
+                    $proyectoRegion->save();
+                    return response()->json();
+                }                
+            }
+        }     
+    }
+    
+    private function regionUsuario(){
+        $user=Auth::user();
+        $regionQuery=new CfgRegion();
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            return $regiones[0]->ide_region;           
+        }else{
+            return null;
+        }
     }
 
 

@@ -31,7 +31,7 @@ $(document).ready(function(){
             type: "DELETE",
             url: my_url + '/' + item_id,
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 //$("#usuario" + user_id).remove();
                 //dataTable.DataTable().draw();
                 dataTable.row( $('#item'+item_id)).remove().draw();
@@ -47,7 +47,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al borrar la plantilla.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show'); 
             }
@@ -90,7 +90,56 @@ $(document).ready(function(){
         $('#publicarModal').modal('show');
         $('#loading').modal('hide');
     }); 
-      
+    
+    $(document).on('click','.btn-enviar',function(){
+        $('#loading').modal('show');
+        $('#btnEnviar').val($(this).val());
+        $('#enviarModal').modal('show');
+        $('#loading').modal('hide');
+    }); 
+    
+    $("#btnEnviar").click(function (e) { 
+        $('#loading').modal('show');
+        var ideProyecto=$(this).val();
+        var formData = {
+            ide_proyecto: ideProyecto
+        };   
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
+        url_target+='/enviar';
+        
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                $('#loading').modal('hide');
+                location.reload(true);
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al enviar la plantilla.</li>';
+                }
+                //console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
+    
     //create new task / update existing task
     $("#btnPublicar").click(function (e) { 
         $('#loading').modal('show');
@@ -127,7 +176,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al publicar la plantilla.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');                
             }
@@ -160,8 +209,8 @@ $(document).ready(function(){
             my_url += '/' + ide_item;
         }
         
-        console.log(formData);
-        console.log("Enviando url "+my_url);
+       // console.log(formData);
+       // console.log("Enviando url "+my_url);
         
         //alert("type "+type+" url "+my_url);
         $.ajax({
@@ -170,7 +219,7 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
+                //console.log(data); 
                 var item='<tr class="even gradeA" id="item'+data.ide_proyecto+'">';
                 item+='<td>'+data.fecha_proyecto+'</td>';
                 item+='<td>'+(data.fecha_cierre?data.fecha_cierre:'')+'</td>';
@@ -203,7 +252,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al guardar la plantilla.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');                
             }

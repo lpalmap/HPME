@@ -44,8 +44,12 @@
                                             <th>Fecha Cierre</th>
                                             <th>Descripci&oacute;n</th>
                                             <th>Periodicidad</th>
-                                            <th>Estado</th>
+                                            <th>Estado Plantilla</th>
+                                            @if(isset($rol) && $rol=='AFILIADO')
+                                                <th>Estado Planificaci&oacute;n</th>
+                                            @else
                                             <th>Acciones</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
@@ -59,9 +63,19 @@
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
                                                 @if(isset($rol) && $rol=='COORDINADOR' && $items[$i]->estado=='ABIERTO')
-                                                <button class="btn btn-success btn-publicar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</a>
-                                                <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</a>
+                                                <button class="btn btn-success btn-publicar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</button>
+                                                <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
+                                                @endif
+                                                @if(isset($rol) && $rol=='AFILIADO' && $items[$i]->estado=='PUBLICADO')
+                                                    @if(isset($estadoRegion))
+                                                        @if($estadoRegion=='ABIERTO')
+                                                            <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>
+                                                        @else
+                                                            <p>{{$estadoRegion}}</p>
+                                                        @endif
+                                                    @endif
+                                                    
                                                 @endif
                                             </td>
                                         </tr>
@@ -149,13 +163,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="inputTitle">Publicar plantilla planificaci&oacute;n</h4>
+                    <h4 class="modal-title">Publicar plantilla planificaci&oacute;n</h4>
                 </div>
                 <div class="modal-body">
                <form role="form" id="formPublicar">
                    <div class="form-group">
                        <p>
-                           Esta seguro de publicar la plantilla de planificaci&oacute;n&quest; Ya no podr&aacute; modicar la plantilla. 
+                           Esta seguro de publicar la plantilla de planificaci&oacute;n&quest; Ya no podr&aacute; modificar la plantilla. 
                        </p>
                     </div>
                 </form>
@@ -163,7 +177,32 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="btnPublicar">Publicar</button>
-                    <input type="hidden" id="ide_item" value="0"/>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(isset($rol) && $rol=='AFILIADO')
+    <div class="modal fade" id="enviarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Enviar planificaci&oacute;n a revisi&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+               <form role="form" id="formEnviar">
+                   <div class="form-group">
+                       <p>
+                           Esta seguro de enviar la planificaci&oacute;n a revisi&oacute;n&quest; Ya no podr&aacute; modificar hasta que se le habilite. 
+                       </p>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnEnviar">Enviar</button>
                 </div>
             </div>
         </div>

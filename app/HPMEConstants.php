@@ -30,7 +30,7 @@ class HPMEConstants
     
     //Query validaciones planificacion
     const PLN_PRODUCTOS_COMPLETADOS="SELECT rp.ide_producto_indicador FROM pln_producto_indicador p,pln_region_producto rp,pln_proyecto_region r where p.ide_producto_indicador=rp.ide_producto_indicador and rp.ide_proyecto_region=r.ide_proyecto_region and p.ide_indicador_area=:ideIndicadorArea and r.ide_region=:ideRegion";
-    
+    const PLN_METAS_NO_INGRESADAS="SELECT distinct m.nombre FROM pln_producto_indicador p,pln_proyecto_meta pm,cfg_meta m WHERE pm.ide_proyecto=p.ide_proyecto AND pm.ide_meta=p.ide_meta AND pm.ind_obligatorio='S' AND p.ide_meta=m.ide_meta AND NOT EXISTS(SELECT r.ide_region_producto from pln_region_producto r WHERE r.ide_producto_indicador=p.ide_producto_indicador AND r.ide_proyecto_region=:ideProyectoRegion)";
     
     
     //Presupuesto
@@ -84,6 +84,7 @@ class HPMEConstants
     const INACTIVA='INACTIVA';
     const PUBLICADO='PUBLICADO';
     const EJECUTADO='EJECUTADO';
+    const ENVIADO='ENVIADO';
     const DATE_FORMAT='Y-m-d';
     const HTTP_AJAX_ERROR=404;
     
