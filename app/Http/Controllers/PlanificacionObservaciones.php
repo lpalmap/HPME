@@ -32,27 +32,61 @@ class PlanificacionObservaciones extends Controller
             }
             $bitacora=$this->bitacoraPorProyectoRegion($proyectoRegion->ide_proyecto_region);
             $mensajes=array();
+            $usuarioPrimerMensaje=-1;
             if(!is_null($bitacora)){
-                $mensajes=PlnBitacoraMensaje::where('ide_bitacora_proyecto_region','=',$bitacora->ide_bitacora_proyecto_region)->get();
-                Log::info($mensajes);
+                $mensajes=PlnBitacoraMensaje::with('usuario')->where('ide_bitacora_proyecto_region','=',$bitacora->ide_bitacora_proyecto_region)->get();
+                if(count($mensajes)>0){
+                    $usuarioPrimerMensaje=$mensajes[0]->ide_usuario;
+                }
             }
              
             $nombreProyecto=PlnProyectoPlanificacion::where('ide_proyecto','=',$proyectoRegion->ide_proyecto_planificacion)->pluck('descripcion')->first();
             $nombreRegion=CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->pluck('nombre')->first();
             
-            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes));
+            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje));
         }
         return view('home');
     }
     
+    
     private function bitacoraPorProyectoRegion($ideProyectoRegion){
         $bitacoras=  PlnBitacoraProyectoRegion::where('ide_proyecto_region','=',$ideProyectoRegion)->get();
-        Log::info($bitacoras);
         if(count($bitacoras)>0){
             return $bitacoras[0];
         }
         return null;
     }
+    
+    public function addMessage(Request $request){
+        $rol=  request()->session()->get('rol');
+        if($rol=='COORDINADOR' || $rol=='AFILIADO'){
+            $bitacora=$this->bitacoraPorProyectoRegion($request->ide_proyecto_region);
+            if(is_null($bitacora)){
+                $bitacora=new PlnBitacoraProyectoRegion();
+                $bitacora->ide_proyecto_region=$request->ide_proyecto_region;
+                $bitacora->estado=HPMEConstants::ABIERTO;
+                $bitacora->save();
+            }
+            $user=Auth::user();
+            $bitacoraMensaje=new PlnBitacoraMensaje();
+            $bitacoraMensaje->ide_usuario=$user->ide_usuario;
+            date_default_timezone_set(HPMEConstants::TIME_ZONE);
+            $bitacoraMensaje->fecha=date(HPMEConstants::DATETIME_FORMAT,  time());
+            $bitacoraMensaje->ide_bitacora_proyecto_region=$bitacora->ide_bitacora_proyecto_region;
+            $bitacoraMensaje->mensaje=$request->mensaje;
+            $bitacoraMensaje->save();
+            if($rol=='COORDINADOR'){
+                $proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
+                if($proyectoRegion->estado==HPMEConstants::ENVIADO){
+                    $proyectoRegion->estado=HPMEConstants::ABIERTO;
+                    $proyectoRegion->save();
+                }
+            }
+            return response()->json(array('ide_usuario'=>$user->ide_usuario,'usuario'=>$user->usuario,'nombres'=>$user->nombres,'apellidos'=>$user->apellidos));
+        }
+    }
+    
+    
     
     
     public function planificacionRegion(){

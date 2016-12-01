@@ -86,6 +86,8 @@ class HPMEConstants
     const EJECUTADO='EJECUTADO';
     const ENVIADO='ENVIADO';
     const DATE_FORMAT='Y-m-d';
+    const DATETIME_FORMAT='Y-m-d H:i:s';
+    const TIME_ZONE='America/Guatemala';
     const HTTP_AJAX_ERROR=404;
     
 }

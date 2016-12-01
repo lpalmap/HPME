@@ -178,7 +178,8 @@ Route::post('/plantilla/publicar',['uses' => 'PlantillaPlanificacion@publicarPla
 Route::post('/plantilla/enviar',['uses' => 'PlantillaPlanificacion@enviarPlantilla', 'middleware' => 'auth']);
 //ver observaciones
 Route::get('/observaciones/{id}',['uses' => 'PlanificacionObservaciones@observacionesRegion', 'middleware' => 'auth']);
-
+//Observaciones
+Route::post('/observacion/add',['uses' => 'PlanificacionObservaciones@addMessage', 'middleware' => 'auth']);
 
 //Metas
 Route::get('/plantilla/{id}',['uses' => 'PlanificacionMeta@metasProyecto', 'middleware' => 'auth']);
@@ -251,6 +252,8 @@ Route::get('/planificaciones',['uses' => 'PlanificacionRegion@planificacionRegio
 Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
 Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacionProyectoDetalle', 'middleware' => 'auth']);
+
+
 
 /*   PRESUPUESTO    */
 Route::get('/presupuestos',['uses' => 'ProyectoPresupuesto@index', 'middleware' => 'auth']);

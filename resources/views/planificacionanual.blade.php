@@ -70,7 +70,7 @@
                                                 @if(isset($rol) && $rol=='AFILIADO' && $items[$i]->estado=='PUBLICADO')
                                                     @if(isset($estadoRegion))
                                                         <a href="{{asset('proyectodetalle/'.($items[$i]->ide_proyecto))}}">
-                                                        <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificac&oacute;n"/></a>
+                                                        <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificaci&oacute;n"/></a>
                                                         @if($estadoRegion=='ABIERTO')
                                                             <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>
                                                         @else
