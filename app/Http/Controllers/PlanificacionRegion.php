@@ -10,6 +10,7 @@ use App\PlnProyectoRegion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
+use App\PlnBitacoraProyectoRegion;
 
 
 class PlanificacionRegion extends Controller
@@ -129,6 +130,25 @@ class PlanificacionRegion extends Controller
         }      
     }
     
+    public function aprobarPlanificacion(Request $request){
+        $planificacion=  PlnProyectoRegion::find($request->ide_proyecto_region);
+        if(!is_null($planificacion)){
+            $count= PlnBitacoraProyectoRegion::where(array('ide_proyecto_region'=>$request->ide_proyecto_region,'estado'=>  HPMEConstants::ABIERTO))->count();
+            if(!is_null($count) && $count>0){
+                return response()->json(array('error'=>'La planificaci&oacute;n tiene observaciones pendentes, debe marcarlas como resueltas para aprobar.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            if($planificacion->estado==HPMEConstants::APROBADO){
+                return response()->json(array('error'=>'Ya se encuentra aprobada la planificaci&oacute;n para la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            if($planificacion->estado==HPMEConstants::ABIERTO){
+                return response()->json(array('error'=>'La planificaci&oacute;n se encuentra en estado '.HPMEConstants::ABIERTO.' no se ha enviado para su revisi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            $planificacion->estado=  HPMEConstants::APROBADO;
+            $planificacion->save();
+            return response()->json();
+        }
+    }
+
     public function planificacionProyectoDetalle($id){ 
         $proyectoPlanificacion = PlnProyectoPlanificacion::find($id);     
         $rol=  request()->session()->get('rol');

@@ -254,9 +254,8 @@ Route::get('/planificaciones',['uses' => 'PlanificacionRegion@planificacionRegio
 Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
 Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacionProyectoDetalle', 'middleware' => 'auth']);
-
-
-
+Route::post('/planregion/aprobar',['uses' => 'PlanificacionRegion@aprobarPlanificacion', 'middleware' => 'auth']);
+        
 /*   PRESUPUESTO    */
 Route::get('/presupuestos',['uses' => 'ProyectoPresupuesto@index', 'middleware' => 'auth']);
 Route::get('/presupuestos/{id}',['uses' => 'ProyectoPresupuesto@retriveDepartamentos', 'middleware' => 'auth']);
