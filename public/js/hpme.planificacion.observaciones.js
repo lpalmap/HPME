@@ -13,6 +13,13 @@ $(document).ready(function(){
         $('#loading').modal('hide');
     });
     
+    $('#btnCerrar').click(function(){
+        $('#loading').modal('show');
+        $('#cerrarObservacion').modal('show');
+        $('#btnMarcar').val($(this).val());
+        $('#loading').modal('hide');
+    });
+    
     $("#btnGuardar").click(function (e) {      
         $('#loading').modal('show');
         var formData = {
@@ -51,6 +58,9 @@ $(document).ready(function(){
                 nitem+='<h4 class="timeline-title">'+data.nombres+' '+data.apellidos+' ('+data.usuario+')</h4></div><div class="timeline-body">';
                 nitem+='<p>'+formData.mensaje+'</p></div></div></li>';
                 $('#listaMensajes').append(nitem);
+                if(data.cambioEstado==='S'){
+                    location.reload(true);
+                }                
                 $('#agregarObservacion').modal('hide');
                 $('#loading').modal('hide');
             },
@@ -62,7 +72,45 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al guardar la plantilla.</li>';
+                    errHTML+='<li>Error al guardar el mensaje.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
+    
+    $("#btnMarcar").click(function (e) {      
+        $('#loading').modal('show');
+        var formData = {
+            ide_proyecto_region: $(this).val()
+        };   
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });      
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))+'/marcar';
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {    
+                location.reload(true);
+                $('#cerrarObservacion').modal('hide');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al marcar las observaciones.</li>';
                 }
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');                

@@ -80,6 +80,7 @@ class HPMEConstants
     const NO='N';
     const ABIERTO='ABIERTO';
     const CERRADO='CERRADO';
+    const APROBADO='APROBADO';
     const ACTIVA='ACTIVA';
     const INACTIVA='INACTIVA';
     const PUBLICADO='PUBLICADO';

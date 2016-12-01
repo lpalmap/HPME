@@ -39,10 +39,11 @@
                                 <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
                             &nbsp;
                             &nbsp;
-                            @if(isset($rol) && $rol=='COORDINADOR')
+                            @if(isset($rol) && $rol=='COORDINADOR' && $estado!='APROBADO')
                             <a href="" >
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Planificaci&oacute;n"/></a>
                             @endif
+                            <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
                         </div>
                         
                          <div class="panel-body">

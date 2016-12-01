@@ -28,8 +28,14 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">
+                                @if($estado!='APROBADO')
                                 <button id="btnAgregar" value="{{$ideProyectoRegion}}">
                                     <img src="{{asset('images/add_mail.png')}}" class="menu-imagen-big" alt="" title="Agregar Observaci&oacute;n"/></button>
+                                @endif
+                                @if($rol=='COORDINADOR' && !is_null($estadoBitacora) && $estadoBitacora=='ABIERTO')
+                                <button id="btnCerrar" value="{{$ideProyectoRegion}}">
+                                    <img src="{{asset('images/ok.png')}}" class="menu-imagen-big" alt="" title="Marcar observaciones como resultas."/></button>
+                                @endif
                             </span>
                         </div>
                         
@@ -83,6 +89,29 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button type="button" tabindex="6" class="btn btn-primary" id="btnGuardar">Guardar</button>
+                <input type="hidden" id="ide_item2" value="0"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cerrarObservacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Marcar Observaciones</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formCerrar">
+                    <div class="form-group">
+                        <label>Esta seguro de marcar como resueltas las observaciones&quest;</label>
+                    </div>                                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" tabindex="6" class="btn btn-primary" id="btnMarcar">Marcar como Resuelto</button>
                 <input type="hidden" id="ide_item2" value="0"/>
             </div>
         </div>

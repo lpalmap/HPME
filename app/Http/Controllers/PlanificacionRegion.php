@@ -122,7 +122,7 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
@@ -206,7 +206,7 @@ class PlanificacionRegion extends Controller
 //                break;
 //            }
             
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');

@@ -180,6 +180,8 @@ Route::post('/plantilla/enviar',['uses' => 'PlantillaPlanificacion@enviarPlantil
 Route::get('/observaciones/{id}',['uses' => 'PlanificacionObservaciones@observacionesRegion', 'middleware' => 'auth']);
 //Observaciones
 Route::post('/observacion/add',['uses' => 'PlanificacionObservaciones@addMessage', 'middleware' => 'auth']);
+//marcar resuelto
+Route::post('/observacion/marcar',['uses' => 'PlanificacionObservaciones@marcarBitacora', 'middleware' => 'auth']);
 
 //Metas
 Route::get('/plantilla/{id}',['uses' => 'PlanificacionMeta@metasProyecto', 'middleware' => 'auth']);
