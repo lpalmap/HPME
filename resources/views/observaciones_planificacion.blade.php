@@ -13,7 +13,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Observaciones por Regi&oacute;n</h2>
+                        <h2>Observaciones <span style="font-weight: bolder;">{{$nombreProyecto}}/{{$nombreRegion}}</span></h2>
                     </div>
                 </div>
 
@@ -23,7 +23,10 @@
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold"></span>
+                            <span style="font-weight: bold">
+                                <a href="{{url('planificaciones')}}" >
+                                    <img src="{{asset('images/add_mail.png')}}" class="menu-imagen-big" alt="" title="Agregar Observaci&oacute;n"/></a>
+                            </span>
                         </div>
                         
                          <div class="panel-body">

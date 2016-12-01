@@ -10,14 +10,50 @@ use App\PlnProyectoRegion;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
+use App\PlnBitacoraProyectoRegion;
+use App\PlnBitacoraMensaje;
 
 
 class PlanificacionObservaciones extends Controller
 {    
     
     public function observacionesRegion($id){
-        return view('observaciones_planificacion');
+        $rol=  request()->session()->get('rol');
+        if($rol=='COORDINADOR' || $rol=='AFILIADO'){
+            $proyectoRegion=  PlnProyectoRegion::find($id);
+            if(is_null($proyectoRegion)){
+                return view('home');
+            }
+            if($rol=='AFILIADO'){
+                $ideRegion=$this->regionUsuario();
+                if(is_null($ideRegion) || $ideRegion!=$proyectoRegion->ide_region){
+                    return view ('home');
+                }
+            }
+            $bitacora=$this->bitacoraPorProyectoRegion($proyectoRegion->ide_proyecto_region);
+            $mensajes=array();
+            if(!is_null($bitacora)){
+                $mensajes=PlnBitacoraMensaje::where('ide_bitacora_proyecto_region','=',$bitacora->ide_bitacora_proyecto_region)->get();
+                Log::info($mensajes);
+            }
+             
+            $nombreProyecto=PlnProyectoPlanificacion::where('ide_proyecto','=',$proyectoRegion->ide_proyecto_planificacion)->pluck('descripcion')->first();
+            $nombreRegion=CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->pluck('nombre')->first();
+            
+            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes));
+        }
+        return view('home');
     }
+    
+    private function bitacoraPorProyectoRegion($ideProyectoRegion){
+        $bitacoras=  PlnBitacoraProyectoRegion::where('ide_proyecto_region','=',$ideProyectoRegion)->get();
+        Log::info($bitacoras);
+        if(count($bitacoras)>0){
+            return $bitacoras[0];
+        }
+        return null;
+    }
+    
     
     public function planificacionRegion(){
         $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion']);
