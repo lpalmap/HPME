@@ -191,6 +191,13 @@ class PlantillaPlanificacion extends Controller
 //        return response()->json($items);
 //    }
 
+    public function cerrarPlantilla(Request $request){
+        $proyectoPlanificacion=  PlnProyectoPlanificacion::find($request->ide_proyecto);
+        if($proyectoPlanificacion->estado!=HPMEConstants::ABIERTO){
+            
+        }
+    }
+    
     public function validateRequest($request){
         $rules=[
         'descripcion' => 'required|max:250',

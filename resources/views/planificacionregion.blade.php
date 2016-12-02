@@ -30,8 +30,8 @@
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>
                                                 &nbsp;
                                                 &nbsp;
-                                                <a href="" >
-                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" alt="" title="Cerrar Plantilla"/></a>
+                                <button id="btnCerrar">                      
+                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" alt="" title="Cerrar Plantilla"/></button>
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                              <div class="table-responsive" id="tableContent">
                                  
@@ -108,7 +108,28 @@
        <!--END PAGE CONTENT -->
 @endsection
 @section('outsidewraper')
-
+<div class="modal fade" id="cerrarPlanificacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cerrar Planificacion</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formCerrar">
+                    <div class="form-group">
+                        <label>Esta seguro de cerrar la plantilla de planificaci&oacute;n&quest;</label>
+                    </div>                                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" tabindex="6" class="btn btn-primary" id="btnAceptarCerrar">Cerrar</button>
+                <input type="hidden" id="ide_item2" value="0"/>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
@@ -136,6 +157,8 @@
 @endsection
 @section('footer')
     @parent
+    <meta name="_token" content="{!! csrf_token() !!}" />
+    <script src="{{asset('js/hpme.planificacion.operaciones.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
