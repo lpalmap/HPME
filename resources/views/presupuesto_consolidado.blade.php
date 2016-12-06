@@ -75,7 +75,7 @@
                                                 <td>{{isset($cuentas[$i]['item10'])?$cuentas[$i]['item10']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item11'])?$cuentas[$i]['item11']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item12'])?$cuentas[$i]['item12']:'0'}}</td>
-                                                <td></td>
+                                                <td>{{isset($cuentas[$i]['total'])?$cuentas[$i]['total']:'0'}}</td>
                                             </tr>
                                         @endfor    
                                     </tbody>

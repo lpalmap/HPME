@@ -147,7 +147,14 @@ class PresupuestoConsolidado extends Controller
                     $itemCuenta['item'.$i]=$itemTotal['item'.$i];
                 }
             }
-        }        
+        } 
+        if(isset($itemTotal['total'])){
+            if(isset($itemCuenta['total'])){
+                $itemCuenta['total']=$itemCuenta['total']+$itemTotal['total'];
+            }else{
+                $itemCuenta['total']=$itemTotal['total'];
+            }
+        }
         //Log::info("***********ITEM CUENTA********************");
         //Log::info($itemCuenta);
         return $itemCuenta;
@@ -170,57 +177,73 @@ class PresupuestoConsolidado extends Controller
         $item10=0.0;
         $item11=0.0;
         $item12=0.0;
+        $total=0.0;
+        $totalCuenta=0.0;
         foreach($cuentasHijas as $hija){
             $item['cuenta']=$hija->cuenta;
             $item['nombre']=$hija->nombre;
+            $totalCuenta=0.0;
             if($hija->item1>0){
                 $item['item1']=$hija->item1;
                 $item1+=$hija->item1;
+                $totalCuenta+=$hija->item1;
             }
             if($hija->item2>0){
                 $item['item2']=$hija->item2;
                 $item2+=$hija->item2;
+                $totalCuenta+=$hija->item2;
             }
             if($hija->item3>0){
                 $item['item3']=$hija->item3;
                 $item3+=$hija->item3;
+                $totalCuenta+=$hija->item3;
             }
             if($hija->item4>0){
                 $item['item4']=$hija->item4;
                 $item4+=$hija->item4;
+                $totalCuenta+=$hija->item4;
             }
             if($hija->item5>0){
                 $item['item5']=$hija->item5;
                 $item5+=$hija->item5;
+                $totalCuenta+=$hija->item5;
             }
             if($hija->item6>0){
                 $item['item6']=$hija->item6;
                 $item6+=$hija->item6;
+                $totalCuenta+=$hija->item6;
             }
             if($hija->item7>0){
                 $item['item7']=$hija->item7;
                 $item7+=$hija->item7;
+                $totalCuenta+=$hija->item7;
             }
             if($hija->item8>0){
                 $item['item8']=$hija->item8;
                 $item8+=$hija->item8;
+                $totalCuenta+=$hija->item8;
             }
             if($hija->item9>0){
                 $item['item9']=$hija->item9;
                 $item9+=$hija->item9;
+                $totalCuenta+=$hija->item9;
             }
             if($hija->item10>0){
                 $item['item10']=$hija->item10;
                 $item10+=$hija->item10;
+                $totalCuenta+=$hija->item10;
             }
             if($hija->item11>0){
                 $item['item11']=$hija->item11;
                 $item11+=$hija->item11;
+                $totalCuenta+=$hija->item11;
             }
             if($hija->item12>0){
                 $item['item12']=$hija->item12;
                 $item12+=$hija->item12;
+                $totalCuenta+=$hija->item12;
             }
+            $item['total']=$totalCuenta;
             $result[]=$item;
         } 
         //$itemCuenta=array();
@@ -228,40 +251,53 @@ class PresupuestoConsolidado extends Controller
         $itemCuenta['nombre']=$cuenta->nombre;
         if($item1>0){
             $itemCuenta['item1']=$item1;
+            $total+=$item1;
         }
         if($item2>0){
             $itemCuenta['item2']=$item2;
+            $total+=$item2;
         }
         if($item3>0){
             $itemCuenta['item3']=$item3;
+            $total+=$item3;
         }
         if($item4>0){
             $itemCuenta['item4']=$item4;
+            $total+=$item4;
         }
         if($item5>0){
             $itemCuenta['item5']=$item5;
+            $total+=$item5;
         }
         if($item6>0){
             $itemCuenta['item6']=$item6;
+            $total+=$item6;
         }
         if($item7>0){
             $itemCuenta['item7']=$item7;
+            $total+=$item7;
         }
         if($item8>0){
             $itemCuenta['item8']=$item8;
+            $total+=$item8;
         }
         if($item9>0){
             $itemCuenta['item9']=$item9;
+            $total+=$item9;
         }
         if($item10>0){
             $itemCuenta['item10']=$item10;
+            $total+=$item10;
         }
         if($item11>0){
             $itemCuenta['item11']=$item11;
+            $total+=$item11;
         }
         if($item12>0){
             $itemCuenta['item12']=$item12;
+            $total+=$item12;
         }
+        $itemCuenta['total']=$total;
         //$result[]=$itemCuenta;
         array_unshift($result,$itemCuenta);
         Log::info($result);
