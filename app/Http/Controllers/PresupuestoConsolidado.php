@@ -104,10 +104,10 @@ class PresupuestoConsolidado extends Controller
         return $result;
     }
     
-    public function buildReporteCuenta($cuenta,$cuentasPadre,$cuentasConsolidar,$parameterQuery){
+    public function buildReporteCuenta($cuenta,$cuentasPadre,$cuentasConsolidar,$parameterQuery,$nivel=0){
         if(in_array($cuenta->ide_cuenta,$cuentasConsolidar)){
             //Log::info("Cuenta $cuenta->nombre en consolidar.");
-            return $this->consolidarCuenta($cuenta, $parameterQuery);
+            return $this->consolidarCuenta($cuenta, $parameterQuery,$nivel);
         }else{
             if(in_array($cuenta->ide_cuenta, $cuentasPadre)){
                 //Log::info("Cuenta $cuenta->nombre en cuentas padre.");
@@ -118,7 +118,7 @@ class PresupuestoConsolidado extends Controller
                     $result[]=$itemCuenta; 
                     foreach($cuentaHijas as $hija){
                         //Log::info('buscando hija..... '.$hija->nombre);
-                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery);
+                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$nivel+1);
                         //Log::info("*****result hija ");
                         //Log::info($result_hija);
                         if(!is_null($result_hija)){
@@ -129,6 +129,7 @@ class PresupuestoConsolidado extends Controller
                     }
                     //Log::info("*********** print array "); 
                     //Log::info($itemCuenta);
+                    $itemCuenta['nivel']=$nivel;
                     $result[0]=$itemCuenta;
                     //Log::info($result);
                     return $result;
@@ -161,7 +162,7 @@ class PresupuestoConsolidado extends Controller
     }
 
 
-    public function consolidarCuenta($cuenta,$parameterQuery){
+    public function consolidarCuenta($cuenta,$parameterQuery,$nivel){
         $result=array();
         $cuentasHijas=DB::select(HPMEConstants::CONSOLIDADO_COLABORADOR_CUENTA_PADRE,array('idePresupuestoColaborador'=>$parameterQuery['idePresupuestoColaborador'],'ideCuentaPadre'=>$cuenta->ide_cuenta));
         Log::info($cuentasHijas);
@@ -244,6 +245,7 @@ class PresupuestoConsolidado extends Controller
                 $totalCuenta+=$hija->item12;
             }
             $item['total']=$totalCuenta;
+            $item['nivel']=$nivel+1;
             $result[]=$item;
         } 
         //$itemCuenta=array();
@@ -298,6 +300,7 @@ class PresupuestoConsolidado extends Controller
             $total+=$item12;
         }
         $itemCuenta['total']=$total;
+        $itemCuenta['nivel']=$nivel;
         //$result[]=$itemCuenta;
         array_unshift($result,$itemCuenta);
         Log::info($result);

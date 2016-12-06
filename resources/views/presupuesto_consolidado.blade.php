@@ -31,7 +31,7 @@
                              @if(isset($cuentas))                         
                              <div class="table-responsive" id="tableContent">
                                  
-                                 <table class="tbl table table-striped table-bordered table-hover table-buget" id="dataTableItems">
+                                 <table class="tbl table table-bordered table-hover table-buget" id="dataTableItems">
                                     <thead>
                                         <tr>
                                             <th style="text-align: center"></th>
@@ -54,7 +54,20 @@
                                     </thead>
                                         <tbody id="lista-items" name="lista-items">
                                         @for ($i=0;$i<count($cuentas);$i++)
-                                            <tr class="warning" style="text-align: center" >
+                                            @if(isset($cuentas[$i]['nivel']))
+                                                @if($cuentas[$i]['nivel']==0)
+                                                    <tr class="success" style="text-align: center" >
+                                                @else
+                                                    @if($cuentas[$i]['nivel']==1)
+                                                        <tr class="warning" style="text-align: center" >
+                                                    @else
+                                                        <tr class="info" style="text-align: center" >
+                                                    @endif
+                                                @endif
+                                                
+                                            @else
+                                                <tr class="info" style="text-align: center" >
+                                            @endif                                           
                                                 @if(is_null($cuentas[$i]['cuenta']) || strlen($cuentas[$i]['cuenta'])==0)
                                                 <td style="text-align: center">{{$cuentas[$i]['nombre']}}</td>
                                                 <td></td>
