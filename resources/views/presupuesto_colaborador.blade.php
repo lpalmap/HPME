@@ -33,18 +33,18 @@
                                 </li>
                                 <li class="active"><a href="{{url('presupuestos/'.$ideProyectoPresupuesto)}}">Departamentos</a>
                                 </li>
-                                <li class="active"><a href="" data-toggle="tab">Colaboradores</a>
+                                <li class="active"><a href="" data-toggle="tab">Colaboradores/Proyectos</a>
                                 </li>
                             </ul>
                              <hr />
-                             <button class="btn btn-success" id="btnAgregar"><i class="icon-user icon-white" ></i> Agregar Presupuesto Colaborador</button>
+                             <button class="btn btn-success" id="btnAgregar"><i class="icon-user icon-white" ></i> Agregar Presupuesto Colaborador/Proyecto</button>
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Fecha Ingreso</th>
-                                            <th style="text-align: center">Colaborador</th>
+                                            <th style="text-align: center">Colaborador/Proyecto</th>
                                             <th style="text-align: center">Acciones</th>    
                                         </tr>
                                     </thead>
@@ -78,10 +78,10 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Presupuesto Colaborador</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar presupuesto Colaborador/Proyecto</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar el presupuesto del colaborador.
+                                            Esta seguro de eliminar el presupuesto del colaborador/proyecto&quest;
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

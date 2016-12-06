@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2> Colaboradores</h2>
+                        <h2> Colaboradores/Proyectos</h2>
                     </div>
                 </div>
 
@@ -24,13 +24,15 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <button class="btn btn-success" id="btnAgregar"><i class="icon-user icon-white" ></i> Agregar Colaborador</button>
+                            <button class="btn btn-success" id="btnAgregarProyecto"><i class="icon-folder-open icon-white" ></i> Agregar Proyecto</button>
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                            <th>Nombres</th>
+                                            <th>Tipo</th>
+                                            <th>Nombre(s)</th>
                                             <th>Apellidos</th>
                                             <th>Departamento</th>
                                             <th>Acciones</th>
@@ -40,11 +42,12 @@
                                         @if (isset($colaboradores))
                                             @for ($i=0;$i<count($colaboradores);$i++)
                                         <tr class="even gradeA" id="usuario{{$colaboradores[$i]->ide_colaborador}}">
+                                            <td>{{$colaboradores[$i]->tipo}}</td>
                                             <td>{{$colaboradores[$i]->nombres}}</td>
                                             <td>{{$colaboradores[$i]->apellidos}}</td>
                                             <td>{{$colaboradores[$i]->departamento->nombre}}</td>
                                             <td>
-                                                <button class="btn btn-primary btn-editar" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-pencil icon-white" ></i> Editar</button>
+                                                <button class="btn btn-primary btn-editar {{$colaboradores[$i]->tipo=='Colaborador'?'btn-editar-colaborador':'btn-editar-proyecto'}}" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                             </td>
                                         </tr>
@@ -69,10 +72,10 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="H1">Eliminar Colaborador</h4>
+                                            <h4 class="modal-title" id="H1">Eliminar Colaborador/Proyecto</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar el colaborador.
+                                            Esta seguro de eliminar el colaborador/proyecto&quest;
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -126,6 +129,43 @@
                                 </div>
                             </div>
                     </div>
+
+                        <div class="modal fade" id="agregarProyecto" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <h4 class="modal-title" id="inputTitleProyecto"></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form role="form" id="formAgregarProyecto">
+                                                <div class="form-group">
+                                                    <label>Nombre</label>
+                                                    <input class="form-control" id="inNombreProyecto" required="true"/>
+                                                </div>                                          
+                                                @if (isset($departamentos))
+                                                <div class="form-group">
+                                                    <label>Departamento</label>
+
+                                                        <select id="inDepartamentoProyecto" class="form-control">
+                                                            <option value="0"></option>
+                                                               @for ($i=0;$i<count($departamentos);$i++)
+                                                                   <option value="{{$departamentos[$i]->ide_departamento}}">{{$departamentos[$i]->nombre}}</option>
+                                                               @endfor
+                                                        </select>
+
+                                                </div>  
+                                                @endif                                       
+                                        </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary" id="btnGuardarProyecto">Guardar</button>
+                                                <input type="hidden" id="ide_col_proyecto" value="0"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                    <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
                         <div class="modal-dialog">

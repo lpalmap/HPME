@@ -14,7 +14,7 @@ class PlnPresupuestoColaborador extends BaseModel
     }
     
     public function colaborador(){
-        return $this->belongsTo('App\CfgColaborador','ide_colaborador');
+        return $this->belongsTo('App\CfgColaboradorProyecto','ide_colaborador');
     }
     
 }

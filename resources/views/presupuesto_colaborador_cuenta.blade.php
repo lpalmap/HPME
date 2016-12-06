@@ -29,7 +29,7 @@
                                 </li>
                                 <li class="active"><a href="{{url('presupuestos/'.$ideProyectoPresupuesto)}}">Departamentos</a>
                                 </li>
-                                <li class="active"><a href="{{url('departamento/'.$idePresupuestoDepartamento)}}">Colaboradores</a>
+                                <li class="active"><a href="{{url('departamento/'.$idePresupuestoDepartamento)}}">Colaboradores/Proyectos</a>
                                 </li>
                                 <li class="active"><a href="" data-toggle="tab">{{$nombreColaborador}}</a>
                             </ul>
