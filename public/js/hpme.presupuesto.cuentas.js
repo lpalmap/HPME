@@ -196,6 +196,7 @@ $(document).ready(function(){
             dataType: 'json',
             success: function (data) {
                 $('#agregarEditarModal').modal('hide');
+                $("#btn"+cuenta).removeClass('btn-primary').addClass('btn-success');
                 $('#loading').modal('hide');
             },
             error: function (data) {

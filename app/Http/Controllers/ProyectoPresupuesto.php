@@ -93,15 +93,24 @@ class ProyectoPresupuesto extends Controller
             $ideProyectoPresupuesto=$detalleColaborador[0]->ide_proyecto_presupuesto;
             $nombreColaborador=$detalleColaborador[0]->nombres." ".$detalleColaborador[0]->apellidos;
         }
+        $cuentasIngresadas=array();
         if(is_null($id)){
             $cuentas= CfgCuenta::where(array('ide_cuenta_padre'=>null,'estado'=>HPMEConstants::ACTIVA))->get();
+            $cuentasCompletadas=DB::select(HPMEConstants::PLN_PRESUPUESTO_CUENTA_COMPLETADA_RAIZ,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
+            foreach($cuentasCompletadas as $ingresada){
+                $cuentasIngresadas[]=$ingresada->ide_cuenta;
+            }
         }else{
             //$cuentas= CfgCuenta::where(array('ide_cuenta_padre'=>$id,'estado'=>HPMEConstants::ACTIVA))->get();
             $cuentas=DB::select(HPMEConstants::PLN_CUENTAS_HIJAS_ACTIVAS,array('ideCuentaPadre'=>$id));
             $ideCuentaPadre=$id;
-            $parents=DB::select(HPMEConstants::CFG_CUENTAS_PARENT,array('ideCuenta'=>$id));            
+            $parents=DB::select(HPMEConstants::CFG_CUENTAS_PARENT,array('ideCuenta'=>$id));
+            $cuentasCompletadas=DB::select(HPMEConstants::PLN_PRESUPUESTO_CUENTAS_COMPLETADAS,array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'ideCuenta'=>$id));
+            foreach($cuentasCompletadas as $ingresada){
+                $cuentasIngresadas[]=$ingresada->ide_cuenta;
+            }
         }
-        return view('presupuesto_colaborador_cuenta',array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'nombreColaborador'=>$nombreColaborador,'cuentas'=>$cuentas,'ideCuentaPadre'=>$ideCuentaPadre,'parents'=>$parents));
+        return view('presupuesto_colaborador_cuenta',array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'nombreColaborador'=>$nombreColaborador,'cuentas'=>$cuentas,'ideCuentaPadre'=>$ideCuentaPadre,'parents'=>$parents,'ingresadas'=>$cuentasIngresadas));
     }
 
 

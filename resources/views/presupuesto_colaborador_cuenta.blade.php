@@ -57,7 +57,7 @@
                                             @if(!isset($cuentas[$i]->hijas) || $cuentas[$i]->hijas>0)
                                             <td class="table-center"><a title="{{$cuentas[$i]->descripcion}}" href="{{url('/colaborador/'.$idePresupuestoColaborador.'/cuenta/'.($cuentas[$i]->ide_cuenta))}}">{{$cuentas[$i]->nombre}}</a></td>
                                             @else
-                                            <td><button class="btn2 btn btn-primary btn-round btn-cuenta" value="{{$cuentas[$i]->ide_cuenta}}"  title="{{$cuentas[$i]->descripcion}}">{{$cuentas[$i]->nombre}}</button></td>
+                                            <td><button class="btn2 btn {{in_array($cuentas[$i]->ide_cuenta,$ingresadas)?'btn-success':'btn-primary'}} btn-round btn-cuenta" id="btn{{$cuentas[$i]->ide_cuenta}}" value="{{$cuentas[$i]->ide_cuenta}}"  title="{{$cuentas[$i]->descripcion}}">{{$cuentas[$i]->nombre}}</button></td>
                                             @endif
                                             <td class="table-center">
 <!--                                                <button class="btn btn-primary btn-editar" value="{{$cuentas[$i]->ide_cuenta}}"><i class="icon-pencil icon-white" ></i> Editar</button>
