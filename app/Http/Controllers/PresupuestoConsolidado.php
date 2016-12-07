@@ -11,12 +11,16 @@ class PresupuestoConsolidado extends Controller
 {
     //Obtiene usuarios y crea vista
     public function consolidadoColaborador($idePresupuestoColaborador){
-        $consolidado=$this->buildConsolidado($idePresupuestoColaborador);
-        
-        return view('presupuesto_consolidado',array('cuentas'=>$consolidado));
+        $consolidado=$this->buildConsolidado($idePresupuestoColaborador,FALSE);
+        return view('presupuesto_consolidado',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
     }
     
-    public function buildConsolidado($idePresupuestoColaborador){
+    public function consolidadoTrimestralColaborador($idePresupuestoColaborador){
+        $consolidado=$this->buildConsolidado($idePresupuestoColaborador,TRUE);
+        return view('presupuesto_consolidado_trimestral',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
+    }
+    
+    public function buildConsolidado($idePresupuestoColaborador,$trimestral){
         Log::info('consolidado '.$idePresupuestoColaborador);
         //Log::info("**************** MEME");
         //Log::info(memory_get_usage(true) );
@@ -50,7 +54,7 @@ class PresupuestoConsolidado extends Controller
             }
         } 
         
-        return $this->buildConsolidadoInicial($cuentasPadre, $cuentasConsolidar, array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        return $this->buildConsolidadoInicial($cuentasPadre, $cuentasConsolidar, array('idePresupuestoColaborador'=>$idePresupuestoColaborador),$trimestral);
         //Log::info('*******CUENTAS PADRE ACTUALIZADAS ********');
        //$this->cuentas(null, $cuentasPadre,$cuentasConsolidar, $idePresupuestoColaborador);
         //Log::info("****************** FIN ******************");
@@ -86,13 +90,13 @@ class PresupuestoConsolidado extends Controller
 //        return null;        
 //    }
        
-    public function buildConsolidadoInicial($cuentasPadre,$cuentasConsolidar,$parameterQuery){     
+    public function buildConsolidadoInicial($cuentasPadre,$cuentasConsolidar,$parameterQuery,$trimestral){     
         //Log::info("**** CONSOLIDADO INICIAL ******");
         $cuentasIniciales=DB::select($query=HPMEConstants::PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ);
         //Log::info($cuentasIniciales);
         $result=array();
         foreach ($cuentasIniciales as $root){
-             $result_cuenta=$this->buildReporteCuenta($root, $cuentasPadre, $cuentasConsolidar, $parameterQuery);
+             $result_cuenta=$this->buildReporteCuenta($root, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$trimestral);
              if(!is_null($result_cuenta)){
                 $result=array_merge($result, $result_cuenta);
              }
@@ -104,10 +108,10 @@ class PresupuestoConsolidado extends Controller
         return $result;
     }
     
-    public function buildReporteCuenta($cuenta,$cuentasPadre,$cuentasConsolidar,$parameterQuery,$nivel=0){
+    public function buildReporteCuenta($cuenta,$cuentasPadre,$cuentasConsolidar,$parameterQuery,$trimestral,$nivel=0){
         if(in_array($cuenta->ide_cuenta,$cuentasConsolidar)){
             //Log::info("Cuenta $cuenta->nombre en consolidar.");
-            return $this->consolidarCuenta($cuenta, $parameterQuery,$nivel);
+            return $this->consolidarCuenta($cuenta, $parameterQuery,$nivel,$trimestral);
         }else{
             if(in_array($cuenta->ide_cuenta, $cuentasPadre)){
                 //Log::info("Cuenta $cuenta->nombre en cuentas padre.");
@@ -118,12 +122,12 @@ class PresupuestoConsolidado extends Controller
                     $result[]=$itemCuenta; 
                     foreach($cuentaHijas as $hija){
                         //Log::info('buscando hija..... '.$hija->nombre);
-                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$nivel+1);
+                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$nivel+1,$trimestral);
                         //Log::info("*****result hija ");
                         //Log::info($result_hija);
                         if(!is_null($result_hija)){
                             //sumariazar
-                            $itemCuenta=$this->totalizar($itemCuenta, $result_hija[0]);
+                            $itemCuenta=$this->totalizar($itemCuenta, $result_hija[0],$trimestral);
                             $result=array_merge($result,$result_hija);
                         }
                     }
@@ -139,8 +143,12 @@ class PresupuestoConsolidado extends Controller
     }
     
     
-    private function totalizar($itemCuenta,$itemTotal){
-        for($i=1;$i<=12;$i++){
+    private function totalizar($itemCuenta,$itemTotal,$trimestral){
+        $items=12;
+        if($trimestral){
+            $items=4;
+        }
+        for($i=1;$i<=$items;$i++){
             if(isset($itemTotal['item'.$i])){
                 if(isset($itemCuenta['item'.$i])){
                     $itemCuenta['item'.$i]=$itemCuenta['item'.$i]+$itemTotal['item'.$i];
@@ -162,10 +170,21 @@ class PresupuestoConsolidado extends Controller
     }
 
 
-    public function consolidarCuenta($cuenta,$parameterQuery,$nivel){
-        $result=array();
+    public function consolidarCuenta($cuenta,$parameterQuery,$nivel,$trimestral){
+        Log::info("Trimestral $trimestral ".$trimestral);
         $cuentasHijas=DB::select(HPMEConstants::CONSOLIDADO_COLABORADOR_CUENTA_PADRE,array('idePresupuestoColaborador'=>$parameterQuery['idePresupuestoColaborador'],'ideCuentaPadre'=>$cuenta->ide_cuenta));
-        Log::info($cuentasHijas);
+        //Log::info($cuentasHijas);
+        if($trimestral){
+            Log::info("trim $trimestral");
+            return $this->trimestral($cuenta,$cuentasHijas, $nivel);
+        }else{
+            Log::info("men $trimestral");
+            return $this->mensual($cuenta,$cuentasHijas, $nivel);
+        }      
+    }
+    
+    private function mensual($cuenta,$cuentasHijas,$nivel){
+        $result=array();
         $item1=0.0;
         $item2=0.0;
         $item3=0.0;
@@ -303,8 +322,111 @@ class PresupuestoConsolidado extends Controller
         $itemCuenta['nivel']=$nivel;
         //$result[]=$itemCuenta;
         array_unshift($result,$itemCuenta);
-        Log::info($result);
-        Log::info('********** FIN CONSOLIDAR ***************');
-        return $result;
-    } 
+        return $result;     
+    }
+    
+    
+    private function trimestral($cuenta,$cuentasHijas,$nivel){
+        $result=array();
+        $item1=0.0;
+        $item2=0.0;
+        $item3=0.0;
+        $item4=0.0;
+        $total=0.0;
+        $totalCuenta=0.0;
+        foreach($cuentasHijas as $hija){
+            $item['cuenta']=$hija->cuenta;
+            $item['nombre']=$hija->nombre;
+            $trim1=0.0;
+            $trim2=0.0;
+            $trim3=0.0;
+            $trim4=0.0;
+            $totalCuenta=0.0;
+            if($hija->item1>0){
+                $trim1+=$hija->item1;
+            }
+            
+            if($hija->item2>0){
+                $trim1+=$hija->item2;
+            }
+            if($hija->item3>0){
+                $trim1+=$hija->item3;
+            }
+            $item['item1']=$trim1;
+            $totalCuenta+=$trim1;
+            
+            if($hija->item4>0){
+                $trim2+=$hija->item4;
+            }
+            if($hija->item5>0){
+                $trim2+=$hija->item5;
+            }
+            if($hija->item6>0){
+                $trim2+=$hija->item6;
+            }
+            $item['item2']=$trim2;
+            $totalCuenta+=$trim2;
+            
+            if($hija->item7>0){
+                $trim3+=$hija->item7;
+            }
+            if($hija->item8>0){
+                $trim3+=$hija->item8;
+            }
+            if($hija->item9>0){
+                $trim3+=$hija->item9;
+            }
+            $item['item3']=$trim3;
+            $totalCuenta+=$trim3;
+            
+            if($hija->item10>0){
+                $trim4+=$hija->item10;
+            }
+            if($hija->item11>0){
+                $trim4+=$hija->item11;
+            }   
+            if($hija->item12>0){
+                $trim4+=$hija->item12;
+            }
+            $item['item4']=$trim4;
+            $totalCuenta+=$trim4;
+            
+            $item1+=$trim1;
+            $item2+=$trim2;
+            $item3+=$trim3;
+            $item4+=$trim4;
+            
+            $item['total']=$totalCuenta;
+            $item['nivel']=$nivel+1;
+            $result[]=$item;
+        } 
+        //$itemCuenta=array();
+        $itemCuenta['cuenta']=$cuenta->cuenta;
+        $itemCuenta['nombre']=$cuenta->nombre;
+        if($item1>0){
+            $itemCuenta['item1']=$item1;
+            $total+=$item1;
+        }
+        if($item2>0){
+            $itemCuenta['item2']=$item2;
+            $total+=$item2;
+        }
+        if($item3>0){
+            $itemCuenta['item3']=$item3;
+            $total+=$item3;
+        }
+        if($item4>0){
+            $itemCuenta['item4']=$item4;
+            $total+=$item4;
+        }
+        $itemCuenta['total']=$total;
+        $itemCuenta['nivel']=$nivel;
+        //$result[]=$itemCuenta;
+        array_unshift($result,$itemCuenta);
+        return $result;     
+    }
+    
+    
+    
+    
 }

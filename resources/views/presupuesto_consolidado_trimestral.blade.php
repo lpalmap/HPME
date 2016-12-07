@@ -24,7 +24,7 @@
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold">Detalle presupuesto <a href="{{url('presupuestocolaboradortrim/'.$idePresupuestoColaborador)}}" >
+                            <span style="font-weight: bold">Detalle presupuesto <a href="{{url('planificaciones')}}" >
                         <img src="{{asset('images/quarter.png')}}" class="menu-imagen-big" alt="" title="Consolidado trimestral"/></a>
                         </div>
                         
@@ -38,19 +38,11 @@
                                             <th style="text-align: center"></th>
                                             <th style="text-align: center"></th>
                                             <th>%</th>
-                                            <th>Enero</th>
-                                            <th>Febrero</th>
-                                            <th>Marzo</th>
-                                            <th>Abril</th>
-                                            <th>Mayo</th>
-                                            <th>Junio</th>
-                                            <th>Julio</th>
-                                            <th>Agosto</th>
-                                            <th>Septiembre</th>
-                                            <th>Octubre</th>
-                                            <th>Noviembre</th>
-                                            <th>Diciembre</th>
-                                            <th>Total</th>
+                                            <th style="text-align: center">Enero-Marzo</th>
+                                            <th style="text-align: center">Abril-Junio</th>
+                                            <th style="text-align: center">Julio-Septiembre</th>
+                                            <th style="text-align: center">Octubre-Diciembre</th>
+                                            <th style="text-align: center">Total</th>
                                         </tr>
                                     </thead>
                                         <tbody id="lista-items" name="lista-items">
@@ -81,14 +73,6 @@
                                                 <td>{{isset($cuentas[$i]['item2'])?$cuentas[$i]['item2']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item3'])?$cuentas[$i]['item3']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item4'])?$cuentas[$i]['item4']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item5'])?$cuentas[$i]['item5']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item6'])?$cuentas[$i]['item6']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item7'])?$cuentas[$i]['item7']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item8'])?$cuentas[$i]['item8']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item9'])?$cuentas[$i]['item9']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item10'])?$cuentas[$i]['item10']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item11'])?$cuentas[$i]['item11']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item12'])?$cuentas[$i]['item12']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['total'])?$cuentas[$i]['total']:'0'}}</td>
                                             </tr>
                                         @endfor    
