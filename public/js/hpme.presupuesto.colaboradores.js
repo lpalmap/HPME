@@ -8,8 +8,10 @@ $(document).ready(function(){
     
     //Clic sobre el botón eliminar para un item de la tabla
     $( document ).on( 'click', '.btn-danger', function() {
+        $('#loading').modal('show');
         $('#btnEliminar').val($(this).val());
         $('#eliminarModal').modal('show');
+        $('#loading').modal('hide');
     });
     
     //Agregar nuevo
@@ -74,17 +76,20 @@ $(document).ready(function(){
         $('#loading').modal('show');
         //Se obtiene el id del elemento a eliminar
         var item_id = $(this).val();
-        var url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
-       
+        var url=(""+$('meta[name="_urlTarget"]').attr('content')).replace("#","")+"/eliminar";    
+        var formData = {
+            ide_presupuesto_colaborador:item_id
+        };
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        //Se hace el request con ajax a la url para eliminar el item
         $.ajax({
             type: "DELETE",
-            url: url + '/' + item_id,
+            url: url,
+            data: formData,
+            dataType: 'json',
             success: function (data) {
                 console.log(data);
                 dataTable.row( $('#item'+item_id)).remove().draw();
@@ -93,8 +98,7 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error borrando meta:', data);
-                $("#erroresContent").html("<li>Error al borrar la meta.</li>"); 
+                $("#erroresContent").html("<li>Error al eliminar el presupuesto del colaborador/proyecto.</li>"); 
                 $('#erroresModal').modal('show');
             }
         });

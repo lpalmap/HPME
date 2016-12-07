@@ -51,6 +51,10 @@ class HPMEConstants
     const PLN_CUENTAS_HIJAS_CONSOLIDA="SELECT c.ide_cuenta,c.cuenta,c.nombre,c.ind_consolidar FROM cfg_cuenta c WHERE c.ide_cuenta_padre=:ideCuentaPadre ORDER BY c.ide_cuenta asc";
     const PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ="SELECT c.ide_cuenta,c.cuenta,c.nombre,c.ind_consolidar FROM cfg_cuenta c WHERE c.ide_cuenta_padre is NULL ORDER BY c.ide_cuenta asc";
     
+    //ELIMINAR DATOS
+    const PLN_PRESUPUESTO_ELIMINAR_DETALLE_CUENTA_COLABORADOR="DELETE FROM pln_colaborador_cuenta_detalle WHERE ide_colaborador_cuenta in (SELECT ide_colaborador_cuenta FROM pln_colaborador_cuenta c where c.ide_presupuesto_colaborador=:idePresupuestoColaborador)";
+    const PLN_PRESUPUESTO_ELIMINAR_CUENTAS_COLABORADOR="DELETE FROM pln_colaborador_cuenta WHERE ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    
     //cuenta colaboardor
     const PLN_COLABORADOR_CUENTA="SELECT c.ide_colaborador_cuenta FROM pln_colaborador_cuenta c WHERE c.ide_cuenta=:ideCuenta AND c.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     const PLN_COLABORADOR_CUENTA_DETALLE="SELECT d.ide_colaborador_cuenta_detalle,num_detalle FROM pln_colaborador_cuenta_detalle d WHERE d.ide_colaborador_cuenta=:ideColaboradorCuenta";

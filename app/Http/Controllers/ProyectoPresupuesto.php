@@ -217,5 +217,14 @@ class ProyectoPresupuesto extends Controller
         return response()->json($result);
     }
     
+    public function deletePresupuestoColaborador(Request $request){
+        $idePresupuestoColaborador=$request->ide_presupuesto_colaborador;
+        $presupuestoColaborador=  PlnPresupuestoColaborador::find($idePresupuestoColaborador);
+        DB::statement(HPMEConstants::PLN_PRESUPUESTO_ELIMINAR_DETALLE_CUENTA_COLABORADOR,array('idePresupuestoColaborador'=>$presupuestoColaborador->ide_presupuesto_colaborador));
+        DB::statement(HPMEConstants::PLN_PRESUPUESTO_ELIMINAR_CUENTAS_COLABORADOR,array('idePresupuestoColaborador'=>$presupuestoColaborador->ide_presupuesto_colaborador));
+        PlnPresupuestoColaborador::destroy($presupuestoColaborador->ide_presupuesto_colaborador);
+        return response()->json($presupuestoColaborador);
+    }
+    
     
 }

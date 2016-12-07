@@ -81,7 +81,7 @@
                                             <h4 class="modal-title" id="H1">Eliminar presupuesto Colaborador/Proyecto</h4>
                                         </div>
                                         <div class="modal-body">
-                                            Esta seguro de eliminar el presupuesto del colaborador/proyecto&quest;
+                                            Esta seguro de eliminar el presupuesto del colaborador/proyecto&quest; Se borrar&aacute; la informaci&oacute;n ingresada en las cuentas.
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
