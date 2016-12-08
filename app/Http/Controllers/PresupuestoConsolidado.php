@@ -7,6 +7,7 @@ use App\HPMEConstants;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\PlnPresupuestoColaborador;
+use App\PlnPresupuestoDepartamento;
 
 class PresupuestoConsolidado extends Controller
 {
@@ -37,6 +38,23 @@ class PresupuestoConsolidado extends Controller
         $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
         $consolidado=$this->buildConsolidado($idePresupuestoColaborador,TRUE);
         return view('presupuesto_consolidado_trimestral',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
+    }
+    
+    public function consolidadoDepartamento($idePresupuestoDepartamento){
+        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        $presupuestoDepartamento->departamento;
+        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;
+        $consolidado=$this->buildConsolidado(1,FALSE);
+        $rol=  request()->session()->get('rol');
+        return view('presupuesto_cons_departamento',array('cuentas'=>$consolidado,'nombre'=>$nombreDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'rol'=>$rol,'estado'=>$presupuestoDepartamento->estado));
+    }
+    
+    public function consolidadoTrimestralDepartamento($idePresupuestoDepartamento){
+        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        $presupuestoDepartamento->departamento;
+        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;
+        $consolidado=$this->buildConsolidado(1,TRUE);
+        return view('presupuesto_cons_departamento_trim',array('cuentas'=>$consolidado,'nombre'=>$nombreDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'estado'=>$presupuestoDepartamento->estado));
     }
     
     public function buildConsolidado($idePresupuestoColaborador,$trimestral){

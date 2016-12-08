@@ -276,7 +276,21 @@ Route::get('/presupuestocolaborador/{id}',['uses' => 'PresupuestoConsolidado@con
 Route::get('/presupuestocolaboradortrim/{id}',['uses' => 'PresupuestoConsolidado@consolidadoTrimestralColaborador', 'middleware' => 'auth']);
 //Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
 //Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
+Route::get('/presupuestosdepartamento',['uses' => 'PresupuestoDepartamento@presupuestoDepartamento', 'middleware' => 'auth']);
+Route::get('/presupuestodepartamento/{id}',['uses' => 'PresupuestoConsolidado@consolidadoDepartamento', 'middleware' => 'auth']);
+Route::get('/presupuestodepartamentotrim/{id}',['uses' => 'PresupuestoConsolidado@consolidadoTrimestralDepartamento', 'middleware' => 'auth']);
 
+
+//ver observaciones
+Route::get('/observacionespresupuesto/{id}',['uses' => 'PresupuestoObservaciones@observacionesDepartamento', 'middleware' => 'auth']);
+//Observaciones
+Route::post('/observacionespresupuesto/add',['uses' => 'PresupuestoObservaciones@addMessage', 'middleware' => 'auth']);
+//marcar resuelto
+Route::post('/observacionespresupuesto/marcar',['uses' => 'PresupuestoObservaciones@marcarBitacora', 'middleware' => 'auth']);
+
+//
+Route::post('/presupuestos/enviar',['uses' => 'PresupuestoDepartamento@enviarPresupuesto', 'middleware' => 'auth']);
+Route::post('/presupuestos/aprobar',['uses' => 'PresupuestoDepartamento@aprobarPresupuesto', 'middleware' => 'auth']);
 
 Route::get('/insert', function() {
     App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

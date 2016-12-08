@@ -55,7 +55,11 @@
                                             <td style="text-align: center">{{$items[$i]->fecha_aprobacion}}</td>
                                             <td style="text-align: center"><a href="{{url('/departamento/'.$items[$i]->ide_presupuesto_departamento)}}">{{$items[$i]->nombre}}</a></td>
                                             <td style="text-align: center">{{$items[$i]->estado}}</td>
-                                            <td style="text-align: center"><a href="{{url('planconsolidado/'.$items[$i]->ide_presupuesto_departamento)}}" >
+                                            <td style="text-align: center">
+                                                @if($items[$i]->estado=='ABIERTO')
+                                                    <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_presupuesto_departamento}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>
+                                                @endif
+                                                <a href="{{url('presupuestodepartamento/'.$items[$i]->ide_presupuesto_departamento)}}" >
                                                 <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver presupuesto departamento"/></a></td>
                                         </tr>
                                             @endfor
@@ -70,9 +74,58 @@
         </div>
        <!--END PAGE CONTENT -->
 @endsection
+@section('outsidewraper')                        
+    <div class="modal fade" id="enviarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Enviar presupuesto a revisi&oacute;n</h4>
+                </div>
+                <div class="modal-body">
+               <form role="form" id="formEnviar">
+                   <div class="form-group">
+                       <p>
+                           Esta seguro de enviar presupuesto a revisi&oacute;n&quest; Ya no podr&aacute; modificar hasta que se le habilite. 
+                       </p>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnEnviar">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Errores</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+                   <ul style="list-style-type:circle" id="erroresContent"></ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section('footer')
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
+        <meta name="_urlTarget" content="{{url('presupuestos')}}" />
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
