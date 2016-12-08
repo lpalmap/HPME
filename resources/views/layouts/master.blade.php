@@ -341,6 +341,8 @@
                         @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO')
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
                         @endif
+                        <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/budget.png')}}"/>Presupuesto Departamento</a></li>
+                        
 <!--                    <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_formato.png')}}"/> Generar Formato Internacional</a></li>
