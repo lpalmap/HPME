@@ -6,22 +6,40 @@ use Illuminate\Http\Request;
 use App\HPMEConstants;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\PlnPresupuestoColaborador;
 
 class PresupuestoConsolidado extends Controller
 {
     //Obtiene usuarios y crea vista
     public function consolidadoColaborador($idePresupuestoColaborador){
+        $presupuestoColaborador=  PlnPresupuestoColaborador::find($idePresupuestoColaborador);
+        $presupuestoColaborador->colaborador;
+        $nombreColaborador='';
+        if($presupuestoColaborador->colaborador->tipo==HPMEConstants::COLABORADOR){
+            $nombreColaborador=$presupuestoColaborador->colaborador->nombres.' '.$presupuestoColaborador->colaborador->apellidos;
+        }else{
+            $nombreColaborador=$presupuestoColaborador->colaborador->nombres;
+        }
+        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
         $consolidado=$this->buildConsolidado($idePresupuestoColaborador,FALSE);
-        return view('presupuesto_consolidado',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        return view('presupuesto_consolidado',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
     }
     
     public function consolidadoTrimestralColaborador($idePresupuestoColaborador){
+        $presupuestoColaborador=  PlnPresupuestoColaborador::find($idePresupuestoColaborador);
+        $presupuestoColaborador->colaborador;
+        $nombreColaborador='';
+        if($presupuestoColaborador->colaborador->tipo==HPMEConstants::COLABORADOR){
+            $nombreColaborador=$presupuestoColaborador->colaborador->nombres.' '.$presupuestoColaborador->colaborador->apellidos;
+        }else{
+            $nombreColaborador=$presupuestoColaborador->colaborador->nombres;
+        }
+        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
         $consolidado=$this->buildConsolidado($idePresupuestoColaborador,TRUE);
-        return view('presupuesto_consolidado_trimestral',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        return view('presupuesto_consolidado_trimestral',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
     }
     
     public function buildConsolidado($idePresupuestoColaborador,$trimestral){
-        Log::info('consolidado '.$idePresupuestoColaborador);
         //Log::info("**************** MEME");
         //Log::info(memory_get_usage(true) );
         //Cuentas padre originales no se cuentan los nodos que son raíz
@@ -122,7 +140,7 @@ class PresupuestoConsolidado extends Controller
                     $result[]=$itemCuenta; 
                     foreach($cuentaHijas as $hija){
                         //Log::info('buscando hija..... '.$hija->nombre);
-                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$nivel+1,$trimestral);
+                        $result_hija=$this->buildReporteCuenta($hija, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$trimestral,$nivel+1);
                         //Log::info("*****result hija ");
                         //Log::info($result_hija);
                         if(!is_null($result_hija)){
@@ -171,14 +189,11 @@ class PresupuestoConsolidado extends Controller
 
 
     public function consolidarCuenta($cuenta,$parameterQuery,$nivel,$trimestral){
-        Log::info("Trimestral $trimestral ".$trimestral);
         $cuentasHijas=DB::select(HPMEConstants::CONSOLIDADO_COLABORADOR_CUENTA_PADRE,array('idePresupuestoColaborador'=>$parameterQuery['idePresupuestoColaborador'],'ideCuentaPadre'=>$cuenta->ide_cuenta));
         //Log::info($cuentasHijas);
         if($trimestral){
-            Log::info("trim $trimestral");
             return $this->trimestral($cuenta,$cuentasHijas, $nivel);
         }else{
-            Log::info("men $trimestral");
             return $this->mensual($cuenta,$cuentasHijas, $nivel);
         }      
     }

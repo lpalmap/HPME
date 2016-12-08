@@ -56,7 +56,7 @@
                                             <td style="text-align: center"><a href="{{url('/departamento/'.$items[$i]->ide_presupuesto_departamento)}}">{{$items[$i]->nombre}}</a></td>
                                             <td style="text-align: center">{{$items[$i]->estado}}</td>
                                             <td style="text-align: center"><a href="{{url('planconsolidado/'.$items[$i]->ide_presupuesto_departamento)}}" >
-                                                <img src="{{asset('images/consolidado.png')}}" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a></td>
+                                                <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver presupuesto departamento"/></a></td>
                                         </tr>
                                             @endfor
                                         @endif

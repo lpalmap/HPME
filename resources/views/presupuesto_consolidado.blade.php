@@ -12,20 +12,20 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Presupuesto</h2>
+                        <h2>Presupuesto/{{$nombre}}</h2>
                     </div>
                 </div>
 
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    <a href="{{url('planificaciones')}}" >
+                    <a href="{{url('departamento/'.$idePresupuestoDepartamento)}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <span style="font-weight: bold">Detalle presupuesto <a href="{{url('presupuestocolaboradortrim/'.$idePresupuestoColaborador)}}" >
-                        <img src="{{asset('images/quarter.png')}}" class="menu-imagen-big" alt="" title="Consolidado trimestral"/></a>
+                            <span style="font-weight: bold">Detalle presupuesto</span><a href="{{url('presupuestocolaboradortrim/'.$idePresupuestoColaborador)}}" >
+                        <img src="{{asset('images/quarter.png')}}" class="menu-imagen-big" alt="" title="Ver por trimestre"/></a>
                         </div>
                         
                          <div class="panel-body">
@@ -89,7 +89,7 @@
                                                 <td>{{isset($cuentas[$i]['item10'])?$cuentas[$i]['item10']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item11'])?$cuentas[$i]['item11']:'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item12'])?$cuentas[$i]['item12']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['total'])?$cuentas[$i]['total']:'0'}}</td>
+                                                <td style="font-weight: bolder">{{isset($cuentas[$i]['total'])?$cuentas[$i]['total']:'0'}}</td>
                                             </tr>
                                         @endfor    
                                     </tbody>
