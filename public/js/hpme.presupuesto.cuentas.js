@@ -124,10 +124,12 @@ $(document).ready(function(){
             dataType: 'json',
             success: function (data) {
                 var recalc=false;
-                for(var e in data){
-                    $('#itemVal'+data[e].num_detalle).val(data[e].valor);
+                for(var e in data.detalle){
+                    $('#itemVal'+data.detalle[e].num_detalle).val(data.detalle[e].valor);
                     recalc=true;
                 }
+                $('#cuentaPadre').html(data.cuenta);
+                $('#totalCuentaPadre').val(data.montoCuenta);
                 if(recalc){
                     recalcTotal();  
                 }
@@ -141,7 +143,7 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al guardar la meta.</li>';
+                    errHTML+='<li>Error al guardar el detalle cuenta</li>';
                 }
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');              

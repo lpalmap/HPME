@@ -46,7 +46,6 @@
                                         <tr>
                                             <th style="text-align: center">Cuenta</th>
                                             <th style="text-align: center">Nombre</th>
-                                            <th style="text-align: center">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
@@ -59,10 +58,6 @@
                                             @else
                                             <td><button class="btn2 btn {{in_array($cuentas[$i]->ide_cuenta,$ingresadas)?'btn-success':'btn-primary'}} btn-round btn-cuenta" id="btn{{$cuentas[$i]->ide_cuenta}}" value="{{$cuentas[$i]->ide_cuenta}}"  title="{{$cuentas[$i]->descripcion}}">{{$cuentas[$i]->nombre}}</button></td>
                                             @endif
-                                            <td class="table-center">
-<!--                                                <button class="btn btn-primary btn-editar" value="{{$cuentas[$i]->ide_cuenta}}"><i class="icon-pencil icon-white" ></i> Editar</button>
-                                                <button class="btn btn-danger" value="{{$cuentas[$i]->ide_cuenta}}"><i class="icon-remove icon-white"></i> Eliminar</button>-->
-                                            </td>
                                         </tr>
                                             @endfor
                                         @endif
@@ -156,6 +151,11 @@
 <!--                                                        <td></td>-->
                                                         <td colspan="2" style="text-align: right">Total</td>
                                                         <td><input id="total" disabled="true" maxlength="13" style="text-align: right;width: 110px;"  type="text" value=""/></td>
+                                                    </tr>
+                                                    <tr style="font-weight: bolder">
+<!--                                                        <td></td>-->
+                                                        <td colspan="2" style="text-align: right">Total <span id="cuentaPadre"></span></td>
+                                                        <td><input id="totalCuentaPadre" disabled="true" maxlength="13" style="text-align: right;width: 110px;"  type="text" value=""/></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

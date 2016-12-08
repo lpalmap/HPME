@@ -50,6 +50,7 @@ class HPMEConstants
     const PLN_CUENTAS_HIJAS_ACTIVAS="SELECT c1.ide_cuenta,c1.cuenta,c1.nombre,c1.descripcion, COUNT(c2.ide_cuenta) hijas FROM cfg_cuenta c1 LEFT JOIN cfg_cuenta c2 ON c1.ide_cuenta = c2.ide_cuenta_padre and c2.estado='ACTIVA' where c1.ide_cuenta_padre=:ideCuentaPadre and c1.estado='ACTIVA'  GROUP BY c1.ide_cuenta";
     const PLN_CUENTAS_HIJAS_CONSOLIDA="SELECT c.ide_cuenta,c.cuenta,c.nombre,c.ind_consolidar FROM cfg_cuenta c WHERE c.ide_cuenta_padre=:ideCuentaPadre ORDER BY c.ide_cuenta asc";
     const PLN_CUENTAS_HIJAS_CONSOLIDA_RAIZ="SELECT c.ide_cuenta,c.cuenta,c.nombre,c.ind_consolidar FROM cfg_cuenta c WHERE c.ide_cuenta_padre is NULL ORDER BY c.ide_cuenta asc";
+    const PLN_TOTAL_CUENTA_PARENT="SELECT sum(valor) as total FROM pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta t,cfg_cuenta c WHERE d.ide_colaborador_cuenta=t.ide_colaborador_cuenta AND t.ide_cuenta=c.ide_cuenta AND t.ide_presupuesto_colaborador=:idePresupuestoColaborador AND c.ide_cuenta_padre=:ideCuentaPadre";
     
     const PLN_PRESUPUESTOS_DEPARTAMENTOS="SELECT p.ide_presupuesto_departamento,d.nombre,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM pln_presupuesto_departamento p,cfg_departamento d WHERE p.ide_departamento=d.ide_departamento and p.ide_proyecto_presupuesto=:ideProyectoPresupuesto ORDER BY d.nombre asc";
     

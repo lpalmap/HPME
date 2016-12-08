@@ -214,7 +214,36 @@ class ProyectoPresupuesto extends Controller
         $ideCuenta=$request->ide_cuenta;
         $idePresupuestoColaborador=$request->ide_presupuesto_colaborador;
         $result=DB::select(HPMEConstants::PLN_COLABORADOR_CUENTA_DETALLE_VALORES,array('ideCuenta'=>$ideCuenta,'idePresupuestoColaborador'=>$idePresupuestoColaborador));
-        return response()->json($result);
+        //$cuentas=DB::select(HPMEConstants::PLN_CUENTAS_HIJAS_ACTIVAS,array('ideCuentaPadre'=>$id));
+            //$ideCuentaPadre=$id;
+        $parents=DB::select(HPMEConstants::CFG_CUENTAS_PARENT_SOLO_ID,array('ideCuenta'=>$ideCuenta));
+        //Log::info($parents);
+        //$raiz=$ideCuenta;
+        $montoTotal=0.0;
+        $raiz=$parents[0]->ide_cuenta;
+        foreach($parents as $parent){
+            $montoParent=$this->totalCuentaParentCuenta($parent->ide_cuenta,$idePresupuestoColaborador);
+            //Log::info("monto parent $montoParent");
+            if(!is_null($montoParent)){
+                $montoTotal+=$montoParent;
+            }
+        }              
+        $cuenta=  CfgCuenta::find($raiz);     
+        
+        //Log::info('cuenta raiz '.$raiz);
+        
+        
+        return response()->json(array('detalle'=>$result,'cuenta'=>$cuenta->nombre,'montoCuenta'=>$montoTotal));
+    }
+    
+    public function totalCuentaParentCuenta($ideCuenta,$idePresupuestoColaborador){
+        //Log::info("Parameters $ideCuenta "." par 2 $idePresupuestoColaborador");
+        $total=DB::select(HPMEConstants::PLN_TOTAL_CUENTA_PARENT,array('idePresupuestoColaborador'=>$idePresupuestoColaborador,'ideCuentaPadre'=>$ideCuenta));
+        //Log::info($total);
+        if(count($total)>0){
+            return $total[0]->total;
+        }
+        return null;
     }
     
     public function deletePresupuestoColaborador(Request $request){
