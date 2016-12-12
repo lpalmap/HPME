@@ -148,7 +148,7 @@
         <meta name="_url" content="{{url('departamento')}}" />
         <meta name="_departamento" content="{{$idePresupuestoDepartamento}}" />
         <meta name="_urlTarget" content="{{url('colaborador')}}" />
-        <meta name="_imgConsolidado" content="{{asset('images/consolidado.png')}}" />
+        <meta name="_imgConsolidado" content="{{asset('images/detail.png')}}" />
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

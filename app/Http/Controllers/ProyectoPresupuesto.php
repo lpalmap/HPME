@@ -132,7 +132,7 @@ class ProyectoPresupuesto extends Controller
         $colaborador->ide_presupuesto_departamento=$idePresupuestoDepartamento;
         $colaborador->save();
         $colaborador->colaborador;
-        $result=array('ide_presupuesto_colaborador'=>$colaborador->ide_presupuesto_colabo,'fecha_ingreso'=>$colaborador->fecha_ingreso,'nombres'=>$colaborador->colaborador->nombres,'apellidos'=>$colaborador->colaborador->apellidos);
+        $result=array('ide_presupuesto_colaborador'=>$colaborador->ide_presupuesto_colaborador,'fecha_ingreso'=>$colaborador->fecha_ingreso,'nombres'=>$colaborador->colaborador->nombres,'apellidos'=>$colaborador->colaborador->apellidos);
         return response()->json($result);
     }
     

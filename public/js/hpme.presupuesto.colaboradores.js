@@ -110,6 +110,7 @@ $(document).ready(function(){
         var ideColaborador=$('#inColaborador').val();
         if(ideColaborador){
             var my_url=(""+$('meta[name="_url"]').attr('content')).replace("#","")+"/colaborador";
+            var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))
             var idePresupuestoDepartamento=$('meta[name="_departamento"]').attr('content');
             var imgConsolidado=$('meta[name="_imgConsolidado"]').attr('content');
             var formData = {
@@ -129,12 +130,12 @@ $(document).ready(function(){
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data); 
+                        //console.log(data); 
                         var item = '<tr class="even gradeA" id="item'+data.ide_presupuesto_colaborador+'">';
                             item+= '<td style="text-align: center">'+data.fecha_ingreso+'</td>';
-                            item+= '<td style="text-align: center"><a href="">'+data.nombres+' '+data.apellidos+'</a></td>';
+                            item+= '<td style="text-align: center"><a href="'+url_target+"/"+data.ide_presupuesto_colaborador+'/cuenta">'+data.nombres+' '+data.apellidos+'</a></td>';
                             item+= '<td style="text-align: center">';
-                            item+= '<button class="btn btn-danger btnEliminarItem" value="'+data.presupuesto_colaborador+'"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;';
+                            item+= '<button class="btn btn-danger btnEliminarItem" value="'+data.ide_presupuesto_colaborador+'"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;';
                             item+='<a href="" ><img src="'+imgConsolidado+'" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a>';                                           
                             item+='</td></tr>';                      
                         dataTable.rows.add($(item)).draw();                    

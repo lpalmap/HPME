@@ -66,6 +66,8 @@ class HPMEConstants
     //
     const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_PADRE_COLABORADOR="SELECT distinct c.ide_cuenta_padre FROM pln_colaborador_cuenta p,cfg_cuenta c where p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre IS NOT NULL AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_RAIZ_COLABORADOR="SELECT distinct c.ide_cuenta FROM pln_colaborador_cuenta p,cfg_cuenta c where p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre is null AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
+    const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_PADRE_DEPARTAMENTO="SELECT distinct c.ide_cuenta_padre FROM pln_colaborador_cuenta p,pln_presupuesto_colaborador l,cfg_cuenta c where p.ide_presupuesto_colaborador=l.ide_presupuesto_colaborador AND p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre IS NOT NULL AND l.ide_presupuesto_departamento=:idePresupuestoDepartamento";
+    const PLN_PRESUPUESTO_CONSOLIDADO_CUENTA_RAIZ_DEPARTAMENTO="SELECT distinct c.ide_cuenta FROM pln_colaborador_cuenta p,pln_presupuesto_colaborador l,cfg_cuenta c where p.ide_presupuesto_colaborador=l.ide_presupuesto_colaborador AND p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre is null AND l.ide_presupuesto_departamento=:idePresupuestoDepartamento";
     
     //reporte consolidado
     const CONSOLIDADO_COLABORADOR_CUENTA_PADRE="SELECT 
@@ -84,6 +86,23 @@ class HPMEConstants
   sum(IF(d.num_detalle=12,d.valor,0)) as item12
   from pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta p,cfg_cuenta c 
   where d.ide_colaborador_cuenta=p.ide_colaborador_cuenta and p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre=:ideCuentaPadre AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador GROUP BY c.ide_cuenta,c.cuenta,c.nombre";
+    
+    const CONSOLIDADO_DEPARTAMENTO_CUENTA_PADRE="SELECT 
+  c.ide_cuenta,c.cuenta,c.nombre,
+  sum(IF(d.num_detalle=1,d.valor,0)) as item1,
+  sum(IF(d.num_detalle=2,d.valor,0)) as item2,
+  sum(IF(d.num_detalle=3,d.valor,0)) as item3,
+  sum(IF(d.num_detalle=4,d.valor,0)) as item4,
+  sum(IF(d.num_detalle=5,d.valor,0)) as item5,
+  sum(IF(d.num_detalle=6,d.valor,0)) as item6,
+  sum(IF(d.num_detalle=7,d.valor,0)) as item7,
+  sum(IF(d.num_detalle=8,d.valor,0)) as item8,
+  sum(IF(d.num_detalle=9,d.valor,0)) as item9,
+  sum(IF(d.num_detalle=10,d.valor,0)) as item10,
+  sum(IF(d.num_detalle=11,d.valor,0)) as item11,
+  sum(IF(d.num_detalle=12,d.valor,0)) as item12
+  from pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta p,pln_presupuesto_colaborador l,cfg_cuenta c 
+  where d.ide_colaborador_cuenta=p.ide_colaborador_cuenta and p.ide_presupuesto_colaborador=l.ide_presupuesto_colaborador and p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre=:ideCuentaPadre AND l.ide_presupuesto_departamento=:idePresupuestoDepartamento GROUP BY c.ide_cuenta,c.cuenta,c.nombre";
     
     const SI='S';
     const NO='N';
