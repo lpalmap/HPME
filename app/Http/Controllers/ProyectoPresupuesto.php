@@ -62,7 +62,7 @@ class ProyectoPresupuesto extends Controller
             $ideProyectoPresupuesto=$departamento->ide_proyecto_presupuesto;
             //Validación departamento/director
             $colaboradores=DB::select(HPMEConstants::PLN_PRESUPUESTO_COLABORADOR_DEPARTAMENTO,array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
-            return view('presupuesto_colaborador',array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'items'=>$colaboradores));
+            return view('presupuesto_colaborador',array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'items'=>$colaboradores,'estado'=>$departamento->estado));
         }
         return view('home');
     }
@@ -147,6 +147,10 @@ class ProyectoPresupuesto extends Controller
     }
     
     public function addDetalleCuenta(Request $request){
+        $estado=$this->estadoPresupuestoDepartamento($request->ide_presupuesto_colaborador);
+        if(is_null($estado) || $estado!=HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'El presupuesto del departamento debe estar '.HPMEConstants::ABIERTO.' para ingresar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         $items=$request->items['items'];
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
         $detalles=array();
@@ -180,6 +184,14 @@ class ProyectoPresupuesto extends Controller
         }
         $this->eliminarDetallesNoUtilizados($detalles, $detallesPersistidos);  
         return response()->json(array('SUCCESS'=>true));
+    }
+    
+    public function estadoPresupuestoDepartamento($idePresupuestoColaborador){
+        $estado=DB::select(HPMEConstants::PLN_PRESUPUESTO_ESTADO_DEPARTAMENTO_COLABORADOR,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
+        if(count($estado)>0){
+            return $estado[0]->estado;
+        }
+        return null;
     }
     
     

@@ -37,7 +37,9 @@
                                 </li>
                             </ul>
                              <hr />
+                             @if($estado=='ABIERTO')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-user icon-white" ></i> Agregar Presupuesto Colaborador/Proyecto</button>
+                             @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -55,7 +57,9 @@
                                             <td style="text-align: center">{{$items[$i]->fecha_ingreso}}</td>
                                             <td style="text-align: center"><a href="{{url('/colaborador/'.$items[$i]->ide_presupuesto_colaborador.'/cuenta')}}">{{$items[$i]->nombres.' '.$items[$i]->apellidos}}</a></td>
                                             <td style="text-align: center">
+                                                @if($estado=='ABIERTO')
                                                 <button title="Eliminar presupuesto colaborador" class="btn btn-danger btnEliminarItem" value="{{$items[$i]->ide_presupuesto_colaborador}}"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;
+                                                @endif
                                                 <a href="{{url('/presupuestocolaborador/'.$items[$i]->ide_presupuesto_colaborador)}}" >
                                                 <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver presupuesto colaborador"/></a></td>
                                         </tr>
