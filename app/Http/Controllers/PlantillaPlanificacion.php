@@ -117,6 +117,13 @@ class PlantillaPlanificacion extends Controller
         if($proyecto->estado==HPMEConstants::ABIERTO){
             $proyecto->estado=  HPMEConstants::PUBLICADO;
             $proyecto->save();
+            $presupuesto=DB::select(HPMEConstants::PLN_PROYECTO_PRESUPUESTO_POR_PLANIFICACION,array('ideProyecto'=>$proyecto->ide_proyecto));
+            if(count($presupuesto)>0){
+                //Log::info($presupuesto[0]->ide_proyecto_presupuesto);
+                $proyectoPresupuesto=PlnProyectoPresupuesto::find($presupuesto[0]->ide_proyecto_presupuesto);
+                $proyectoPresupuesto->estado=  HPMEConstants::PUBLICADO;
+                $proyectoPresupuesto->save();
+            } 
             return response()->json(array('sts'=>'OK'));
         }else{
             return response()->json(array('error'=>'Solo se pueden publicar plantillas abiertas.'), HPMEConstants::HTTP_AJAX_ERROR);
