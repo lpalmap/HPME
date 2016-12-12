@@ -89,4 +89,42 @@ $(document).ready(function(){
         });
     });
     
+    $("#btnAceptarCerrar").click(function (e) {      
+        $('#loading').modal('show');
+        var formData = {
+            ide_proyecto: $(this).val()
+        };   
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });      
+        
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))+'/cerrar';
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {    
+                location.reload(true);
+                $('#cerrarPlanificacion').modal('hide');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al cerrar planificacion.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
 });

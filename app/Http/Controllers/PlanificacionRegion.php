@@ -16,7 +16,7 @@ use App\PlnBitacoraProyectoRegion;
 class PlanificacionRegion extends Controller
 {    
     public function planificacionRegion(){
-        $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion']);
+        $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion','estado']);
         //Log::info("ultimo ".$ultimoProyecto);
         $rol=  request()->session()->get('rol');
         if(!is_null($ultimoProyecto) && $rol=='COORDINADOR'){
@@ -29,7 +29,7 @@ class PlanificacionRegion extends Controller
 //                Log::info('proyecto region: '.$region->ide_proyecto_region);
 //            }
             if(count($regiones)>0){
-                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto));
+                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>$ultimoProyecto->estado));
             }          
         }        
         return view('planificacionregion');

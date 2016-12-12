@@ -30,8 +30,10 @@
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>
                                                 &nbsp;
                                                 &nbsp;
+                                @if($estado=='PUBLICADO')                
                                 <button id="btnCerrar">                      
-                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" alt="" title="Cerrar Plantilla"/></button>
+                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyecto}}" title="Cerrar Plantilla"/></button>
+                                @endif
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                              <div class="table-responsive" id="tableContent">
                                  
@@ -158,6 +160,7 @@
 @section('footer')
     @parent
     <meta name="_token" content="{!! csrf_token() !!}" />
+    <meta name="_urlTarget" content="{{url('planificacion')}}" />
     <script src="{{asset('js/hpme.planificacion.operaciones.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
