@@ -225,7 +225,7 @@ class PresupuestoConsolidado extends Controller
         }
         if($trimestral){
             return $this->trimestral($cuenta,$cuentasHijas, $nivel);
-        }else{
+        }else{          
             return $this->mensual($cuenta,$cuentasHijas, $nivel);
         }      
     }
@@ -247,6 +247,7 @@ class PresupuestoConsolidado extends Controller
         $total=0.0;
         $totalCuenta=0.0;
         foreach($cuentasHijas as $hija){
+            $item=array();
             $item['cuenta']=$hija->cuenta;
             $item['nombre']=$hija->nombre;
             $totalCuenta=0.0;
@@ -382,6 +383,7 @@ class PresupuestoConsolidado extends Controller
         $total=0.0;
         $totalCuenta=0.0;
         foreach($cuentasHijas as $hija){
+            $item=array();
             $item['cuenta']=$hija->cuenta;
             $item['nombre']=$hija->nombre;
             $trim1=0.0;
@@ -447,7 +449,7 @@ class PresupuestoConsolidado extends Controller
             $item['nivel']=$nivel+1;
             $result[]=$item;
         } 
-        //$itemCuenta=array();
+        $itemCuenta=array();
         $itemCuenta['cuenta']=$cuenta->cuenta;
         $itemCuenta['nombre']=$cuenta->nombre;
         if($item1>0){
