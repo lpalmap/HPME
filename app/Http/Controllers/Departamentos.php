@@ -30,7 +30,7 @@ class Departamentos extends Controller
     public function retriveAllAdmin(Request $request){
         $user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
-        $usuarios = $user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY, array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
+        $usuarios = $user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY, array());//array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
         return response()->json($usuarios);     
     }
     
@@ -39,7 +39,7 @@ class Departamentos extends Controller
         $item->director;
         $user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
-        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY, array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
+        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY,array());// array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
 //        if(count($item->administradores)>0){
 //            $ideUserAdmin=0;
 //            foreach ($item->administradores as $admin){

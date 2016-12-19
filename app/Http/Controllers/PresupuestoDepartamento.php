@@ -42,7 +42,7 @@ class PresupuestoDepartamento extends Controller
     
     public function enviarPresupuesto(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol!='DIRECTOR DEPARTAMENTO'){
+        if($rol!='DIRECTOR DEPARTAMENTO' && $rol!='AFILIADO'){
             return response()->json(array('error'=>'Solo los directores pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         //Log::info($request->ide_presupuesto_departamento);

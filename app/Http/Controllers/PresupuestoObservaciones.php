@@ -24,12 +24,12 @@ class PresupuestoObservaciones extends Controller
     
     public function observacionesDepartamento($id){
         $rol=  request()->session()->get('rol');
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
             $presupuesto= PlnPresupuestoDepartamento::find($id);
             if(is_null($presupuesto)){
                 return view('home');
             }
-            if($rol=='DIRECTOR DEPARTAMENTO'){
+            if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'){
                 $ideDepartamento=$this->departamentoDirector();
                 if(is_null($ideDepartamento) || $ideDepartamento!=$presupuesto->ide_departamento){
                     return view ('home');
@@ -68,7 +68,7 @@ class PresupuestoObservaciones extends Controller
     
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
             Log::info("Buscando ".$request->ide_presupuesto_departamento);
             $presupuestoDepartamento= PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
             if(is_null($presupuestoDepartamento)){

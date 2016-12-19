@@ -338,7 +338,7 @@
                         @if(Session::get('rol')=='AFILIADO')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
                         @endif 
-                        @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO')
+                        @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO' || Session::get('rol')=='AFILIADO')
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
                         @endif
                         @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS')

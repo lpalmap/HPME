@@ -19,7 +19,7 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    @if(isset($rol) && $rol=='DIRECTOR DEPARTAMENTO')
+                    @if(isset($rol) && ($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'))
                             <a href="{{url('departamento/'.$idePresupuestoDepartamento)}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @else
