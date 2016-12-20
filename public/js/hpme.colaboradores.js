@@ -29,13 +29,13 @@ $(document).ready(function(){
             type: "DELETE",
             url: url + '/' + user_id,
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 dataTable.row( $('#usuario'+user_id)).remove().draw();
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $('#loading').modal('hide');
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
@@ -45,7 +45,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al borrar el colaborador/proyecto.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');  
             }
@@ -87,7 +87,7 @@ $(document).ready(function(){
             }else{
                 $('#inRol').val(0);
             }
-            if(data.hasOwnProperty("puesto")){
+            if(data.hasOwnProperty("puesto") && data.puesto){
                 $('#inPuesto').val(data.puesto.ide_puesto);    
             }else{
                 $('#inPuesto').val(0);
@@ -157,7 +157,7 @@ $(document).ready(function(){
                 //console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_colaborador+ '">';
                     item+='<td>'+data.tipo+'</td>'+'<td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
-                    if(data.hasOwnProperty("puesto")){
+                    if(data.hasOwnProperty("puesto") && data.puesto){
                         item+='<td>'+data.puesto.nombre+'</td>';                          
                     }else{
                         item+='<td></td>';
