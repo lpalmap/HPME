@@ -154,6 +154,8 @@ class ProyectoPresupuesto extends Controller
         $items=$request->items['items'];
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
         $detalles=array();
+        Log::info("### agregando detalles $ideColaboradorCuenta");
+        Log::info($items);
         if(is_null($ideColaboradorCuenta)){
             $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
             $nuevoColaboradorCuenta->ide_cuenta=$request->ide_cuenta;
@@ -205,12 +207,17 @@ class ProyectoPresupuesto extends Controller
     }
     
     private function cuentaColaboradorDetalle($detalles,$numDetalle){
+        Log::info("Detalles");
+        Log::info($detalles);
+        Log::info("Num det $numDetalle");
         $numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
+            Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
             if($detalle->num_detalle==$numDetalle){
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
+        Log::info("Return null");
         return null;
     }
     
