@@ -213,7 +213,7 @@ class ProyectoPresupuesto extends Controller
         $numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
             Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
-            if($detalle->num_detalle==$numDetalle){
+            if($detalle->num_detalle.  intValue()===$numDetalle.intValue()){
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
