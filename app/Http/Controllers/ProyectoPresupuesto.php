@@ -169,7 +169,8 @@ class ProyectoPresupuesto extends Controller
         $detallesPersistidos=array();
         foreach ($items as $item){
             $numItem=str_replace('itemVal', "", $item['item']);
-            $itemValue=$item['value'];
+            $itemValue=$item['value'].  integerValue();
+            Log::info("Num item".$numItem);
             $ideColaboradorCuentaDetalle=$this->cuentaColaboradorDetalle($detalles, $numItem);
             if(is_null($ideColaboradorCuentaDetalle)){
                 $nuevoDetalle=new PlnColaboradorCuentaDetalle();
