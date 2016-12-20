@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 use App\CfgColaboradorProyecto;
 use App\CfgDepartamento;
 use App\HPMEConstants;
+use App\CfgPuesto;
 
 class Colaboradores extends Controller
 {
     //Obtiene usuarios y crea vista
     public function index(){
-        $usuarios= CfgColaboradorProyecto::with("departamento")->get(); 
+        $usuarios= CfgColaboradorProyecto::with('departamento','puesto')->get(); 
         $roles=CfgDepartamento::all();
-        return view('colaboradores',array('colaboradores'=>$usuarios,'departamentos'=>$roles));
+        $puestos=CfgPuesto::all();
+        return view('colaboradores',array('colaboradores'=>$usuarios,'departamentos'=>$roles,'puestos'=>$puestos));
     }
     
     public function delete($id){
@@ -24,9 +26,10 @@ class Colaboradores extends Controller
     }
     
     public function retrive($id){
-        $user = CfgColaboradorProyecto::find($id);
-        $user->departamento;
-        return response()->json($user);
+        $colaborador = CfgColaboradorProyecto::find($id);
+        $colaborador->departamento;
+        $colaborador->puesto;
+        return response()->json($colaborador);
     }
     
     public function add(Request $request){
@@ -34,24 +37,39 @@ class Colaboradores extends Controller
         if($request->ide_departamento<=0){
             return response()->json(array('error'=>'Debe seleccionar un departamento para el colaborador/proyecto'), HPMEConstants::HTTP_AJAX_ERROR );
         }
+        if($request->tipo==HPMEConstants::COLABORADOR && $request->ide_puesto<=0){
+            return response()->json(array('error'=>'Debe seleccionar un puesto para el colaborador'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         $data = $request->toArray();
         $user= CfgColaboradorProyecto::create($data);
         $user->departamento;
+        $user->puesto;
         return response()->json($user);
     }
     
     public function update(Request $request,$id){
         $this->validateRequest($request);
-        $user= CfgColaboradorProyecto::find($id);
+        $colaborador= CfgColaboradorProyecto::find($id);
         if($request->ide_departamento<=0){
             return response()->json(array('error'=>'Debe seleccionar un departamento para el colaborador/proyecto'), HPMEConstants::HTTP_AJAX_ERROR );
         }
-        $user->ide_departamento=$request->ide_departamento;
-        $user->nombres=$request->nombres;
-        $user->apellidos=$request->apellidos;
-        $user->save();
-        $user->departamento;
-        return response()->json($user);       
+        if($request->tipo==HPMEConstants::COLABORADOR && $request->ide_puesto<=0){
+            return response()->json(array('error'=>'Debe seleccionar un puesto para el colaborador'), HPMEConstants::HTTP_AJAX_ERROR);
+        }       
+        $colaborador->ide_departamento=$request->ide_departamento;
+        $colaborador->nombres=$request->nombres;
+        $colaborador->apellidos=$request->apellidos;
+        
+        if($request->tipo==HPMEConstants::COLABORADOR){
+            $colaborador->ide_puesto=$request->ide_puesto;
+        }else{
+            $colaborador->ide_puesto=NULL;
+        }
+        
+        $colaborador->save();
+        $colaborador->departamento;
+        $colaborador->puesto;
+        return response()->json($colaborador);       
     }
     
     public function validateRequest($request){                
@@ -61,7 +79,8 @@ class Colaboradores extends Controller
             $rules=[
             'nombres' => 'required|max:100',
             'apellidos' => 'required|max:100',
-            'ide_departamento' => 'required'
+            'ide_departamento' => 'required',
+            'ide_puesto'=>'required'
             ];
         }else{
             $rules=[

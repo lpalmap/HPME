@@ -58,6 +58,7 @@ $(document).ready(function(){
         $('#inputTitle').html("Agregar Colaborador");
         $('#formAgregar').trigger("reset");
         $('#inRol').val(0);
+        $('#inPuesto').val(0);
         $('#btnGuardar').val('add');
         $('#formModal').modal('show');
     });
@@ -66,6 +67,7 @@ $(document).ready(function(){
         $('#inputTitleProyecto').html("Agregar Proyecto");
         $('#formAgregarProyecto').trigger("reset");
         $('#inDepartamentoProyecto').val(0);
+        $('#inPuesto').val(0);
         $('#btnGuardarProyecto').val('add');
         $('#agregarProyecto').modal('show');
     });
@@ -84,7 +86,12 @@ $(document).ready(function(){
                 $('#inRol').val(data.departamento.ide_departamento);    
             }else{
                 $('#inRol').val(0);
-            }           
+            }
+            if(data.hasOwnProperty("puesto")){
+                $('#inPuesto').val(data.puesto.ide_puesto);    
+            }else{
+                $('#inPuesto').val(0);
+            }
             $('#btnGuardar').val('update');
             $('#formModal').modal('show');
             $('#loading').modal('hide');
@@ -97,14 +104,14 @@ $(document).ready(function(){
         $('#inputTitleProyecto').html("Editar Proyecto");
         $.get(url + '/' + ide_usuario, function (data) {
             //success data
-            console.log(data);
+            //console.log(data);
             $('#inNombreProyecto').val(data.nombres);
             $('#ide_col_proyecto').val(data.ide_colaborador);
             if(data.hasOwnProperty("departamento")){
                 $('#inDepartamentoProyecto').val(data.departamento.ide_departamento);    
             }else{
                 $('#inDepartamentoProyecto').val(0);
-            }           
+            }
             $('#btnGuardarProyecto').val('update');
             $('#agregarProyecto').modal('show');
             $('#loading').modal('hide');
@@ -123,7 +130,8 @@ $(document).ready(function(){
             tipo:'Colaborador',
             nombres: $('#inNombres').val(),
             apellidos: $('#inApellidos').val(),
-            ide_departamento: $('#inRol').val()
+            ide_departamento: $('#inRol').val(),
+            ide_puesto: $('#inPuesto').val()
         };
 
         //used to determine the http verb to use [add=POST], [update=PUT]
@@ -138,17 +146,22 @@ $(document).ready(function(){
             my_url += '/' + ide_usuario;
         }
 
-        console.log(formData);
-        console.log("Enviando url "+my_url);
+        //console.log(formData);
+        //console.log("Enviando url "+my_url);
         $.ajax({
             type: type,
             url: my_url,
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
+                //console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_colaborador+ '">';
                     item+='<td>'+data.tipo+'</td>'+'<td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
+                    if(data.hasOwnProperty("puesto")){
+                        item+='<td>'+data.puesto.nombre+'</td>';                          
+                    }else{
+                        item+='<td></td>';
+                    }
                     if(data.hasOwnProperty("departamento")){
                         item+='<td>'+data.departamento.nombre+'</td>';                          
                     }else{
@@ -168,7 +181,7 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
                     for( e in data.responseJSON){
@@ -177,7 +190,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al guardar el colaborador.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');  
             }
@@ -217,9 +230,10 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
+                //console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_colaborador+ '">';
                     item+='<td>'+data.tipo+'</td>'+'<td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
+                    item+='<td></td>';
                     if(data.hasOwnProperty("departamento")){
                         item+='<td>'+data.departamento.nombre+'</td>';                          
                     }else{
@@ -239,7 +253,7 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
                     for( e in data.responseJSON){
@@ -248,7 +262,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al guardar el colaborador.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');  
             }

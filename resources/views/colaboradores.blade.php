@@ -34,6 +34,7 @@
                                             <th>Tipo</th>
                                             <th>Nombre(s)</th>
                                             <th>Apellidos</th>
+                                            <th>Puesto</th>
                                             <th>Departamento</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -45,6 +46,7 @@
                                             <td>{{$colaboradores[$i]->tipo}}</td>
                                             <td>{{$colaboradores[$i]->nombres}}</td>
                                             <td>{{$colaboradores[$i]->apellidos}}</td>
+                                            <td>{{isset($colaboradores[$i]->puesto)?$colaboradores[$i]->puesto->nombre:''}}</td>
                                             <td>{{$colaboradores[$i]->departamento->nombre}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar {{$colaboradores[$i]->tipo=='Colaborador'?'btn-editar-colaborador':'btn-editar-proyecto'}}" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-pencil icon-white" ></i> Editar</button>
@@ -105,6 +107,19 @@
                                                 <label>Apellidos</label>
                                                 <input class="form-control" id="inApellidos" required="true"/>
                                             </div>
+                                            @if (isset($puestos))
+                                            <div class="form-group">
+                                                <label>Puesto</label>
+                                                
+                                                    <select id="inPuesto" class="form-control">
+                                                        <option value="0"></option>
+                                                           @for ($i=0;$i<count($puestos);$i++)
+                                                               <option value="{{$puestos[$i]->ide_puesto}}">{{$puestos[$i]->nombre}}</option>
+                                                           @endfor
+                                                    </select>
+                                                
+                                            </div>                                            
+                                            @endif
                                             @if (isset($departamentos))
                                             <div class="form-group">
                                                 <label>Departamento</label>
