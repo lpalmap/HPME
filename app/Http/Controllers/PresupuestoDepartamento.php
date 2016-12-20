@@ -276,10 +276,12 @@ class PresupuestoDepartamento extends Controller
     private function cuentaColaboradorDetalle($detalles,$numDetalle){
         $numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
-            if($detalle->num_detalle==$numDetalle){
+            Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
+            if($detalle->num_detalle==$numDetalle){               
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
+        Log::info("Return null");
         return null;
     }
     
