@@ -231,6 +231,8 @@ class PresupuestoDepartamento extends Controller
         $items=$request->items['items'];
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
         $detalles=array();
+        Log::info("### agregando detalles $ideColaboradorCuenta");
+        Log::info($items);
         if(is_null($ideColaboradorCuenta)){
             $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
             $nuevoColaboradorCuenta->ide_cuenta=$request->ide_cuenta;
