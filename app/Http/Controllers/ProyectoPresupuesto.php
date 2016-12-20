@@ -154,8 +154,8 @@ class ProyectoPresupuesto extends Controller
         $items=$request->items['items'];
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
         $detalles=array();
-        Log::info("### agregando detalles $ideColaboradorCuenta");
-        Log::info($items);
+        //Log::info("### agregando detalles $ideColaboradorCuenta");
+        //Log::info($items);
         if(is_null($ideColaboradorCuenta)){
             $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
             $nuevoColaboradorCuenta->ide_cuenta=$request->ide_cuenta;
@@ -169,8 +169,8 @@ class ProyectoPresupuesto extends Controller
         $detallesPersistidos=array();
         foreach ($items as $item){
             $numItem=str_replace('itemVal', "", $item['item']);
-            $itemValue=$item['value'].  integerValue();
-            Log::info("Num item".$numItem);
+            $itemValue=$item['value'].integerValue();
+            //Log::info("Num item".$numItem);
             $ideColaboradorCuentaDetalle=$this->cuentaColaboradorDetalle($detalles, $numItem);
             if(is_null($ideColaboradorCuentaDetalle)){
                 $nuevoDetalle=new PlnColaboradorCuentaDetalle();
@@ -208,18 +208,18 @@ class ProyectoPresupuesto extends Controller
     }
     
     private function cuentaColaboradorDetalle($detalles,$numDetalle){
-        Log::info("Detalles");
-        Log::info($detalles);
-        Log::info("Num det $numDetalle");
+        //Log::info("Detalles");
+        //Log::info($detalles);
+        //Log::info("Num det $numDetalle");
         //$numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
-            Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
+          //  Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
             if($detalle->num_detalle===$numDetalle){
-                Log::info("### iguales....");
+            //    Log::info("### iguales....");
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
-        Log::info("Return null");
+       // Log::info("Return null");
         return null;
     }
     
