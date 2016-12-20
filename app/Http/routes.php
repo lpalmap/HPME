@@ -140,6 +140,14 @@ Route::post('/departamentos',['uses' => 'Departamentos@add', 'middleware' => 'au
 Route::put('/departamentos/{id}',['uses' => 'Departamentos@update', 'middleware' => 'auth']);
 Route::post('/departamentos/admin',['uses' => 'Departamentos@retriveAllAdmin', 'middleware' => 'auth']);
 
+/* Mantenimiento de puestos */
+
+Route::get('/puestos',['uses' => 'Puestos@index', 'middleware' => 'auth'])->name('puestos');
+Route::delete('/puestos/{id}',['uses' => 'Puestos@delete', 'middleware' => 'auth']);
+Route::get('/puestos/{id}',['uses' => 'Puestos@retrive', 'middleware' => 'auth']);
+Route::post('/puestos',['uses' => 'Puestos@add', 'middleware' => 'auth']);
+Route::put('/puestos/{id}',['uses' => 'Puestos@update', 'middleware' => 'auth']);
+
 /*  Mantenimiento de colaboradores */
 
 Route::get('/colaboradores',['uses' => 'Colaboradores@index', 'middleware' => 'auth'])->name('colaboradores');
