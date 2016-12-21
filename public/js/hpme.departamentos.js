@@ -38,8 +38,17 @@ $(document).ready(function(){
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('####Error:', data);
-                alert('Error borrado '+data);
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al borrar el departamento.</li>';
+                }
+                console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show'); 
             }
         });
         
