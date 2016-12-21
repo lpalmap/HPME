@@ -39,7 +39,8 @@ class Departamentos extends Controller
         $item->director;
         $user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
-        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY,array());// array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
+        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_USUARIO_QUERY,array('ideUsuario'=>$item->ide_usuario_director));// array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
+
 //        if(count($item->administradores)>0){
 //            $ideUserAdmin=0;
 //            foreach ($item->administradores as $admin){
@@ -87,13 +88,11 @@ class Departamentos extends Controller
     public function validateRequest($request){
         $rules=[
         'nombre' => 'required|max:100',
-        'descripcion' => 'required|max:200',
-        'ide_usuario_director'=>'unique:cfg_departamento'
+        'descripcion' => 'required|max:200'
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',
-        'max'  => 'La capacidad del campo :attribute es :max',
-        'unique' => 'El usuario ya ha sido asignado a otro departamento'
+        'max'  => 'La capacidad del campo :attribute es :max'
         ];
         $this->validate($request, $rules,$messages);        
     }
@@ -116,14 +115,14 @@ class Departamentos extends Controller
         //'ide_usuario' => 'unique:seg_usuario_region,'.$ideUsuario.',ide_usuario,ide_regio,'.$ideRegion,
         //'unique' => 'El :attribute ya ha sido utilizado'
         $rules=[
-            'ide_usuario_director' => 'unique:cfg_departamento,ide_usuario_director,'.$ideRegion.',ide_departamento',
+            //'ide_usuario_director' => 'unique:cfg_departamento,ide_usuario_director,'.$ideRegion.',ide_departamento',
             'nombre' => 'required|max:100',
             'descripcion' => 'required|max:100'  
         ];
         $messages=[
             'required' => 'Debe ingresar :attribute.',
-            'max'  => 'La capacidad del campo :attribute es :max',
-            'unique' => 'El usuario ya fue asignado a otro departamento.'
+            'max'  => 'La capacidad del campo :attribute es :max'
+            //'unique' => 'El usuario ya fue asignado a otro departamento.'
         ];
         $this->validate($request, $rules,$messages);        
     }

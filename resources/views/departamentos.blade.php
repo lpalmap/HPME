@@ -39,7 +39,7 @@
                                     <tbody id="lista-items" name="lista-items">
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
-                                        <tr class="even gradeA" id="item{{$items[$i]->ide_region}}">
+                                        <tr class="even gradeA" id="item{{$items[$i]->ide_departamento}}">
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
                                             <td>{{$items[$i]->director->usuario}}</td>

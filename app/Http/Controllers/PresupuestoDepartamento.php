@@ -15,6 +15,7 @@ use App\CfgCuenta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\PlnBitacoraPresupuesto;
+use App\CfgDepartamento;
 
 class PresupuestoDepartamento extends Controller
 {
@@ -52,18 +53,17 @@ class PresupuestoDepartamento extends Controller
         if($proyecto->estado!=HPMEConstants::PUBLICADO){
             return response()->json(array('error'=>'Solo se pueden enviar presupuestos si el proyecto esta PUBLICADO.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
-        $departamento=$this->departamentoDirector();
-        if(!is_null($departamento)){
-            if($departamento==$presupuestoDepartamento->ide_departamento){
-                if($presupuestoDepartamento->estado!='ABIERTO'){
-                    return response()->json(array('error'=>'Solo se pueden enviar presupuesto si el presupuesto del despartamento esta '.HPMEConstants::ABIERTO), HPMEConstants::HTTP_AJAX_ERROR);
-                }
-                $presupuestoDepartamento->estado=  HPMEConstants::ENVIADO;
-                $presupuestoDepartamento->save();
-                return response()->json();
-            }
-        }     
+        if(!$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+            return response()->json(array('error'=>'Solo los directores del departamento pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        if($presupuestoDepartamento->estado!='ABIERTO'){
+            return response()->json(array('error'=>'Solo se pueden enviar presupuesto si el presupuesto del despartamento esta '.HPMEConstants::ABIERTO), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $presupuestoDepartamento->estado=  HPMEConstants::ENVIADO;
+        $presupuestoDepartamento->save();
+        return response()->json(); 
     }
+   
     
     public function aprobarPresupuesto(Request $request){
         //Log::info("###########################");
@@ -87,15 +87,15 @@ class PresupuestoDepartamento extends Controller
         }
     }
     
-    private function departamentoDirector(){
+    private function departamentoDirector($ideDepartamento){
         $user=Auth::user();       
-        $regiones=DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
-        if(count($regiones)>0){
-            return $regiones[0]->ide_departamento;
-        }else{
-            return null;
+        $regiones=CfgDepartamento::where(array('ide_usuario_director'=>$user->ide_usuario))->pluck('ide_departamento');//DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
+        foreach($regiones as $region){
+            if($region===$ideDepartamento){
+                return TRUE;
+            }
         }
-        
+        return FALSE;        
     }
     
     //Obtiene las plantillas de planificacion
@@ -103,38 +103,6 @@ class PresupuestoDepartamento extends Controller
         $data= PlnProyectoPresupuesto::all(); 
         $rol=  request()->session()->get('rol');
         return view('proyectopresupuesto',array('items'=>$data,'rol'=>$rol));
-    }
-    
-    public function retriveDepartamentos($ideProyectoPresupuesto){
-        $ideDepartamento=$this->regionDirector();  
-        $items=array();
-        if(!is_null($ideDepartamento)){
-            $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-            if(count($presupuestos)>0){
-                return view('presupuesto_departamentos',array('items'=>$presupuestos));
-            }else{
-                $presupuesto=new PlnPresupuestoDepartamento();
-                $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
-                $presupuesto->estado= HPMEConstants::ABIERTO;
-                $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
-                $presupuesto->ide_departamento=$ideDepartamento;
-                $presupuesto->save();
-                $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-            }
-        }       
-        return view('presupuesto_departamentos',array('items'=>$items));
-    }
-    
-    
-    private function regionDirector(){
-        $user=Auth::user();       
-        $regiones=DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
-        if(count($regiones)>0){
-            return $regiones[0]->ide_departamento;
-        }else{
-            return null;
-        }
-        
     }
     
     public function retriveColaboradores($idePresupuestoDepartamento){
@@ -231,8 +199,8 @@ class PresupuestoDepartamento extends Controller
         $items=$request->items['items'];
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
         $detalles=array();
-        Log::info("### agregando detalles $ideColaboradorCuenta");
-        Log::info($items);
+        //Log::info("### agregando detalles $ideColaboradorCuenta");
+        //Log::info($items);
         if(is_null($ideColaboradorCuenta)){
             $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
             $nuevoColaboradorCuenta->ide_cuenta=$request->ide_cuenta;
@@ -278,12 +246,12 @@ class PresupuestoDepartamento extends Controller
     private function cuentaColaboradorDetalle($detalles,$numDetalle){
         $numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
-            Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
+            //Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
             if($detalle->num_detalle==$numDetalle){               
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
-        Log::info("Return null");
+        //Log::info("Return null");
         return null;
     }
     
