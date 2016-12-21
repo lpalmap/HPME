@@ -68,7 +68,7 @@ class PresupuestoObservaciones extends Controller
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
         if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
-            Log::info("Buscando ".$request->ide_presupuesto_departamento);
+            //Log::info("Buscando ".$request->ide_presupuesto_departamento);
             $presupuestoDepartamento= PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
             if(is_null($presupuestoDepartamento)){
                 return response()->json(array('error'=>'No existe el presupuesto para el departamento.'), HPMEConstants::HTTP_AJAX_ERROR);

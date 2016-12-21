@@ -18,7 +18,7 @@ class PresupuestoConsolidado extends Controller
         $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
         $ideDepartamento=  PlnPresupuestoDepartamento::where(array('ide_presupuesto_departamento'=>$idePresupuestoDepartamento))->pluck('ide_departamento')->first();
         $rol=  request()->session()->get('rol');
-        if($rol!='DIRECTOR ADMIN Y FIANANZAS' && !$this->departamentoDirector($ideDepartamento)){
+        if($rol!='DIRECTOR ADMIN Y FINANZAS' && !$this->departamentoDirector($ideDepartamento)){
             return view('home');
         }
         $presupuestoColaborador->colaborador;
@@ -38,7 +38,7 @@ class PresupuestoConsolidado extends Controller
         $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
         $ideDepartamento=  PlnPresupuestoDepartamento::where(array('ide_presupuesto_departamento'=>$idePresupuestoDepartamento))->pluck('ide_departamento')->first();
         $rol=  request()->session()->get('rol');
-        if($rol!='DIRECTOR ADMIN Y FIANANZAS' && !$this->departamentoDirector($ideDepartamento)){
+        if($rol!='DIRECTOR ADMIN Y FINANZAS' && !$this->departamentoDirector($ideDepartamento)){
             return view('home');
         }
         $presupuestoColaborador->colaborador;
@@ -55,7 +55,7 @@ class PresupuestoConsolidado extends Controller
     public function consolidadoDepartamento($idePresupuestoDepartamento){
         $rol=  request()->session()->get('rol');
         $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
-        if($rol!='DIRECTOR ADMIN Y FIANANZAS' && !$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+        if($rol!='DIRECTOR ADMIN Y FINANZAS' && !$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
             return view('home');
         }
         $presupuestoDepartamento->departamento;
@@ -78,7 +78,7 @@ class PresupuestoConsolidado extends Controller
     public function consolidadoTrimestralDepartamento($idePresupuestoDepartamento){
         $rol=  request()->session()->get('rol');
         $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
-        if($rol!='DIRECTOR ADMIN Y FIANANZAS' && !$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+        if($rol!='DIRECTOR ADMIN Y FINANZAS' && !$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
             return view('home');
         }
         $presupuestoDepartamento->departamento;
