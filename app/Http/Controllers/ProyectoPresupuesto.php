@@ -9,6 +9,7 @@ use App\PlnPresupuestoDepartamento;
 use App\PlnPresupuestoColaborador;
 use App\PlnColaboradorCuenta;
 use App\PlnColaboradorCuentaDetalle;
+use App\CfgDepartamento;
 use App\HPMEConstants;
 use App\PlnProyectoPresupuesto;
 use App\CfgCuenta;
@@ -25,23 +26,55 @@ class ProyectoPresupuesto extends Controller
     }
     
     public function retriveDepartamentos($ideProyectoPresupuesto){
-        $ideDepartamento=$this->regionDirector();  
+        //$ideDepartamento=$this->regionDirector();  
+        $user=Auth::user(); 
+        $ideUsuario=$user->ide_usuario;
         $items=array();
-        if(!is_null($ideDepartamento)){
-            $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-            if(count($presupuestos)>0){
-                return view('presupuesto_departamentos',array('items'=>$presupuestos));
-            }else{
-                $presupuesto=new PlnPresupuestoDepartamento();
-                $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
-                $presupuesto->estado= HPMEConstants::ABIERTO;
-                $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
-                $presupuesto->ide_departamento=$ideDepartamento;
-                $presupuesto->save();
-                $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-            }
-        }       
+        //Verificar si ya se creo el presupuesto para los departamentos en los que esta asignado
+        $this->crearPresupuestoDepartamento($ideUsuario, $ideProyectoPresupuesto);
+        
+        $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO_USUARIO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideUsuario'=>$ideUsuario));
+        if(count($presupuestos)>0){
+            return view('presupuesto_departamentos',array('items'=>$presupuestos));
+        }
+        
+//        else{
+//            $presupuesto=new PlnPresupuestoDepartamento();
+//            $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+//            $presupuesto->estado= HPMEConstants::ABIERTO;
+//            $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
+//            $presupuesto->ide_departamento=$ideDepartamento;
+//            $presupuesto->save();
+//            $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
+//        }
+            
+        //if(!is_null($ideDepartamento)){
+//            $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
+//            if(count($presupuestos)>0){
+//                return view('presupuesto_departamentos',array('items'=>$presupuestos));
+//            }else{
+//                $presupuesto=new PlnPresupuestoDepartamento();
+//                $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+//                $presupuesto->estado= HPMEConstants::ABIERTO;
+//                $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
+//                $presupuesto->ide_departamento=$ideDepartamento;
+//                $presupuesto->save();
+//                $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
+//            }
+        //}       
         return view('presupuesto_departamentos',array('items'=>$items));
+    }
+    
+    public function crearPresupuestoDepartamento($ideUsuario,$ideProyectoPresupuesto){
+        $departamentos=DB::select(HPMEConstants::PLN_PRESUPUESTO_DEPARTAMENTO_USUARIO_SIN_PRESUPUESTO,array('ideUsuario'=>$ideUsuario));
+        foreach($departamentos as $departamento){
+            $presupuesto=new PlnPresupuestoDepartamento();
+            $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+            $presupuesto->estado= HPMEConstants::ABIERTO;
+            $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
+            $presupuesto->ide_departamento=$departamento->ide_departamento;
+            $presupuesto->save();
+        }
     }
     
     
@@ -52,19 +85,29 @@ class ProyectoPresupuesto extends Controller
             return $regiones[0]->ide_departamento;
         }else{
             return null;
-        }
-        
+        }       
     }
     
     public function retriveColaboradores($idePresupuestoDepartamento){
-        $departamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
-        if(!is_null($departamento)){
+        $departamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);       
+        if(!is_null($departamento) && $this->departamentoDirector($departamento->ide_departamento)){
             $ideProyectoPresupuesto=$departamento->ide_proyecto_presupuesto;
             //Validación departamento/director
             $colaboradores=DB::select(HPMEConstants::PLN_PRESUPUESTO_COLABORADOR_DEPARTAMENTO,array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
             return view('presupuesto_colaborador',array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'items'=>$colaboradores,'estado'=>$departamento->estado));
         }
         return view('home');
+    }
+    
+    private function departamentoDirector($ideDepartamento){
+        $user=Auth::user();       
+        $regiones=CfgDepartamento::where(array('ide_usuario_director'=>$user->ide_usuario))->pluck('ide_departamento');//DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
+        foreach($regiones as $region){
+            if($region===$ideDepartamento){
+                return TRUE;
+            }
+        }
+        return FALSE;        
     }
 
     //Devuelve la lista de colaboradores que se pueden agregar al presupuesto del departamento
@@ -92,6 +135,9 @@ class ProyectoPresupuesto extends Controller
             $idePresupuestoDepartamento=$detalleColaborador[0]->ide_presupuesto_departamento;
             $ideProyectoPresupuesto=$detalleColaborador[0]->ide_proyecto_presupuesto;
             $nombreColaborador=$detalleColaborador[0]->nombres." ".$detalleColaborador[0]->apellidos;
+            if(!$this->departamentoDirector($detalleColaborador[0]->ide_departamento)){
+                return view('home');
+            }
         }
         $cuentasIngresadas=array();
         if(is_null($id)){

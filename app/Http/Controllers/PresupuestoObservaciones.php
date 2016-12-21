@@ -30,8 +30,7 @@ class PresupuestoObservaciones extends Controller
                 return view('home');
             }
             if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'){
-                $ideDepartamento=$this->departamentoDirector();
-                if(is_null($ideDepartamento) || $ideDepartamento!=$presupuesto->ide_departamento){
+                if(!$this->departamentoDirector($presupuesto->ide_departamento)){
                     return view ('home');
                 }
             }
@@ -323,15 +322,19 @@ class PresupuestoObservaciones extends Controller
         }      
     } 
     
-    private function departamentoDirector(){
+    private function departamentoDirector($ideDepartamento){
         $user=Auth::user();       
-        $regiones=DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
-        if(count($regiones)>0){
-            return $regiones[0]->ide_departamento;
-        }else{
-            return null;
+        $regiones=CfgDepartamento::where(array('ide_usuario_director'=>$user->ide_usuario))->pluck('ide_departamento');//DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
+        Log::info("#### validando $ideDepartamento");
+        Log::info($regiones);
+        foreach($regiones as $region){
+            Log::info($region);
+            if($region===$ideDepartamento){
+                Log::info("$$$$$ true $region dep $ideDepartamento");
+                return TRUE;
+            }
         }
-        
+        return FALSE;        
     }
 
     private function obtenerMetas($ideProyecto,$ideProyectoRegion=null){

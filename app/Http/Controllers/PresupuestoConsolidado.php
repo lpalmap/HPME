@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\HPMEConstants;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\PlnPresupuestoColaborador;
 use App\PlnPresupuestoDepartamento;
+use App\CfgDepartamento;
+use Illuminate\Support\Facades\Auth;
 
 class PresupuestoConsolidado extends Controller
 {
     //Obtiene usuarios y crea vista
     public function consolidadoColaborador($idePresupuestoColaborador){
         $presupuestoColaborador=  PlnPresupuestoColaborador::find($idePresupuestoColaborador);
+        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
+        $ideDepartamento=  PlnPresupuestoDepartamento::where(array('ide_presupuesto_departamento'=>$idePresupuestoDepartamento))->pluck('ide_departamento')->first();
+        if(!$this->departamentoDirector($ideDepartamento)){
+            return view('home');
+        }
         $presupuestoColaborador->colaborador;
         $nombreColaborador='';
         if($presupuestoColaborador->colaborador->tipo==HPMEConstants::COLABORADOR){
@@ -21,36 +27,57 @@ class PresupuestoConsolidado extends Controller
         }else{
             $nombreColaborador=$presupuestoColaborador->colaborador->nombres;
         }
-        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
+        
         $consolidado=$this->buildConsolidado(array('idePresupuestoColaborador'=>$idePresupuestoColaborador),FALSE);
         return view('presupuesto_consolidado',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
     }
     
     public function consolidadoTrimestralColaborador($idePresupuestoColaborador){
         $presupuestoColaborador=  PlnPresupuestoColaborador::find($idePresupuestoColaborador);
+        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
+        $ideDepartamento=  PlnPresupuestoDepartamento::where(array('ide_presupuesto_departamento'=>$idePresupuestoDepartamento))->pluck('ide_departamento')->first();
+        if(!$this->departamentoDirector($ideDepartamento)){
+            return view('home');
+        }
         $presupuestoColaborador->colaborador;
         $nombreColaborador='';
         if($presupuestoColaborador->colaborador->tipo==HPMEConstants::COLABORADOR){
             $nombreColaborador=$presupuestoColaborador->colaborador->nombres.' '.$presupuestoColaborador->colaborador->apellidos;
         }else{
             $nombreColaborador=$presupuestoColaborador->colaborador->nombres;
-        }
-        $idePresupuestoDepartamento=$presupuestoColaborador->ide_presupuesto_departamento;
+        }     
         $consolidado=$this->buildConsolidado(array('idePresupuestoColaborador'=>$idePresupuestoColaborador),TRUE);
         return view('presupuesto_consolidado_trimestral',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
     }
     
     public function consolidadoDepartamento($idePresupuestoDepartamento){
         $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        if(!$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+            return view('home');
+        }
         $presupuestoDepartamento->departamento;
-        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;
+        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;        
         $consolidado=$this->buildConsolidado(array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento),FALSE);
         $rol=  request()->session()->get('rol');
         return view('presupuesto_cons_departamento',array('cuentas'=>$consolidado,'nombre'=>$nombreDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'rol'=>$rol,'estado'=>$presupuestoDepartamento->estado));
     }
     
+    private function departamentoDirector($ideDepartamento){
+        $user=Auth::user();       
+        $regiones=CfgDepartamento::where(array('ide_usuario_director'=>$user->ide_usuario))->pluck('ide_departamento');//DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
+        foreach($regiones as $region){
+            if($region===$ideDepartamento){
+                return TRUE;
+            }
+        }
+        return FALSE;        
+    }
+    
     public function consolidadoTrimestralDepartamento($idePresupuestoDepartamento){
         $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        if(!$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+            return view('home');
+        }
         $presupuestoDepartamento->departamento;
         $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;
         $consolidado=$this->buildConsolidado(array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento),TRUE);
