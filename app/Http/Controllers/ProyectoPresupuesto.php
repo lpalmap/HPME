@@ -215,7 +215,7 @@ class ProyectoPresupuesto extends Controller
         $detallesPersistidos=array();
         foreach ($items as $item){
             $numItem=str_replace('itemVal', "", $item['item']);
-            $itemValue=$item['value'].integerValue();
+            $itemValue=$item['value'];
             //Log::info("Num item".$numItem);
             $ideColaboradorCuentaDetalle=$this->cuentaColaboradorDetalle($detalles, $numItem);
             if(is_null($ideColaboradorCuentaDetalle)){
@@ -259,13 +259,13 @@ class ProyectoPresupuesto extends Controller
         //Log::info("Num det $numDetalle");
         //$numDetalle=$numDetalle.intValue();
         foreach ($detalles as $detalle){
-          //  Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
-            if($detalle->num_detalle===$numDetalle){
+            //Log::info("Buscando detalle ".$detalle->num_detalle." param::: ".$numDetalle);
+            if(intval($detalle->num_detalle)===intval($numDetalle)){
             //    Log::info("### iguales....");
                 return $detalle->ide_colaborador_cuenta_detalle;
             }
         }
-       // Log::info("Return null");
+        //Log::info("Return null");
         return null;
     }
     
