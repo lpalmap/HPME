@@ -82,6 +82,7 @@ class PresupuestoDepartamento extends Controller
             }
             //Log::info("cambiar estado....");
             $planificacion->estado=  HPMEConstants::APROBADO;
+            $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $planificacion->save();
             return response()->json();
         }

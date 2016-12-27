@@ -144,6 +144,7 @@ class PlanificacionRegion extends Controller
                 return response()->json(array('error'=>'La planificaci&oacute;n se encuentra en estado '.HPMEConstants::ABIERTO.' no se ha enviado para su revisi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
             }
             $planificacion->estado=  HPMEConstants::APROBADO;
+            $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $planificacion->save();
             return response()->json();
         }
