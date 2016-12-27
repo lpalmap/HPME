@@ -22,17 +22,19 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Departamentos {{isset($proyecto)?$proyecto:''}}</span>
+                            <div style="float: right"><span style="font-weight: bolder;">{{isset($estado)?$estado:''}}</span></div>
                         </div>
                         
                          <div class="panel-body">
                              @if(isset($regiones))
-                             <a href="{{url('planconsolidado/'.$ideProyecto)}}" >
-                                                <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>
+<!--                                       <a href="{{url('planconsolidado/'.$ideProyectoPresupuesto)}}" >
+                                                <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>-->
                                                 &nbsp;
                                                 &nbsp;
-                                <button id="btnCerrar">                      
-                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" alt="" title="Cerrar Plantilla"/></button>
-<!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
+                                @if($estado=='PUBLICADO')                
+                                <button id="btnCerrar" value="{{$ideProyectoPresupuesto}}">                      
+                                <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyectoPresupuesto}}" title="Cerrar Presupuesto"/></button>
+                                @endif
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">
@@ -157,6 +159,7 @@
     @parent
     <meta name="_token" content="{!! csrf_token() !!}" />
     <script src="{{asset('js/hpme.presupuesto.operaciones.js')}}"></script>
+    <meta name="_urlTarget" content="{{url('presupuesto')}}" />
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

@@ -302,6 +302,8 @@ Route::post('/observacionespresupuesto/marcar',['uses' => 'PresupuestoObservacio
 //
 Route::post('/presupuestos/enviar',['uses' => 'PresupuestoDepartamento@enviarPresupuesto', 'middleware' => 'auth']);
 Route::post('/presupuestos/aprobar',['uses' => 'PresupuestoDepartamento@aprobarPresupuesto', 'middleware' => 'auth']);
+//Cerrar presupuesto
+Route::post('/presupuesto/cerrar',['uses' => 'ProyectoPresupuesto@cerrarPresupuesto', 'middleware' => 'auth']);
 
 Route::get('/insert', function() {
     App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

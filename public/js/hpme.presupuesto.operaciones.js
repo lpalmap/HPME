@@ -92,7 +92,7 @@ $(document).ready(function(){
     $("#btnAceptarCerrar").click(function (e) {      
         $('#loading').modal('show');
         var formData = {
-            ide_proyecto: $(this).val()
+            ide_proyecto_presupuesto: $(this).val()
         };   
               
         $.ajaxSetup({
@@ -120,7 +120,7 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al cerrar planificacion.</li>';
+                    errHTML+='<li>Error al cerrar el presupuesto.</li>';
                 }
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');                

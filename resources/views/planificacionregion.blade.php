@@ -22,7 +22,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Regiones {{isset($proyecto)?$proyecto:''}}</span>
-                            <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
+                            <div style="float: right"><span style="font-weight: bolder;">{{isset($estado)?$estado:''}}</span></div>
                         </div>
                         
                          <div class="panel-body">

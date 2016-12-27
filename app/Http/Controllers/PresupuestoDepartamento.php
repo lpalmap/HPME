@@ -22,7 +22,7 @@ class PresupuestoDepartamento extends Controller
     public function presupuestoDepartamento(){
         $rol=  request()->session()->get('rol');
         
-        $ultimoProyecto=  PlnProyectoPresupuesto::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto_presupuesto','descripcion']);
+        $ultimoProyecto=  PlnProyectoPresupuesto::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto_presupuesto','descripcion','estado']);
         if(is_null($ultimoProyecto) || $rol!='DIRECTOR ADMIN Y FINANZAS'){
             return view('home');
         }
@@ -34,8 +34,9 @@ class PresupuestoDepartamento extends Controller
     //            foreach ($regiones as $region){
     //                Log::info('proyecto region: '.$region->ide_proyecto_region);
     //            }
+        //Log::info($ultimoProyecto);
         if(count($regiones)>0){
-            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto));
+            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'estado'=>$ultimoProyecto->estado));
         }
         return view('presupuestos');
     }

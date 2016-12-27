@@ -132,6 +132,10 @@ class PlantillaPlanificacion extends Controller
     }
     
     public function cerrarPlanificacion(Request $request){
+        $rol=  request()->session()->get('rol');
+        if($rol!='COORDINADOR'){
+            return response()->json(array('error'=>'Solo el usuario autorizado puede cerrar una plantilla.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
         if($proyecto->estado!=HPMEConstants::PUBLICADO){
             return response()->json(array('error'=>'La plantilla debe estar '.HPMEConstants::PUBLICADO.' para cerrarla.'), HPMEConstants::HTTP_AJAX_ERROR);

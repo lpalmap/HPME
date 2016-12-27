@@ -25,6 +25,25 @@ class ProyectoPresupuesto extends Controller
         return view('proyectopresupuesto',array('items'=>$data,'rol'=>$rol));
     }
     
+    public function cerrarPresupuesto(Request $request){
+        $rol=  request()->session()->get('rol');
+        if($rol!='DIRECTOR ADMIN Y FINANZAS'){
+            return response()->json(array('error'=>'Solo el usuario autorizado puede cerrar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $proyecto= PlnProyectoPresupuesto::find($request->ide_proyecto_presupuesto);
+        if($proyecto->estado!=HPMEConstants::PUBLICADO){
+            return response()->json(array('error'=>'El presupuesto debe estar '.HPMEConstants::PUBLICADO.' para cerrarlo.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $count= PlnPresupuestoDepartamento::where([['ide_proyecto_presupuesto','=',$request->ide_proyecto_presupuesto],['estado','!=',  HPMEConstants::APROBADO]])->count();
+        if($count>0){
+            return response()->json(array('error'=>"Se encuentran $count presupuestos por departamento pendientes de aprobar."), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $proyecto->estado=  HPMEConstants::CERRADO;
+        $proyecto->fecha_cierre=date(HPMEConstants::DATE_FORMAT,  time());
+        $proyecto->save();
+        return response()->json();
+    }
+    
     public function retriveDepartamentos($ideProyectoPresupuesto){
         //$ideDepartamento=$this->regionDirector();  
         $user=Auth::user(); 
