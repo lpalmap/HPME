@@ -136,11 +136,12 @@ class PlantillaPlanificacion extends Controller
         if($proyecto->estado!=HPMEConstants::PUBLICADO){
             return response()->json(array('error'=>'La plantilla debe estar '.HPMEConstants::PUBLICADO.' para cerrarla.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
-        $count=  PlnProyectoRegion::where(['estado','!=',  HPMEConstants::APROBADO])->count();
+        $count=  PlnProyectoRegion::where([['ide_proyecto_planificacion','=',$request->ide_proyecto],['estado','!=',  HPMEConstants::APROBADO]])->count();
         if($count>0){
             return response()->json(array('error'=>"Se encuentran $count planificaciones por regi&oacute;n pendientes de aprobar."), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto->estado=  HPMEConstants::CERRADO;
+        $proyecto->fecha_cierre=date(HPMEConstants::DATE_FORMAT,  time());
         $proyecto->save();
         return response()->json();
     }

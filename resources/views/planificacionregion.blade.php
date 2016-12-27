@@ -22,6 +22,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Regiones {{isset($proyecto)?$proyecto:''}}</span>
+                            <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
                         </div>
                         
                          <div class="panel-body">
@@ -31,7 +32,7 @@
                                                 &nbsp;
                                                 &nbsp;
                                 @if($estado=='PUBLICADO')                
-                                <button id="btnCerrar">                      
+                                <button id="btnCerrar" value="{{$ideProyecto}}">                      
                                 <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyecto}}" title="Cerrar Plantilla"/></button>
                                 @endif
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->

@@ -265,7 +265,7 @@ Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacion
 Route::post('/planregion/aprobar',['uses' => 'PlanificacionRegion@aprobarPlanificacion', 'middleware' => 'auth']);
 
 //Cerrar planificacion
-Route::post('/planificacion/cerrar',['uses' => 'Planificacion@cerrarPlanificacion', 'middleware' => 'auth']);
+Route::post('/planificacion/cerrar',['uses' => 'PlantillaPlanificacion@cerrarPlanificacion', 'middleware' => 'auth']);
         
 /*   PRESUPUESTO    */
 Route::get('/presupuestos',['uses' => 'ProyectoPresupuesto@index', 'middleware' => 'auth']);
