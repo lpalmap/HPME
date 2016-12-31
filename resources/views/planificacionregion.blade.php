@@ -51,7 +51,15 @@
                                     </thead>
                                     <tbody id="lista-items" name="lista-items">
                                         @for ($i=0;$i<count($regiones);$i++)
-                                        <tr class="warning" style="text-align: center" >
+                                        @if($regiones[$i]->estado=='ENVIADO')
+                                            <tr class="danger" style="text-align: center" >
+                                        @else
+                                            @if($regiones[$i]->estado=='APROBADO')
+                                            <tr class="success" style="text-align: center" >
+                                            @else
+                                            <tr class="info" style="text-align: center" >
+                                            @endif
+                                        @endif
                                                 <td>{{$regiones[$i]->nombre}}</td>
                                                 <td>{{$regiones[$i]->usuario}}</td>
                                                 <td>{{$regiones[$i]->fecha_ingreso}}</td>

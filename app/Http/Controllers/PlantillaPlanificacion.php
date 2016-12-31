@@ -59,7 +59,8 @@ class PlantillaPlanificacion extends Controller
         $periodicidad=$request->periodicidad;
         $plantilla=new PlnProyectoPlanificacion();
         $plantilla->descripcion=$descripcion;
-        $plantilla->ide_lista_periodicidad=$periodicidad;     
+        $plantilla->ide_lista_periodicidad=$periodicidad; 
+        date_default_timezone_set(HPMEConstants::TIME_ZONE);
         $plantilla->fecha_proyecto= date(HPMEConstants::DATE_FORMAT,  time());
         $authuser=Auth::user();
         $plantilla->ide_usuario_creacion=$authuser->ide_usuario;
@@ -145,6 +146,7 @@ class PlantillaPlanificacion extends Controller
             return response()->json(array('error'=>"Se encuentran $count planificaciones por regi&oacute;n pendientes de aprobar."), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto->estado=  HPMEConstants::CERRADO;
+        date_default_timezone_set(HPMEConstants::TIME_ZONE);
         $proyecto->fecha_cierre=date(HPMEConstants::DATE_FORMAT,  time());
         $proyecto->save();
         return response()->json();

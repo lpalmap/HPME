@@ -39,6 +39,7 @@ class ProyectoPresupuesto extends Controller
             return response()->json(array('error'=>"Se encuentran $count presupuestos por departamento pendientes de aprobar."), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto->estado=  HPMEConstants::CERRADO;
+        date_default_timezone_set(HPMEConstants::TIME_ZONE);
         $proyecto->fecha_cierre=date(HPMEConstants::DATE_FORMAT,  time());
         $proyecto->save();
         return response()->json();
