@@ -43,6 +43,9 @@
                             <button  id="btnAprobarPlan" value="{{$ideProyectoRegion}}">
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Planificaci&oacute;n"/></button>
                             @endif
+                            <button id="cleanVacio">
+                                <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>
+                                
                             <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
                         </div>
                         
@@ -111,15 +114,17 @@
                                                                 foreach ($detalles as $detalle){
                                                                     $total=0;
                                                                     $valores=$detalle['valores'];
+                                                                    foreach ($valores as $valor){
+                                                                        $total=$total+$valor->valor;
+                                                                    }                                                                    
                                                     ?>
-                                                        <tr class="info" style="text-align: center" >
+                                                        <tr class="info {{$total>0?'':'goodbye'}}" style="text-align: center" >
                                                             <td>{{$objetivo['objetivo']->nombre}}</td>
                                                             <td>{{$indicador['indicador']->nombre}}</td>
                                                             <td>{{$detalle['detalle']->proyecto}}</td>
                                                             <td>{{$producto['producto']->nombre}}</td>
                                                             <?php
-                                                                foreach ($valores as $valor){
-                                                                    $total=$total+$valor->valor;
+                                                                foreach ($valores as $valor){                                                                    
                                                             ?>
                                                             <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
                                                             <?php
@@ -196,7 +201,28 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirmacionModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Mensaje</h4>
+            </div>
 
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+<ul style="list-style-type:circle" id="erroresContent">Se ocultaron todos los productos con planificaci&oacute;n 0.</ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('footer')
     @parent
