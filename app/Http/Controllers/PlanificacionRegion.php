@@ -143,6 +143,7 @@ class PlanificacionRegion extends Controller
             if($planificacion->estado==HPMEConstants::ABIERTO){
                 return response()->json(array('error'=>'La planificaci&oacute;n se encuentra en estado '.HPMEConstants::ABIERTO.' no se ha enviado para su revisi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
             }
+            date_default_timezone_set(HPMEConstants::TIME_ZONE);
             $planificacion->estado=  HPMEConstants::APROBADO;
             $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $planificacion->save();

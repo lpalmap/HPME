@@ -89,4 +89,12 @@ $(document).ready(function(){
         });
     });
     
+    $("#cleanVacio").click(function (e) {      
+        $('#loading').modal('show');
+        $('.goodbye').remove();
+        $('#loading').modal('hide');
+        $('#confirmacionModal').modal('show');    
+    });
+    
+    
 });
