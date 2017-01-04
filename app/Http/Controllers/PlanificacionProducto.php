@@ -14,6 +14,7 @@ use App\PlnRegionProducto;
 use App\PlnRegionProductoDetalle;
 use Illuminate\Support\Facades\DB;
 use App\PlnProyectoPlanificacion;
+use Illuminate\Support\Facades\Log;
 
 class PlanificacionProducto extends Controller
 {
@@ -154,6 +155,15 @@ class PlanificacionProducto extends Controller
         if(count($regiones)>0){
             $ideRegionAdmin=$regiones[0]->ide_region;
             //['ide_region',$ideRegionAdmin],['ide_proyecto_planificacion',$ideProyecto]
+            if($proyecto>0){
+                //Se establecio un proyecto para producto no es necesario validar si se ingreso planificacion
+            }else{
+                $totalItems=  $this->totalItemsProducto($items);
+                if($totalItems>0){
+                    return response()->json(array('error'=>'Debe seleccionar un proyecto para la planificaci&oacute;n ya que no est&aacute planificando 0 para el producto.'), HPMEConstants::HTTP_AJAX_ERROR);
+                }
+            }
+            
             $ideProyectoRegion=-1;
             $regionProyecto=PlnProyectoRegion::where(array("ide_region"=>$ideRegionAdmin,"ide_proyecto_planificacion"=>$ideProyecto))->select(['ide_proyecto_region','estado'])->get(); //$regionQuery->selectQuery(HPMEConstants::SI, $params);
             $nuevo=false;
@@ -244,6 +254,18 @@ class PlanificacionProducto extends Controller
                 $itemUpdate->save();
             }
         }
+    }
+    
+    private function totalItemsProducto($items){
+        $itemsCount=count($items);
+        $total=0;
+        for ($i = 1; $i <=$itemsCount; $i++) {
+            $itemKey='item'.$i;
+            if(isset($items[$itemKey])){
+                $total+=$items[$itemKey];
+            }
+        } 
+        return $total;
     }
     
 }

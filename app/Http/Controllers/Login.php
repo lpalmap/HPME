@@ -25,10 +25,10 @@ class Login extends Controller
                 //return redirect()->route('home',array('usuario'=>$request->get('usuario')));
                 $user=Auth::user();
                 $queryUser=new SegUsuario();
-                Log::info('Usuario.... '+$user->ide_usuario);
+                //Log::info('Usuario.... '+$user->ide_usuario);
                 $params=array('ideUsuario'=>$user->ide_usuario);
                 $roles=$queryUser->selectQuery(HPMEConstants::NOMBRE_ROL_POR_USUARIO, $params);
-                Log::info($roles);
+                //Log::info($roles);
                 $rol='';
                 if(count($roles)>0){
                     $rol=$roles[0]->nombre;

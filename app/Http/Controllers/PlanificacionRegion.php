@@ -157,9 +157,8 @@ class PlanificacionRegion extends Controller
             $ideRegion=$this->regionUsuario();
             if(is_null($ideRegion)){
                 return view('home');
-            }         
+            }  
             $ideProyectoRegion=PlnProyectoRegion::where(array("ide_region"=>$ideRegion,"ide_proyecto_planificacion"=>$id))->pluck('ide_proyecto_region')->first(); 
-            
             $encabezados=array();
             $encabezados[]='Ene-Mar';
             $encabezados[]='Abr-Jun';
@@ -306,6 +305,8 @@ class PlanificacionRegion extends Controller
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
+            //Log::info("### indicador area $producto->ide_producto_indicador region $ideProyectoRegion");
+            //Log::info($detalle);
             if(!empty($detalle)){
                 $result[]=array('producto'=>$producto,'detalles'=>$detalle);
             }          
@@ -325,6 +326,7 @@ class PlanificacionRegion extends Controller
             $detalleProducto=DB::select(HPMEConstants::PLN_REGION_PRODUCTO,array('ideProductoIndicador'=>$ideProductoIndicador,'ideProyectoRegion'=>$ideProyectoRegion));
             $result=array();
             //Log::info('Detalles....  '.count($detalleProducto));
+            //Log::info($detalleProducto);
             foreach($detalleProducto as $detalle){
                 $items=$this->obtenerValoresItems($detalle->ide_region_producto);
                 $result[]=array('detalle'=>$detalle,'valores'=>$items);
