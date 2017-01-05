@@ -103,7 +103,7 @@ class PresupuestoDepartamento extends Controller
             date_default_timezone_set(HPMEConstants::TIME_ZONE);
             $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $user=Auth::user();
-            //$planificacion->ide_usuario_aprobacion=$user->ide_usuario_aprobacion;
+            $planificacion->ide_usuario_aprobacion=$user->ide_usuario;
             $planificacion->save();
             return response()->json();
         }

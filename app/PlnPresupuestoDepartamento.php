@@ -6,7 +6,7 @@ class PlnPresupuestoDepartamento extends BaseModel
 {
     protected $primaryKey = 'ide_presupuesto_departamento';
     protected $table = 'pln_presupuesto_departamento';
-    protected $fillable = array('fecha_ingreso','fecha_aprobacion','descripcion','estado','ide_departamento','ide_proyecto_presupuesto');
+    protected $fillable = array('fecha_ingreso','fecha_aprobacion','descripcion','estado','ide_departamento','ide_proyecto_presupuesto','ide_usuario_aprobacion');
     public $timestamps = false;
     
     public function proyecto(){
@@ -16,5 +16,4 @@ class PlnPresupuestoDepartamento extends BaseModel
     public function departamento(){
         return $this->belongsTo('App\CfgDepartamento','ide_departamento');
     }
-    
 }

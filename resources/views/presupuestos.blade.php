@@ -43,6 +43,7 @@
                                             <th style="text-align: center">Departamento</th>
                                             <th style="text-align: center">Fecha Ingreso</th>
                                             <th style="text-align: center">Fecha Aprobaci&oacute;n</th>
+                                            <th style="text-align: center">Aprobado por</th>                                           
                                             <th style="text-align: center">Estado</th>
                                             <th style="text-align: center">Acciones</th>
                                         </tr>
@@ -61,6 +62,7 @@
                                                 <td>{{$regiones[$i]->nombre}}</td>
                                                 <td>{{$regiones[$i]->fecha_ingreso}}</td>
                                                 <td>{{$regiones[$i]->fecha_aprobacion}}</td>
+                                                <td>{{$regiones[$i]->usuario}}</td>
                                                 <td>{{$regiones[$i]->estado}}</td>
                                                 <td><a href="{{asset('presupuestodepartamento/'.($regiones[$i]->ide_presupuesto_departamento))}}" >
                                                 <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle presupuesto"/></a></td>
