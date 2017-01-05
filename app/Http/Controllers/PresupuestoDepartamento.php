@@ -33,6 +33,7 @@ class PresupuestoDepartamento extends Controller
         }
          //Log::info('No es null '.$ultimoProyecto);
         //$regionQuery=new PlnProyectoRegion();
+        $puedeCerrar=$this->puedeCerrar();
         $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
         //Log::info("count ".count($regiones));
         //Log::info($regiones);
@@ -41,7 +42,7 @@ class PresupuestoDepartamento extends Controller
     //            }
         //Log::info($ultimoProyecto);
         if(count($regiones)>0){
-            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'estado'=>$ultimoProyecto->estado));
+            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'estado'=>$ultimoProyecto->estado,'puedeCerrar'=>$puedeCerrar));
         }
         return view('presupuestos');
     }
@@ -54,9 +55,18 @@ class PresupuestoDepartamento extends Controller
                     ){
                 return TRUE;
             }
-        }
-        
+        }      
         return FALSE;
+    }
+    
+    public function puedeCerrar(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;   
     }
     
     private function ingresarPresupuesto(){

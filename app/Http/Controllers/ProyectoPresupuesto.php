@@ -15,6 +15,7 @@ use App\PlnProyectoPresupuesto;
 use App\CfgCuenta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\PrivilegiosConstants;
 
 class ProyectoPresupuesto extends Controller
 {
@@ -27,7 +28,7 @@ class ProyectoPresupuesto extends Controller
     
     public function cerrarPresupuesto(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol!='DIRECTOR ADMIN Y FINANZAS'){
+        if(!$this->puedeCerrar()){
             return response()->json(array('error'=>'Solo el usuario autorizado puede cerrar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto= PlnProyectoPresupuesto::find($request->ide_proyecto_presupuesto);
@@ -43,6 +44,16 @@ class ProyectoPresupuesto extends Controller
         $proyecto->fecha_cierre=date(HPMEConstants::DATE_FORMAT,  time());
         $proyecto->save();
         return response()->json();
+    }
+    
+    public function puedeCerrar(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;   
     }
     
     public function retriveDepartamentos($ideProyectoPresupuesto){

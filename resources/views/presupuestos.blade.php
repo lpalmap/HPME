@@ -31,7 +31,7 @@
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>-->
                                                 &nbsp;
                                                 &nbsp;
-                                @if($estado=='PUBLICADO')                
+                                @if($estado=='PUBLICADO' && $puedeCerrar)                
                                 <button id="btnCerrar" value="{{$ideProyectoPresupuesto}}">                      
                                 <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyectoPresupuesto}}" title="Cerrar Presupuesto"/></button>
                                 @endif
