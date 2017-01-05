@@ -41,7 +41,7 @@
                                 <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
                             &nbsp;
                             &nbsp;
-                            @if(isset($rol) && $rol=='DIRECTOR ADMIN Y FINANZAS' && $estado!='APROBADO')
+                            @if(isset($rol) && ($aprueba || $rol=='DIRECTOR ADMIN Y FINANZAS') && $estado!='APROBADO')
                             <button  id="btnAprobarPlan" value="{{$idePresupuestoDepartamento}}">
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar presupuesto departamento"/></button>
                             @endif

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\PlnBitacoraPresupuesto;
 use App\CfgDepartamento;
+use App\PrivilegiosConstants;
 
 class PresupuestoDepartamento extends Controller
 {
@@ -23,8 +24,12 @@ class PresupuestoDepartamento extends Controller
         $rol=  request()->session()->get('rol');
         
         $ultimoProyecto=  PlnProyectoPresupuesto::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto_presupuesto','descripcion','estado']);
-        if(is_null($ultimoProyecto) || $rol!='DIRECTOR ADMIN Y FINANZAS'){
-            return view('home');
+        //$privilegios=request()->session()->get('privilegios');
+        //Log::info($privilegios);
+        if(is_null($ultimoProyecto) || ($rol!='DIRECTOR ADMIN Y FINANZAS')){
+            if(!$this->vistaPrivilegio()){
+                return view('home');
+            }           
         }
          //Log::info('No es null '.$ultimoProyecto);
         //$regionQuery=new PlnProyectoRegion();
@@ -41,6 +46,18 @@ class PresupuestoDepartamento extends Controller
         return view('presupuestos');
     }
     
+    private function vistaPrivilegio(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
+                    || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
     
     public function enviarPresupuesto(Request $request){
         $rol=  request()->session()->get('rol');
@@ -85,6 +102,8 @@ class PresupuestoDepartamento extends Controller
             $planificacion->estado=  HPMEConstants::APROBADO;
             date_default_timezone_set(HPMEConstants::TIME_ZONE);
             $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
+            $user=Auth::user();
+            //$planificacion->ide_usuario_aprobacion=$user->ide_usuario_aprobacion;
             $planificacion->save();
             return response()->json();
         }

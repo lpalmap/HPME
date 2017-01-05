@@ -33,6 +33,14 @@ class Login extends Controller
                 if(count($roles)>0){
                     $rol=$roles[0]->nombre;
                 }
+                $priv= $queryUser->selectQuery(HPMEConstants::PRIVILEGIOS_POR_USUARIO, $params);
+                $privilegios=array();
+                foreach($priv as $privilegio){
+                    $privilegios[]=$privilegio->ide_privilegio;
+                }
+                $request->session()->put('privilegios',$privilegios);
+               // Log::info("#### privilegios");
+               // Log::info($privilegios);
                 //Log::info('rol.... '.$rol);
                 $request->session()->put("rol", $rol);
                 return redirect()->route('home');

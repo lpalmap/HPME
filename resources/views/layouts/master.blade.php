@@ -341,7 +341,7 @@
                         @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO' || Session::get('rol')=='AFILIADO')
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
                         @endif
-                        @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS')
+                        @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS' || ((null!==Session::get('privilegios')) && in_array(1,Session::get('privilegios'))))
                         <li class=""><a href="{{url('presupuestosdepartamento')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/budget.png')}}"/>Presupuesto Departamento</a></li>
                         @endif
 <!--                    <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>

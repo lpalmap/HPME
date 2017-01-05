@@ -17,6 +17,7 @@ use App\PlnBitacoraPresupuesto;
 use App\PlnBitacoraMensajePresupuesto;
 use App\PlnProyectoPresupuesto;
 use App\CfgDepartamento;
+use App\PrivilegiosConstants;
 
 
 class PresupuestoObservaciones extends Controller
@@ -24,7 +25,8 @@ class PresupuestoObservaciones extends Controller
     
     public function observacionesDepartamento($id){
         $rol=  request()->session()->get('rol');
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
+        $vistaPrivilegio=$this->vistaPrivilegio();
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
             $presupuesto= PlnPresupuestoDepartamento::find($id);
             if(is_null($presupuesto)){
                 return view('home');
@@ -56,6 +58,17 @@ class PresupuestoObservaciones extends Controller
         return view('home');
     }
     
+    private function vistaPrivilegio(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
+                    || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }  
+        return FALSE;
+    }
     
     private function bitacoraPorProyectoDepartamento($idePresupuestoDepartamento){
         $bitacoras= PlnBitacoraPresupuesto::where('ide_presupuesto_departamento','=',$idePresupuestoDepartamento)->get();
@@ -67,7 +80,8 @@ class PresupuestoObservaciones extends Controller
     
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS'){
+        $vistaPrivilegio=$this->vistaPrivilegio();
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
             //Log::info("Buscando ".$request->ide_presupuesto_departamento);
             $presupuestoDepartamento= PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
             if(is_null($presupuestoDepartamento)){
@@ -94,7 +108,7 @@ class PresupuestoObservaciones extends Controller
             $bitacoraMensaje->ide_bitacora_presupuesto=$bitacora->ide_bitacora_presupuesto;
             $bitacoraMensaje->mensaje=$request->mensaje;
             $bitacoraMensaje->save();      
-            if($rol=='DIRECTOR ADMIN Y FINANZAS'){
+            if($rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
                 //$proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
                 if($presupuestoDepartamento->estado==HPMEConstants::ENVIADO){
                     $presupuestoDepartamento->estado=HPMEConstants::ABIERTO;
