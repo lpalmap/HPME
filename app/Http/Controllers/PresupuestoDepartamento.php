@@ -59,10 +59,24 @@ class PresupuestoDepartamento extends Controller
         return FALSE;
     }
     
+    private function ingresarPresupuesto(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_INGRESAR_PRESUPUESTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }
+        
+        return FALSE;
+    }
+    
     public function enviarPresupuesto(Request $request){
         $rol=  request()->session()->get('rol');
         if($rol!='DIRECTOR DEPARTAMENTO' && $rol!='AFILIADO'){
-            return response()->json(array('error'=>'Solo los directores pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+            if(!$this->ingresarPresupuesto()){
+                return response()->json(array('error'=>'Solo los directores pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }   
         }
         //Log::info($request->ide_presupuesto_departamento);
         $presupuestoDepartamento=  PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
