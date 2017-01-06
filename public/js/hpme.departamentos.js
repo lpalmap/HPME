@@ -108,6 +108,7 @@ $(document).ready(function(){
             console.log(data);
             $('#inNombre').val(data.item.nombre);
             $('#inDescripcion').val(data.item.descripcion);
+            $('#inCodigo').val(data.item.codigo_interno);
             var selectHTML='<option value="0"></option>';
             if(data.item.hasOwnProperty("director")){
                 $('#inAdmin').val(data.item.director.ide_usuario);
@@ -135,7 +136,8 @@ $(document).ready(function(){
         var formData = {
             nombre: $('#inNombre').val(),
             descripcion: $('#inDescripcion').val(),
-            ide_usuario_director: $('#inAdmin').val()
+            ide_usuario_director: $('#inAdmin').val(),
+            codigo_interno: $('#inCodigo').val()         
         };   
         $('#loading').modal('show');
         $.ajaxSetup({
@@ -168,6 +170,7 @@ $(document).ready(function(){
                 var item = '<tr class="even gradeA" id="item'+data.ide_departamento+'">';
                     item+='<td>'+data.nombre+'</td>';
                     item+='<td>'+data.descripcion+'</td>';
+                    item+='<td>'+data.codigo_interno+'</td>';
                     if(data.hasOwnProperty("director")){
                         item+='<td>'+data.director.usuario+'</td>';                          
                     }else{

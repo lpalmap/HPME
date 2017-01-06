@@ -6,7 +6,7 @@ class CfgColaboradorProyecto extends BaseModel
 {
     protected $primaryKey = 'ide_colaborador';
     protected $table = 'cfg_colaborador_proyecto';
-    protected $fillable = array('tipo','nombres','apellidos','ide_departamento','ide_puesto');
+    protected $fillable = array('tipo','nombres','apellidos','ide_departamento','ide_puesto','codigo_interno');
     public $timestamps = false;
     
     public function departamento(){

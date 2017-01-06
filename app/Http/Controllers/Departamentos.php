@@ -79,7 +79,8 @@ class Departamentos extends Controller
             return response()->json(array('error'=>'Debe seleccionar un usuario como director del departamento.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $item->nombre=$request->nombre;
-        $item->descripcion=$request->descripcion;        
+        $item->descripcion=$request->descripcion; 
+        $item->codigo_interno=$request->codigo_interno;
         $item->save();
         $item->director;
         return response()->json($item);       
@@ -88,7 +89,8 @@ class Departamentos extends Controller
     public function validateRequest($request){
         $rules=[
         'nombre' => 'required|max:100',
-        'descripcion' => 'required|max:200'
+        'descripcion' => 'required|max:200',
+        'codigo_interno' => 'max:150'    
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',
@@ -117,7 +119,8 @@ class Departamentos extends Controller
         $rules=[
             //'ide_usuario_director' => 'unique:cfg_departamento,ide_usuario_director,'.$ideRegion.',ide_departamento',
             'nombre' => 'required|max:100',
-            'descripcion' => 'required|max:100'  
+            'descripcion' => 'required|max:100',
+            'codigo_interno' => 'max:150'
         ];
         $messages=[
             'required' => 'Debe ingresar :attribute.',

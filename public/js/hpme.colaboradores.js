@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTables-example').DataTable(window.lang);   
+    var dataTable=$('#dataTables-example').DataTable(window.lang); 
+    dataTable.order( [ 1, 'asc' ] ).draw();
     var url = window.location;
     url=(""+url).replace("#","");
     
@@ -82,6 +83,7 @@ $(document).ready(function(){
             $('#inNombres').val(data.nombres);
             $('#inApellidos').val(data.apellidos);
             $('#ide_usuario').val(data.ide_colaborador);
+            $('#inCodigo').val(data.codigo_interno);
             if(data.hasOwnProperty("departamento")){
                 $('#inRol').val(data.departamento.ide_departamento);    
             }else{
@@ -106,6 +108,7 @@ $(document).ready(function(){
             //success data
             //console.log(data);
             $('#inNombreProyecto').val(data.nombres);
+            $('#inCodigoProyecto').val(data.codigo_interno);
             $('#ide_col_proyecto').val(data.ide_colaborador);
             if(data.hasOwnProperty("departamento")){
                 $('#inDepartamentoProyecto').val(data.departamento.ide_departamento);    
@@ -130,6 +133,7 @@ $(document).ready(function(){
             tipo:'Colaborador',
             nombres: $('#inNombres').val(),
             apellidos: $('#inApellidos').val(),
+            codigo_interno: $('#inCodigo').val(),
             ide_departamento: $('#inRol').val(),
             ide_puesto: $('#inPuesto').val()
         };
@@ -154,7 +158,7 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                //console.log(data); 
+                console.log(data); 
                 var item = '<tr class="even gradeA" id="usuario' + data.ide_colaborador+ '">';
                     item+='<td>'+data.tipo+'</td>'+'<td>' + data.nombres + '</td><td>' + data.apellidos+ '</td>';
                     if(data.hasOwnProperty("puesto") && data.puesto){
@@ -167,6 +171,7 @@ $(document).ready(function(){
                     }else{
                         item+='<td></td>';
                     }
+                    item +='<td>'+data.codigo_interno+'</td>';
                     item += '<td><button class="btn btn-primary btn-editar btn-editar-colaborador" value="' + data.ide_colaborador + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item += '<button class="btn btn-danger" value="' + data.ide_colaborador + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 
@@ -209,6 +214,7 @@ $(document).ready(function(){
             tipo:'Proyecto',
             nombres: $('#inNombreProyecto').val(),
             apellidos: '',
+            codigo_interno: $('#inCodigoProyecto').val(),
             ide_departamento: $('#inDepartamentoProyecto').val()
         };
 
@@ -239,6 +245,7 @@ $(document).ready(function(){
                     }else{
                         item+='<td></td>';
                     }
+                    item+='<td>'+data.codigo_interno+'</td>';
                     item += '<td><button class="btn btn-primary btn-editar btn-editar-proyecto" value="' + data.ide_colaborador + '"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item += '<button class="btn btn-danger" value="' + data.ide_colaborador + '"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 
