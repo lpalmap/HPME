@@ -18,6 +18,8 @@ class HPMEConstants
     const ULTIMO_PROYECTO_ABIERTO_QUERY="SELECT p.ide_proyecto FROM pln_proyecto_planificacion p WHERE p.estado=:estado";
     const USUARIO_DEPARTAMENTO_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol rol WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=rol.ide_rol order by s.usuario";
     const USUARIO_DEPARTAMENTO_USUARIO_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol rol WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=rol.ide_rol and ur.ide_usuario<>:ideUsuario order by s.usuario";
+    const USUARIO_CONTADOR_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol_privilegio p WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=p.ide_rol and p.ide_privilegio=:idePrivilegio order by s.usuario";
+    const USUARIO_CONTADOR_USUARIO_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol_privilegio p WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=p.ide_rol and p.ide_privilegio=:idePrivilegio and s.ide_usuario<>:ideUsuario order by s.usuario";
     
     //Querys reportes de planificacion
     const PROYECTOS_REGION_QUERY="SELECT p.ide_proyecto_region,r.nombre,u.usuario,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM pln_proyecto_region p,cfg_region r,seg_usuario u WHERE p.ide_region=r.ide_region and p.ide_usuario_creacion=u.ide_usuario and p.ide_proyecto_planificacion=:ideProyecto ORDER BY r.nombre asc";
@@ -58,6 +60,7 @@ class HPMEConstants
     const PLN_TOTAL_CUENTA_PARENT="SELECT sum(valor) as total FROM pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta t,cfg_cuenta c WHERE d.ide_colaborador_cuenta=t.ide_colaborador_cuenta AND t.ide_cuenta=c.ide_cuenta AND t.ide_presupuesto_colaborador=:idePresupuestoColaborador AND c.ide_cuenta_padre=:ideCuentaPadre";
     
     const PLN_PRESUPUESTOS_DEPARTAMENTOS="SELECT p.ide_presupuesto_departamento,d.nombre,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado,u.usuario FROM pln_presupuesto_departamento p left join seg_usuario u on p.ide_usuario_aprobacion=u.ide_usuario join cfg_departamento d on d.ide_departamento=p.ide_departamento WHERE p.ide_proyecto_presupuesto=:ideProyectoPresupuesto ORDER BY d.nombre asc";
+    const PLN_PRESUPUESTOS_DEPARTAMENTOS_CONTADOR="SELECT p.ide_presupuesto_departamento,d.nombre,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado,u.usuario FROM pln_presupuesto_departamento p left join seg_usuario u on p.ide_usuario_aprobacion=u.ide_usuario join cfg_departamento d on d.ide_departamento=p.ide_departamento WHERE p.ide_proyecto_presupuesto=:ideProyectoPresupuesto and d.ide_usuario_contador=:ideUsuarioContador ORDER BY d.nombre asc";
     
     //ELIMINAR DATOS
     const PLN_PRESUPUESTO_ELIMINAR_DETALLE_CUENTA_COLABORADOR="DELETE FROM pln_colaborador_cuenta_detalle WHERE ide_colaborador_cuenta in (SELECT ide_colaborador_cuenta FROM pln_colaborador_cuenta c where c.ide_presupuesto_colaborador=:idePresupuestoColaborador)";

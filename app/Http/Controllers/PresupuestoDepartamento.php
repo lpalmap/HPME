@@ -34,7 +34,13 @@ class PresupuestoDepartamento extends Controller
          //Log::info('No es null '.$ultimoProyecto);
         //$regionQuery=new PlnProyectoRegion();
         $puedeCerrar=$this->puedeCerrar();
-        $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
+        if($this->vistaContador()){
+            $user=Auth::user();
+            $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS_CONTADOR,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'ideUsuarioContador'=>$user->ide_usuario));
+        }else{
+            $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto));
+        }
+         //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
         //Log::info("count ".count($regiones));
         //Log::info($regiones);
     //            foreach ($regiones as $region){
@@ -52,12 +58,30 @@ class PresupuestoDepartamento extends Controller
         if(isset($privilegios)){
             if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
                     || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                            || in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)
                     ){
                 return TRUE;
             }
         }      
         return FALSE;
     }
+    
+    private function vistaContador(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
+                    || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                    ){
+                return FALSE;
+            }
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
     
     public function puedeCerrar(){
         $privilegios=request()->session()->get('privilegios');

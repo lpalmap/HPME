@@ -26,11 +26,16 @@ class PresupuestoObservaciones extends Controller
     public function observacionesDepartamento($id){
         $rol=  request()->session()->get('rol');
         $vistaPrivilegio=$this->vistaPrivilegio();
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
+        $esContador=$this->esContador();
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio || $esContador){
             $presupuesto= PlnPresupuestoDepartamento::find($id);
             if(is_null($presupuesto)){
                 return view('home');
             }
+            if(!$this->verificarContador($presupuesto->ide_departamento)){
+                return view('home');
+            }
+            
             if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'){
                 if(!$this->departamentoDirector($presupuesto->ide_departamento)){
                     return view ('home');
@@ -52,8 +57,8 @@ class PresupuestoObservaciones extends Controller
              
             $nombreProyecto=  PlnProyectoPresupuesto::where('ide_proyecto_presupuesto','=',$presupuesto->ide_proyecto_presupuesto)->pluck('descripcion')->first();
             $nombreDepartamento=  CfgDepartamento::where('ide_departamento','=',$presupuesto->ide_departamento)->pluck('nombre')->first();
-            
-            return view('observaciones_presupuesto',array('idePresupuestoDepartamento'=>$id,'estado'=>$presupuesto->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombre'=>$nombreDepartamento,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora));
+            $aprueba=$this->apruebaPrivilegio();
+            return view('observaciones_presupuesto',array('idePresupuestoDepartamento'=>$id,'estado'=>$presupuesto->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombre'=>$nombreDepartamento,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'aprueba'=>$aprueba));
         }
         return view('home');
     }
@@ -70,6 +75,37 @@ class PresupuestoObservaciones extends Controller
         return FALSE;
     }
     
+    private function verificarContador($ideDepartamento){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
+                    || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS,$privilegios)
+                    ){
+                return TRUE;
+            }
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)){
+                $user=Auth::user();
+                $count=  CfgDepartamento::where(array('ide_usuario_contador'=>$user->ide_usuario,'ide_departamento'=>$ideDepartamento))->count();
+                if($count>0){
+                    return TRUE;
+                }
+                FALSE;
+            }
+        } 
+        return TRUE;
+    }
+    
+    public function apruebaPrivilegio(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS,$privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
     private function bitacoraPorProyectoDepartamento($idePresupuestoDepartamento){
         $bitacoras= PlnBitacoraPresupuesto::where('ide_presupuesto_departamento','=',$idePresupuestoDepartamento)->get();
         if(count($bitacoras)>0){
@@ -78,10 +114,21 @@ class PresupuestoObservaciones extends Controller
         return null;
     }
     
+    private function esContador(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)){   
+                return TRUE;
+            }
+        } 
+        return FALSE;
+    }
+    
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
         $vistaPrivilegio=$this->vistaPrivilegio();
-        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
+        $esContador=$this->esContador();
+        if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO' || $rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio || $esContador){
             //Log::info("Buscando ".$request->ide_presupuesto_departamento);
             $presupuestoDepartamento= PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
             if(is_null($presupuestoDepartamento)){

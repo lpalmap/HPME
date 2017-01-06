@@ -34,6 +34,7 @@
                                             <th>Descripci&oacute;n</th>
                                             <th>C&oacute;digo Interno</th>
                                             <th>Director</th>
+                                            <th>Contador</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -45,6 +46,7 @@
                                             <td>{{$items[$i]->descripcion}}</td>
                                             <td>{{$items[$i]->codigo_interno}}</td>
                                             <td>{{$items[$i]->director->usuario}}</td>
+                                            <td>{{isset($items[$i]->contador)?$items[$i]->contador->usuario:''}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_departamento}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_departamento}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -115,7 +117,14 @@
                                                     <select id="inAdmin" class="form-control">
                                                     </select>
                                                 
-                                            </div>  
+                                            </div>
+                                           <div class="form-group">
+                                                <label>Contador</label>
+                                                
+                                                    <select id="inContador" class="form-control">
+                                                    </select>
+                                                
+                                            </div> 
                                         </form>
                                         </div>
                                         <div class="modal-footer">
