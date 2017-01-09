@@ -330,18 +330,21 @@
                         </span>
                        &nbsp; <span class="label label-default">0</span>&nbsp;
                     </a>
+                    <?php
+                        $privilegios=Session::get('privilegios');
+                    ?>
                     <ul class="collapse" id="component-nav">                   
                         @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
-                        <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+                        <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/afiliados.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
                         @endif
-                        @if(Session::get('rol')=='AFILIADO')
+                        @if(Session::get('rol')=='AFILIADO' || in_array(100,$privilegios))
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
                         @endif 
                         @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO' || Session::get('rol')=='AFILIADO' || ((null!==Session::get('privilegios')) && in_array(3,Session::get('privilegios'))))
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
                         @endif
-                        @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS' || ((null!==Session::get('privilegios')) && array_intersect([1,2,4],Session::get('privilegios'))))
+                        @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS' || (array_intersect([1,2,4],$privilegios)))
                         <li class=""><a href="{{url('presupuestosdepartamento')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/budget.png')}}"/>Presupuesto Departamento</a></li>
                         @endif
 <!--                    <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>

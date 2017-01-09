@@ -60,7 +60,7 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
-                                            @if(isset($rol) && $rol=='AFILIADO')
+                                            @if(isset($rol) && $rol=='AFILIADO' || $ingresaPlan)
                                             <td><button id="btn{{$items[$i]->ide_producto_indicador}}" class="btn2 btn {{in_array($items[$i]->ide_producto_indicador,$ingresados)?'btn-success':'btn-primary'}} btn-round" value="{{$items[$i]->ide_producto_indicador}}"  title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</button></td>
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
