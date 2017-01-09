@@ -21,12 +21,13 @@ class PlanificacionObservaciones extends Controller
     public function observacionesRegion($id){
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
-        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan){
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($id);
             if(is_null($proyectoRegion)){
                 return view('home');
             }
-            if($rol=='AFILIADO' || $ingresaPlan){
+            if($rol=='AFILIADO' || ($ingresaPlan && !$consultaPlanificacion)){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion) || $ideRegion!=$proyectoRegion->ide_region){
                     return view ('home');
@@ -62,6 +63,16 @@ class PlanificacionObservaciones extends Controller
         return FALSE;
     }
     
+    private function consultaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CONSULTA_REGIONES, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
     private function bitacoraPorProyectoRegion($ideProyectoRegion){
         $bitacoras=  PlnBitacoraProyectoRegion::where('ide_proyecto_region','=',$ideProyectoRegion)->get();
         if(count($bitacoras)>0){
@@ -73,7 +84,8 @@ class PlanificacionObservaciones extends Controller
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
-        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan){
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
             if(is_null($proyectoRegion)){
                 return response()->json(array('error'=>'Solo pudo guardar el pensaje para el proyecto de la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);

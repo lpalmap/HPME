@@ -336,7 +336,9 @@
                     <ul class="collapse" id="component-nav">                   
                         @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
-                        <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/afiliados.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
+                        @endif
+                        @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR' || in_array(101,$privilegios))
+                        <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/afiliados.png')}}"/>     Planificaci&#243;n Afiliados</a></li>
                         @endif
                         @if(Session::get('rol')=='AFILIADO' || in_array(100,$privilegios))
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
