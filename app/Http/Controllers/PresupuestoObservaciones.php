@@ -155,7 +155,8 @@ class PresupuestoObservaciones extends Controller
             $bitacoraMensaje->ide_bitacora_presupuesto=$bitacora->ide_bitacora_presupuesto;
             $bitacoraMensaje->mensaje=$request->mensaje;
             $bitacoraMensaje->save();      
-            if($rol=='DIRECTOR ADMIN Y FINANZAS' || $vistaPrivilegio){
+            $aprueba=$this->apruebaPrivilegio();
+            if($rol=='DIRECTOR ADMIN Y FINANZAS' || $aprueba){
                 //$proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
                 if($presupuestoDepartamento->estado==HPMEConstants::ENVIADO){
                     $presupuestoDepartamento->estado=HPMEConstants::ABIERTO;
