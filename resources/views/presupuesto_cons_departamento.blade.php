@@ -97,19 +97,19 @@
                                                 <td style="text-align: center">{{$cuentas[$i]['nombre']}}</td>
                                                 @endif
                                                 <td></td>
-                                                <td>{{isset($cuentas[$i]['item1'])?$cuentas[$i]['item1']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item2'])?$cuentas[$i]['item2']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item3'])?$cuentas[$i]['item3']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item4'])?$cuentas[$i]['item4']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item5'])?$cuentas[$i]['item5']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item6'])?$cuentas[$i]['item6']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item7'])?$cuentas[$i]['item7']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item8'])?$cuentas[$i]['item8']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item9'])?$cuentas[$i]['item9']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item10'])?$cuentas[$i]['item10']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item11'])?$cuentas[$i]['item11']:'0'}}</td>
-                                                <td>{{isset($cuentas[$i]['item12'])?$cuentas[$i]['item12']:'0'}}</td>
-                                                <td style="font-weight: bolder">{{isset($cuentas[$i]['total'])?$cuentas[$i]['total']:'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item1'])?number_format($cuentas[$i]['item1'],(fmod($cuentas[$i]['item1'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item2'])?number_format($cuentas[$i]['item2'],(fmod($cuentas[$i]['item2'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item3'])?number_format($cuentas[$i]['item3'],(fmod($cuentas[$i]['item3'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item4'])?number_format($cuentas[$i]['item4'],(fmod($cuentas[$i]['item4'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item5'])?number_format($cuentas[$i]['item5'],(fmod($cuentas[$i]['item5'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item6'])?number_format($cuentas[$i]['item6'],(fmod($cuentas[$i]['item6'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item7'])?number_format($cuentas[$i]['item7'],(fmod($cuentas[$i]['item7'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item8'])?number_format($cuentas[$i]['item8'],(fmod($cuentas[$i]['item8'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item9'])?number_format($cuentas[$i]['item9'],(fmod($cuentas[$i]['item9'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item10'])?number_format($cuentas[$i]['item10'],(fmod($cuentas[$i]['item10'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item11'])?number_format($cuentas[$i]['item11'],(fmod($cuentas[$i]['item11'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['item12'])?number_format($cuentas[$i]['item12'],(fmod($cuentas[$i]['item12'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td style="font-weight: bolder">{{isset($cuentas[$i]['total'])?number_format($cuentas[$i]['total'],(fmod($cuentas[$i]['total'], 1) !== 0.00)?2:0):'0'}}</td>
                                             </tr>
                                         @endfor    
                                     </tbody>
