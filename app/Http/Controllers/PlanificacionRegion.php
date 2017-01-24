@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 use App\PlnBitacoraProyectoRegion;
+use App\PrivilegiosConstants;
 
 
 class PlanificacionRegion extends Controller
@@ -19,9 +20,11 @@ class PlanificacionRegion extends Controller
         $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion','estado']);
         //Log::info("ultimo ".$ultimoProyecto);
         $rol=  request()->session()->get('rol');
-        if(!is_null($ultimoProyecto) && $rol=='COORDINADOR'){
+        $consulta=$this->consultaPlanificacion();
+        if(!is_null($ultimoProyecto) && $rol=='COORDINADOR' || $consulta){
             //Log::info('No es null '.$ultimoProyecto);
             //$regionQuery=new PlnProyectoRegion();
+            $puedeCerrar=$this->puedeCerrar();
             $regiones=  DB::select(HPMEConstants::PROYECTOS_REGION_QUERY,array('ideProyecto'=>$ultimoProyecto->ide_proyecto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
             //Log::info("count ".count($regiones));
             //Log::info($regiones);
@@ -29,15 +32,43 @@ class PlanificacionRegion extends Controller
 //                Log::info('proyecto region: '.$region->ide_proyecto_region);
 //            }
             if(count($regiones)>0){
-                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>$ultimoProyecto->estado));
+                return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>$ultimoProyecto->estado,'puedeCerrar'=>$puedeCerrar));
             }          
         }        
         return view('planificacionregion');
     }
     
+    private function puedeCerrar(){
+        $rol=  request()->session()->get('rol');
+        if($rol=='COORDINADOR'){
+            return TRUE;
+        } 
+        return FALSE;
+    }
+    
+    private function ingresoPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFIACION_INGRESAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
+    private function consultaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CONSULTA_REGIONES, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
     public function planificacionConsolidada($ideProyecto){
         $rol=  request()->session()->get('rol');
-        if(!is_null($ideProyecto) && $rol=='COORDINADOR'){
+        if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
             //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
             $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
             $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto);         
@@ -57,8 +88,10 @@ class PlanificacionRegion extends Controller
     public function planificacionRegionDetalle($id){ 
         $proyectoRegion=  PlnProyectoRegion::find($id);
         $rol=  request()->session()->get('rol');
-        if(!is_null($proyectoRegion)){
-            if($rol=='AFILIADO'){
+        $ingresaPlan=  $this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $rol == 'AFILIADO' || $ingresaPlan || $consultaPlanificacion)){   
+            if($rol=='AFILIADO' || ($ingresaPlan && (!$consultaPlanificacion))){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion)){
                     return view('home');
@@ -123,7 +156,7 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
@@ -154,7 +187,8 @@ class PlanificacionRegion extends Controller
     public function planificacionProyectoDetalle($id){ 
         $proyectoPlanificacion = PlnProyectoPlanificacion::find($id);     
         $rol=  request()->session()->get('rol');
-        if(!is_null($proyectoPlanificacion) && $rol=='AFILIADO'){
+        $ingresaPlan=$this->ingresoPlanificacion();
+        if(!is_null($proyectoPlanificacion) && ($rol=='AFILIADO' || $ingresaPlan)){
             $ideRegion=$this->regionUsuario();
             if(is_null($ideRegion)){
                 return view('home');
@@ -168,7 +202,7 @@ class PlanificacionRegion extends Controller
             
             if(is_null($ideProyectoRegion)){
                 $region=  CfgRegion::find($ideRegion);
-                return view('planificacion_region_detalle',array('plantilla'=>array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> array()),'region'=>$region->nombre,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
+                return view('planificacion_region_detalle',array('plantilla'=>array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> array()),'region'=>$region->nombre,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan));
             }
             
             $proyectoRegion=  PlnProyectoRegion::find($ideProyectoRegion);
@@ -227,7 +261,7 @@ class PlanificacionRegion extends Controller
 //                break;
 //            }
             
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$ingresaPlan));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');

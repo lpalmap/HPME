@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 use App\PlnProyectoRegion;
+use App\PrivilegiosConstants;
 
 class PlantillaPlanificacion extends Controller
 {
@@ -26,7 +27,8 @@ class PlantillaPlanificacion extends Controller
         //Log::info("Session ".request()->session()->get("mi session"));
         //NOMBRE_ROL_POR_USUARIO
         $rol=  request()->session()->get('rol');
-        if($rol=='AFILIADO'){
+        $ingresaPlan=$this->ingresoPlanificacion();
+        if($rol=='AFILIADO' || $ingresaPlan ){
             $ideProyecto=null;
             foreach ($data as $proyecto){
                 if($proyecto['estado']=='PUBLICADO'){
@@ -39,13 +41,23 @@ class PlantillaPlanificacion extends Controller
             if(!is_null($region) && !is_null($ideProyecto)){
                 $regionProyecto=PlnProyectoRegion::where(array("ide_region"=>$region,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('estado')->first(); 
                 if(!is_null($regionProyecto)){
-                    return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'estadoRegion'=>$regionProyecto));
+                    return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'estadoRegion'=>$regionProyecto,'ingresaPlan'=>$ingresaPlan));
                 }
                 
             }
             
         }
-        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol));
+        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan));
+    }
+    
+    private function ingresoPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFIACION_INGRESAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function addPlantilla(Request $request){
@@ -154,8 +166,9 @@ class PlantillaPlanificacion extends Controller
     
     public function enviarPlantilla(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol!='AFILIADO'){
-            return response()->json(array('error'=>'Solo los afiliados pueden enviar plantillas.'), HPMEConstants::HTTP_AJAX_ERROR);
+        $ingresaPlan=$this->ingresoPlanificacion();   
+        if($rol!='AFILIADO' && !$ingresaPlan){
+            return response()->json(array('error'=>'Solo los adminitradores de una regi&oacute;n enviar plantillas.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
         if($proyecto->estado!=HPMEConstants::PUBLICADO){

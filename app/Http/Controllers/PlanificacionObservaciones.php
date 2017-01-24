@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 use App\PlnBitacoraProyectoRegion;
 use App\PlnBitacoraMensaje;
+use App\PrivilegiosConstants;
 
 
 class PlanificacionObservaciones extends Controller
@@ -19,12 +20,14 @@ class PlanificacionObservaciones extends Controller
     
     public function observacionesRegion($id){
         $rol=  request()->session()->get('rol');
-        if($rol=='COORDINADOR' || $rol=='AFILIADO'){
+        $ingresaPlan=$this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($id);
             if(is_null($proyectoRegion)){
                 return view('home');
             }
-            if($rol=='AFILIADO'){
+            if($rol=='AFILIADO' || ($ingresaPlan && !$consultaPlanificacion)){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion) || $ideRegion!=$proyectoRegion->ide_region){
                     return view ('home');
@@ -48,8 +51,27 @@ class PlanificacionObservaciones extends Controller
             return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora));
         }
         return view('home');
+    } 
+    
+    private function ingresoPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFIACION_INGRESAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
+    private function consultaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CONSULTA_REGIONES, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
     
     private function bitacoraPorProyectoRegion($ideProyectoRegion){
         $bitacoras=  PlnBitacoraProyectoRegion::where('ide_proyecto_region','=',$ideProyectoRegion)->get();
@@ -61,7 +83,9 @@ class PlanificacionObservaciones extends Controller
     
     public function addMessage(Request $request){
         $rol=  request()->session()->get('rol');
-        if($rol=='COORDINADOR' || $rol=='AFILIADO'){
+        $ingresaPlan=$this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if($rol=='COORDINADOR' || $rol=='AFILIADO' || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
             if(is_null($proyectoRegion)){
                 return response()->json(array('error'=>'Solo pudo guardar el pensaje para el proyecto de la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
@@ -98,6 +122,8 @@ class PlanificacionObservaciones extends Controller
                 }
             }
             return response()->json(array('ide_usuario'=>$user->ide_usuario,'usuario'=>$user->usuario,'nombres'=>$user->nombres,'apellidos'=>$user->apellidos,'cambioEstado'=>$cambioEstado));
+        }else{
+            return response()->json(array('error'=>'Su usuario no tiene permisos para agregar mensajes a la bit&aacute;cora.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
     }
     

@@ -110,7 +110,8 @@ $(document).ready(function(){
         var ideColaborador=$('#inColaborador').val();
         if(ideColaborador){
             var my_url=(""+$('meta[name="_url"]').attr('content')).replace("#","")+"/colaborador";
-            var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))
+            var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
+            var url_detalle=(""+$('meta[name="_urlDetalle"]').attr('content'))
             var idePresupuestoDepartamento=$('meta[name="_departamento"]').attr('content');
             var imgConsolidado=$('meta[name="_imgConsolidado"]').attr('content');
             var formData = {
@@ -136,7 +137,7 @@ $(document).ready(function(){
                             item+= '<td style="text-align: center"><a href="'+url_target+"/"+data.ide_presupuesto_colaborador+'/cuenta">'+data.nombres+' '+data.apellidos+'</a></td>';
                             item+= '<td style="text-align: center">';
                             item+= '<button class="btn btn-danger btnEliminarItem" value="'+data.ide_presupuesto_colaborador+'"><i class="icon-remove icon-white"></i></button>&nbsp;&nbsp;&nbsp;';
-                            item+='<a href="" ><img src="'+imgConsolidado+'" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a>';                                           
+                            item+='<a href="'+url_detalle+'/'+data.ide_presupuesto_colaborador+'" ><img src="'+imgConsolidado+'" class="menu-imagen" alt="" title="Ver resumen consolidado"/></a>';                                           
                             item+='</td></tr>';                      
                         dataTable.rows.add($(item)).draw();                    
                         $('#agregarEditarModal').modal('hide');

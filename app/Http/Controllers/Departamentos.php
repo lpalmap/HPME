@@ -7,13 +7,14 @@ use App\CfgDepartamento;
 use App\SegUsuario;
 use App\HPMEConstants;
 use Illuminate\Support\Facades\Log;
+use App\PrivilegiosConstants;
 
 class Departamentos extends Controller
 {
     //
     //Obtiene metas y crea vista
     public function index(){
-        $departamentos=CfgDepartamento::with('director')->get(); 
+        $departamentos=CfgDepartamento::with(['director','contador'])->get(); 
         //$user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
         //$usuarios = $user->selectQuery(HPMEConstants::USUARIO_REGION_QUERY, array());
@@ -31,16 +32,23 @@ class Departamentos extends Controller
         $user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
         $usuarios = $user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_QUERY, array());//array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
-        return response()->json($usuarios);     
+        $contadores=$user->selectQuery(HPMEConstants::USUARIO_CONTADOR_QUERY, array('idePrivilegio'=>  PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO));//array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));;
+        return response()->json(array('admins'=>$usuarios,'contadores'=>$contadores));     
     }
     
     public function retrive($id){
         $item = CfgDepartamento::find($id);
         $item->director;
+        $item->contador;
         $user=new SegUsuario();
         //Obtiene la lista de usuarios que pueden ser asignados como administradores (Que no estan asignados a una region)
-        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_USUARIO_QUERY,array('ideUsuario'=>$item->ide_usuario_director));// array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));
-
+        $usuarios=$user->selectQuery(HPMEConstants::USUARIO_DEPARTAMENTO_USUARIO_QUERY,array('ideUsuario'=>$item->ide_usuario_director));// array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));       
+        if(is_null($item->ide_usuario_contador)){
+            $contadores=$user->selectQuery(HPMEConstants::USUARIO_CONTADOR_QUERY, array('idePrivilegio'=>  PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO));//array('usuarioRol'=>'DIRECTOR DEPARTAMENTO'));;
+        }else{
+            $contadores=$user->selectQuery(HPMEConstants::USUARIO_CONTADOR_USUARIO_QUERY,array('idePrivilegio'=>  PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO,'ideUsuario'=>$item->ide_usuario_contador));
+        }
+                
 //        if(count($item->administradores)>0){
 //            $ideUserAdmin=0;
 //            foreach ($item->administradores as $admin){
@@ -52,7 +60,7 @@ class Departamentos extends Controller
 //            $usuarios = $user->selectQuery(HPMEConstants::USUARIO_REGION_QUERY, array('ideUsuario'=>$id));
 //        }
         
-        $result=array('item'=>$item,'users'=>$usuarios);
+        $result=array('item'=>$item,'users'=>$usuarios,'contadores'=>$contadores);
         return response()->json($result);
     }
     
@@ -66,7 +74,13 @@ class Departamentos extends Controller
         if($request->ide_usuario_director>0){
             $item->ide_usuario_director=$request->ide_usuario_director;
         }
+        if($request->ide_usuario_contador>0){
+            $item->ide_usuario_contador=$request->ide_usuario_contador;
+        }else{
+            $item->ide_usuario_contador=NULL;
+        }       
         $item->director;
+        $item->contador;
         return response()->json($item);
     }
     
@@ -78,17 +92,25 @@ class Departamentos extends Controller
         }else{
             return response()->json(array('error'=>'Debe seleccionar un usuario como director del departamento.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
+        if($request->ide_usuario_contador>0){
+            $item->ide_usuario_contador=$request->ide_usuario_contador;
+        }else{
+            $item->ide_usuario_contador=NULL;
+        }
         $item->nombre=$request->nombre;
-        $item->descripcion=$request->descripcion;        
+        $item->descripcion=$request->descripcion; 
+        $item->codigo_interno=$request->codigo_interno;
         $item->save();
         $item->director;
+        $item->contador;
         return response()->json($item);       
     }
     
     public function validateRequest($request){
         $rules=[
         'nombre' => 'required|max:100',
-        'descripcion' => 'required|max:200'
+        'descripcion' => 'required|max:200',
+        'codigo_interno' => 'max:150'    
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',
@@ -117,7 +139,8 @@ class Departamentos extends Controller
         $rules=[
             //'ide_usuario_director' => 'unique:cfg_departamento,ide_usuario_director,'.$ideRegion.',ide_departamento',
             'nombre' => 'required|max:100',
-            'descripcion' => 'required|max:100'  
+            'descripcion' => 'required|max:100',
+            'codigo_interno' => 'max:150'
         ];
         $messages=[
             'required' => 'Debe ingresar :attribute.',

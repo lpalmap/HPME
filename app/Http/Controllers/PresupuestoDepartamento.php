@@ -33,7 +33,14 @@ class PresupuestoDepartamento extends Controller
         }
          //Log::info('No es null '.$ultimoProyecto);
         //$regionQuery=new PlnProyectoRegion();
-        $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
+        $puedeCerrar=$this->puedeCerrar();
+        if($this->vistaContador()){
+            $user=Auth::user();
+            $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS_CONTADOR,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'ideUsuarioContador'=>$user->ide_usuario));
+        }else{
+            $regiones=  DB::select(HPMEConstants::PLN_PRESUPUESTOS_DEPARTAMENTOS,array('ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto));
+        }
+         //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
         //Log::info("count ".count($regiones));
         //Log::info($regiones);
     //            foreach ($regiones as $region){
@@ -41,7 +48,7 @@ class PresupuestoDepartamento extends Controller
     //            }
         //Log::info($ultimoProyecto);
         if(count($regiones)>0){
-            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'estado'=>$ultimoProyecto->estado));
+            return view('presupuestos',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyectoPresupuesto'=>$ultimoProyecto->ide_proyecto_presupuesto,'estado'=>$ultimoProyecto->estado,'puedeCerrar'=>$puedeCerrar));
         }
         return view('presupuestos');
     }
@@ -51,6 +58,45 @@ class PresupuestoDepartamento extends Controller
         if(isset($privilegios)){
             if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
                     || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                            || in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
+    private function vistaContador(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_TODOS_LOS_DEPARTAMENTOS, $privilegios)
+                    || in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)
+                    ){
+                return FALSE;
+            }
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
+    
+    public function puedeCerrar(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_APROBACION_PRESUPUESTOS, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;   
+    }
+    
+    private function ingresarPresupuesto(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_INGRESAR_PRESUPUESTO, $privilegios)
                     ){
                 return TRUE;
             }
@@ -62,7 +108,9 @@ class PresupuestoDepartamento extends Controller
     public function enviarPresupuesto(Request $request){
         $rol=  request()->session()->get('rol');
         if($rol!='DIRECTOR DEPARTAMENTO' && $rol!='AFILIADO'){
-            return response()->json(array('error'=>'Solo los directores pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+            if(!$this->ingresarPresupuesto()){
+                return response()->json(array('error'=>'Solo los directores pueden enviar presupuesto.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }   
         }
         //Log::info($request->ide_presupuesto_departamento);
         $presupuestoDepartamento=  PlnPresupuestoDepartamento::find($request->ide_presupuesto_departamento);
@@ -103,7 +151,7 @@ class PresupuestoDepartamento extends Controller
             date_default_timezone_set(HPMEConstants::TIME_ZONE);
             $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $user=Auth::user();
-            //$planificacion->ide_usuario_aprobacion=$user->ide_usuario_aprobacion;
+            $planificacion->ide_usuario_aprobacion=$user->ide_usuario;
             $planificacion->save();
             return response()->json();
         }

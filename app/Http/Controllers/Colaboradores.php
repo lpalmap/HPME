@@ -59,7 +59,7 @@ class Colaboradores extends Controller
         $colaborador->ide_departamento=$request->ide_departamento;
         $colaborador->nombres=$request->nombres;
         $colaborador->apellidos=$request->apellidos;
-        
+        $colaborador->codigo_interno=$request->codigo_interno;
         if($request->tipo==HPMEConstants::COLABORADOR){
             $colaborador->ide_puesto=$request->ide_puesto;
         }else{
@@ -80,7 +80,8 @@ class Colaboradores extends Controller
             'nombres' => 'required|max:100',
             'apellidos' => 'required|max:100',
             'ide_departamento' => 'required',
-            'ide_puesto'=>'required'
+            'ide_puesto'=>'required',
+             'codigo_interno'=> 'max:150'   
             ];
         }else{
             $rules=[

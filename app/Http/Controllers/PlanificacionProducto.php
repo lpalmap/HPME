@@ -15,6 +15,7 @@ use App\PlnRegionProductoDetalle;
 use Illuminate\Support\Facades\DB;
 use App\PlnProyectoPlanificacion;
 use Illuminate\Support\Facades\Log;
+use App\PrivilegiosConstants;
 
 class PlanificacionProducto extends Controller
 {
@@ -30,7 +31,8 @@ class PlanificacionProducto extends Controller
         $productos=  PlnProductoIndicador::with("producto")->where("ide_indicador_area",$ideIndicadorArea)->get();
         $rol=  request()->session()->get('rol');
         $produtosIngresados=array();
-        if($rol=='AFILIADO'){
+        $ingresaPlan=$this->ingresaPlanificacion();
+        if($rol=='AFILIADO' || $ingresaPlan){
             $region=$this->regionUsuario($indicador->ide_proyecto);
             if(!is_null($region)){
                 $ingresados=DB::select(HPMEConstants::PLN_PRODUCTOS_COMPLETADOS,array('ideIndicadorArea'=>$ideIndicadorArea,'ideRegion'=>$region));
@@ -39,7 +41,17 @@ class PlanificacionProducto extends Controller
                 }
             }
         }
-        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol,'ingresados'=>$produtosIngresados));    
+        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol,'ingresados'=>$produtosIngresados,'ingresaPlan'=>$ingresaPlan));    
+    }
+    
+    private function ingresaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFIACION_INGRESAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function addProducto(Request $request){

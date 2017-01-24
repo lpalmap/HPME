@@ -44,6 +44,7 @@
                                             <th style="text-align: center">Fecha Aprobaci&oacute;n</th>
                                             <th style="text-align: center">Departamento</th>
                                             <th style="text-align: center">Estado</th>
+                                            <th style="text-align: center">Aprobado por</th>
                                             <th style="text-align: center">Acciones</th>    
                                         </tr>
                                     </thead>
@@ -55,6 +56,7 @@
                                             <td style="text-align: center">{{$items[$i]->fecha_aprobacion}}</td>
                                             <td style="text-align: center"><a href="{{url('/departamento/'.$items[$i]->ide_presupuesto_departamento)}}">{{$items[$i]->nombre}}</a></td>
                                             <td style="text-align: center">{{$items[$i]->estado}}</td>
+                                            <td style="text-align: center">{{$items[$i]->usuario}}</td>
                                             <td style="text-align: center">
                                                 @if($items[$i]->estado=='ABIERTO')
                                                     <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_presupuesto_departamento}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>

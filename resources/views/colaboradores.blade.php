@@ -36,6 +36,7 @@
                                             <th>Apellidos</th>
                                             <th>Puesto</th>
                                             <th>Departamento</th>
+                                            <th>C&oacute;digo Interno</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -48,6 +49,7 @@
                                             <td>{{$colaboradores[$i]->apellidos}}</td>
                                             <td>{{isset($colaboradores[$i]->puesto)?$colaboradores[$i]->puesto->nombre:''}}</td>
                                             <td>{{$colaboradores[$i]->departamento->nombre}}</td>
+                                            <td>{{$colaboradores[$i]->codigo_interno}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar {{$colaboradores[$i]->tipo=='Colaborador'?'btn-editar-colaborador':'btn-editar-proyecto'}}" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$colaboradores[$i]->ide_colaborador}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -107,7 +109,11 @@
                                                 <label>Apellidos</label>
                                                 <input class="form-control" id="inApellidos" required="true"/>
                                             </div>
-                                            @if (isset($puestos))
+                                            <div class="form-group">
+                                                <label>C&oacute;digo Interno</label>
+                                                <input class="form-control" id="inCodigo" required="true"/>
+                                            </div>
+                                                @if (isset($puestos))
                                             <div class="form-group">
                                                 <label>Puesto</label>
                                                 
@@ -157,7 +163,11 @@
                                                 <div class="form-group">
                                                     <label>Nombre</label>
                                                     <input class="form-control" id="inNombreProyecto" required="true"/>
-                                                </div>                                          
+                                                </div>  
+                                                <div class="form-group">
+                                                    <label>C&oacute;digo Interno</label>
+                                                    <input class="form-control" id="inCodigoProyecto" required="true"/>
+                                                </div> 
                                                 @if (isset($departamentos))
                                                 <div class="form-group">
                                                     <label>Departamento</label>

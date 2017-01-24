@@ -64,6 +64,7 @@ $(document).ready(function(){
         $('#inAdmin').val(0);
         
         var selectHTML='<option value="0"></option>';
+        var selectHTMLCont='<option value="0"></option>';
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -79,18 +80,22 @@ $(document).ready(function(){
             data: data,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
-                for(var u in data){
-                    console.log('t');
-                    selectHTML+='<option value="'+data[u].ide_usuario+'">'+data[u].usuario+'&nbsp;('+data[u].nombres+'&nbsp;'+data[u].apellidos+')</option>';
+                //console.log(data); 
+                for(var u in data.admins){
+                    selectHTML+='<option value="'+data.admins[u].ide_usuario+'">'+data.admins[u].usuario+'&nbsp;('+data.admins[u].nombres+'&nbsp;'+data.admins[u].apellidos+')</option>';
                 }
-                console.log(selectHTML);
+                for(var u in data.contadores){
+                    selectHTMLCont+='<option value="'+data.contadores[u].ide_usuario+'">'+data.contadores[u].usuario+'&nbsp;('+data.contadores[u].nombres+'&nbsp;'+data.contadores[u].apellidos+')</option>';
+                }
+                //console.log(selectHTML);
                 $('#inAdmin').html(selectHTML); 
+                $('#inContador').html(selectHTMLCont); 
                 $('#loading').modal('hide');
             },
             error: function (data) {
-                console.log('Error:', data); 
+                //console.log('Error:', data); 
                 $('#inAdmin').html(selectHTML); 
+                $('#inContador').html(selectHTMLCont); 
                 $('#loading').modal('hide');
             }
         });
@@ -105,24 +110,39 @@ $(document).ready(function(){
         $('#inputTitle').html("Editar Departamento");
         $.get(url + '/' + ide_item, function (data) {
             //success data
-            console.log(data);
+            //console.log(data);
             $('#inNombre').val(data.item.nombre);
             $('#inDescripcion').val(data.item.descripcion);
+            $('#inCodigo').val(data.item.codigo_interno);
             var selectHTML='<option value="0"></option>';
+            var selectHTMLCont='<option value="0"></option>';
             if(data.item.hasOwnProperty("director")){
                 $('#inAdmin').val(data.item.director.ide_usuario);
                 selectHTML+='<option value="'+data.item.director.ide_usuario+'" selected>'+data.item.director.usuario+'&nbsp;('+data.item.director.nombres+'&nbsp;'+data.item.director.apellidos+')</option>';
-                console.log('admin '+data.item.director.ide_usuario);
+                //console.log('admin '+data.item.director.ide_usuario);
             }else{
                 $('#inAdmin').val(0);
-                console.log('no admin');
+                //console.log('no admin');
+            }
+            if(data.item.hasOwnProperty("contador") && data.item.contador){
+                $('#inContador').val(data.item.contador.ide_usuario);
+                selectHTMLCont+='<option value="'+data.item.contador.ide_usuario+'" selected>'+data.item.contador.usuario+'&nbsp;('+data.item.contador.nombres+'&nbsp;'+data.item.contador.apellidos+')</option>';
+                //console.log('admin '+data.item.director.ide_usuario);
+            }else{
+                $('#inContador').val(0);
+                //console.log('no admin');
             }
             
             for(var u in data.users){
                 selectHTML+='<option value="'+data.users[u].ide_usuario+'">'+data.users[u].usuario+'&nbsp;('+data.users[u].nombres+'&nbsp;'+data.users[u].apellidos+')</option>';
             }
+            
+            for(var u in data.contadores){
+                selectHTMLCont+='<option value="'+data.contadores[u].ide_usuario+'">'+data.contadores[u].usuario+'&nbsp;('+data.contadores[u].nombres+'&nbsp;'+data.contadores[u].apellidos+')</option>';
+            }
             //$('#inAdmin').val(itemVal);
-            $('#inAdmin').html(selectHTML);          
+            $('#inAdmin').html(selectHTML);
+            $('#inContador').html(selectHTMLCont);
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.item.ide_departamento);
@@ -135,7 +155,9 @@ $(document).ready(function(){
         var formData = {
             nombre: $('#inNombre').val(),
             descripcion: $('#inDescripcion').val(),
-            ide_usuario_director: $('#inAdmin').val()
+            ide_usuario_director: $('#inAdmin').val(),
+            ide_usuario_contador: $('#inContador').val(),
+            codigo_interno: $('#inCodigo').val()         
         };   
         $('#loading').modal('show');
         $.ajaxSetup({
@@ -156,20 +178,26 @@ $(document).ready(function(){
             my_url += '/' + ide_item;
         }
 
-        console.log(formData);
-        console.log("Enviando url "+my_url);
+        //console.log(formData);
+        //console.log("Enviando url "+my_url);
         $.ajax({
             type: type,
             url: my_url,
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
+                //console.log(data); 
                 var item = '<tr class="even gradeA" id="item'+data.ide_departamento+'">';
                     item+='<td>'+data.nombre+'</td>';
                     item+='<td>'+data.descripcion+'</td>';
+                    item+='<td>'+data.codigo_interno+'</td>';
                     if(data.hasOwnProperty("director")){
                         item+='<td>'+data.director.usuario+'</td>';                          
+                    }else{
+                        item+='<td></td>';
+                    }
+                    if(data.hasOwnProperty("contador") && data.contador){
+                        item+='<td>'+data.contador.usuario+'</td>';                          
                     }else{
                         item+='<td></td>';
                     }
@@ -195,7 +223,7 @@ $(document).ready(function(){
                 }else{
                     errHTML+='<li>Error al guardar el departamento.</li>';
                 }
-                console.log('Error:', data);
+                //console.log('Error:', data);
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');               
             }

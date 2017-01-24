@@ -32,7 +32,9 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
+                                            <th>C&oacute;digo Interno</th>
                                             <th>Director</th>
+                                            <th>Contador</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -42,7 +44,9 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_departamento}}">
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
+                                            <td>{{$items[$i]->codigo_interno}}</td>
                                             <td>{{$items[$i]->director->usuario}}</td>
+                                            <td>{{isset($items[$i]->contador)?$items[$i]->contador->usuario:''}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_departamento}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_departamento}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -104,12 +108,23 @@
                                                 <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
                                             </div>
                                            <div class="form-group">
+                                               <label>C&oacute;digo Interno</label>
+                                                <input class="form-control" id="inCodigo" required="true"/>
+                                                </div>
+                                           <div class="form-group">
                                                 <label>Director</label>
                                                 
                                                     <select id="inAdmin" class="form-control">
                                                     </select>
                                                 
-                                            </div>  
+                                            </div>
+                                           <div class="form-group">
+                                                <label>Contador</label>
+                                                
+                                                    <select id="inContador" class="form-control">
+                                                    </select>
+                                                
+                                            </div> 
                                         </form>
                                         </div>
                                         <div class="modal-footer">
