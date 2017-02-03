@@ -98,6 +98,14 @@ Route::get('/roles/{id}','Roles@retrive');
 Route::post('/roles','Roles@add');
 Route::put('/roles/{id}','Roles@update');
 
+/* Mantenimiento de privilegios */
+
+Route::get('/privilegios',['uses' => 'Privilegios@index', 'middleware' => 'auth'])->name('privilegios');
+Route::delete('/privilegios/{id}','Roles@delete');
+Route::get('/privilegios/{id}','Roles@retrive');
+Route::post('/privilegios','Roles@add');
+Route::put('/privilegios/{id}','Roles@update');
+
 /* Mantenimiento de areas de atencion */
 
 Route::get('/areas',['uses' => 'Areas@index', 'middleware' => 'auth'])->name('areas');
