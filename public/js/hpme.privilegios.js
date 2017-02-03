@@ -4,67 +4,27 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTableItems').DataTable(window.lang);
-    var url = window.location;
-    url=(""+url).replace("#","");
-    
-    //Clic sobre el botón eliminar para un item de la tabla
-    $( document ).on( 'click', '.btn-danger', function() {
-        $('#btnEliminar').val($(this).val());
-        $('#eliminarModal').modal('show');
-    });
-    
-    //Clic sobre el botón eliminar en el popup de confirmación
-    $('#btnEliminar').click(function(){
-        $('#loading').modal('show');
-        //Se obtiene el id del elemento a eliminar
-        var item_id = $(this).val();
-       
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        })
-        //Se hace el request con ajax a la url para eliminar el item
-        $.ajax({
-            type: "DELETE",
-            url: url + '/' + item_id,
-            success: function (data) {
-                console.log(data);
-                //$("#usuario" + user_id).remove();
-                //dataTable.DataTable().draw();
-                dataTable.row( $('#item'+item_id)).remove().draw();
-                $('#loading').modal('hide');
-            },
-            error: function (data) {
-                $('#loading').modal('hide');
-                console.log('####Error:', data);
-                alert('Error borrado '+data);
-            }
-        });
-        
-        //Se oculta el popup de confirmación.
-        $('#eliminarModal').modal('hide');
-    });
-    
-    //Agregar nuevo usuario
-    $('#btnAgregar').click(function(){
-        $('#inputTitle').html("Agregar Rol");
-        $('#formAgregar').trigger("reset");
-        $('#btnGuardar').val('add');
-        $('#agregarEditarModal').modal('show');
-    });
-    
+    var dataTable=$('#dataTableItems').DataTable(window.lang);    
+    $.configureBoxes();   
+    //Ventana para modificar los privilegios
     $(document).on('click','.btn-editar',function(){
         $('#loading').modal('show');
         var ide_item=$(this).val();
-        $('#inputTitle').html("Editar Rol");
-        $.get(url + '/' + ide_item, function (data) {
+        var my_url=(""+$('meta[name="_urlTarget"]').attr('content')).replace("#","");
+        
+        $.get(my_url + '/' + ide_item, function (data) {
             //success data
             console.log(data);
             $('#inNombre').val(data.nombre);
             $('#inDescripcion').val(data.descripcion);
-            $('#btnGuardar').val('update');
+            var box1HTML='';
+            if(data.hasOwnProperty("privilegios") && data.privilegios.length>0){
+                for(var d in data.privilegios){
+                    box1HTML+='<option value="'+data.privilegios[d].ide_privilegio+'" title="'+data.privilegios[d].descripcion+'">'+data.privilegios[d].descripcion+"</option>";
+                }   
+            }
+            $('#box1View').html(box1HTML);
+            
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.ide_rol);
             $('#loading').modal('hide');

@@ -102,9 +102,9 @@ Route::put('/roles/{id}','Roles@update');
 
 Route::get('/privilegios',['uses' => 'Privilegios@index', 'middleware' => 'auth'])->name('privilegios');
 Route::delete('/privilegios/{id}','Roles@delete');
-Route::get('/privilegios/{id}','Roles@retrive');
 Route::post('/privilegios','Roles@add');
 Route::put('/privilegios/{id}','Roles@update');
+Route::get('/privilegios/{id}','Privilegios@retrivePrivilegios');
 
 /* Mantenimiento de areas de atencion */
 

@@ -21,6 +21,12 @@ class Privilegios extends Controller
         return view('privilegios',array('items'=>$roles));
     }
     
+    public function retrivePrivilegios($id){
+        $rol= SegRol::find($id);
+        $rol->privilegios;
+        return response()->json($rol);
+    }
+    
     public function delete($id){
         $item = SegRol::destroy($id);
         return response()->json($item);
