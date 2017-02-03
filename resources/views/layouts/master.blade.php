@@ -51,8 +51,11 @@
                 <header class="navbar-header">
 
                     <a href="{{asset('home')}}" class="navbar-brand">
-                    <img src="{{asset('images/loghab.png')}}" alt="" /></a>
-                    <img src="{{asset('images/banner.png')}}" alt="" /></a>
+                        <div>
+                            <img src="{{asset('images/loghab.png')}}" alt="" />
+                    <img src="{{asset('images/banner.png')}}" alt="" />
+                        </div>    
+                    </a>
                 </header>
                 <!-- END LOGO SECTION -->
                 <ul class="nav navbar-top-links navbar-right">
