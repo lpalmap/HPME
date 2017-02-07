@@ -21,6 +21,9 @@ class HPMEConstants
     const USUARIO_CONTADOR_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol_privilegio p WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=p.ide_rol and p.ide_privilegio=:idePrivilegio order by s.usuario";
     const USUARIO_CONTADOR_USUARIO_QUERY="SELECT distinct s.ide_usuario,s.usuario,s.nombres,s.apellidos FROM seg_usuario s,seg_usuario_rol ur,seg_rol_privilegio p WHERE ur.ide_usuario=s.ide_usuario and ur.ide_rol=p.ide_rol and p.ide_privilegio=:idePrivilegio and s.ide_usuario<>:ideUsuario order by s.usuario";
     
+    //configuración
+    const PRIVILEGIOS_SIN_ASIGNAR_ROL="SELECT p.ide_privilegio,p.descripcion FROM seg_privilegio p WHERE NOT EXISTS(SELECT pr.ide_privilegio FROM seg_rol_privilegio pr where p.ide_privilegio=pr.ide_privilegio AND pr.ide_rol=:ideRol)";
+    
     //Querys reportes de planificacion
     const PROYECTOS_REGION_QUERY="SELECT p.ide_proyecto_region,r.nombre,u.usuario,DATE_FORMAT(p.fecha_ingreso,'%d-%m-%Y') as fecha_ingreso,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM pln_proyecto_region p,cfg_region r,seg_usuario u WHERE p.ide_region=r.ide_region and p.ide_usuario_creacion=u.ide_usuario and p.ide_proyecto_planificacion=:ideProyecto ORDER BY r.nombre asc";
     const PLN_METAS_POR_PROYECTO="SELECT p.ide_proyecto_meta,m.nombre FROM pln_proyecto_meta p,cfg_meta m WHERE p.ide_proyecto=:ideProyecto and p.ide_meta=m.ide_meta";
