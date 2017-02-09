@@ -81,8 +81,16 @@
             <div class="modal-body">
                 <form role="form" id="formAgregar">
                     <div class="form-group">
+                        <label>Asunto:</label>
+                        <input class="form-control" id="inAsunto" required="true" value="{{$nombreProyecto}}/{{$nombreRegion}}"/>
+                    </div>  
+                    <div class="form-group">
+                        <label>Para (*Separar los correos por coma):</label>
+                        <textarea class="form-control" id="inPara"  rows="2" style="width: 100%">{{$correos}}</textarea>
+                    </div>                         
+                    <div class="form-group">
                         <label>Mensaje</label>
-                        <textarea class="form-control" id="inMensaje" rows="3" style="width: 100%"></textarea>
+                        <textarea class="form-control" id="inMensaje" rows="4" style="width: 100%"></textarea>
                     </div>                                   
                 </form>
             </div>

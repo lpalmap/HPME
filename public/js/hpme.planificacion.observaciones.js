@@ -24,6 +24,8 @@ $(document).ready(function(){
         $('#loading').modal('show');
         var formData = {
             ide_proyecto_region: $(this).val(),
+            asunto:$('#inAsunto').val(),
+            para:$('#inPara').val(),
             mensaje:$('#inMensaje').val()
         };   
               

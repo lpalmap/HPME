@@ -13,6 +13,7 @@ use App\CfgRegion;
 use App\PlnBitacoraProyectoRegion;
 use App\PlnBitacoraMensaje;
 use App\PrivilegiosConstants;
+use Mail;
 
 
 class PlanificacionObservaciones extends Controller
@@ -48,7 +49,23 @@ class PlanificacionObservaciones extends Controller
             $nombreProyecto=PlnProyectoPlanificacion::where('ide_proyecto','=',$proyectoRegion->ide_proyecto_planificacion)->pluck('descripcion')->first();
             $nombreRegion=CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->pluck('nombre')->first();
             
-            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora));
+            $myusuario=Auth::user();
+            $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PLANIFICACION,array('ideBitacora'=>$bitacora->ide_bitacora_proyecto_region,'myUsuario'=>$myusuario->ide_usuario));
+            $cadenaCorreos='';
+            $first=true;
+            Log::info($emails);
+            foreach($emails as $email){
+                if($first){
+                    $first=false;
+                    Log::info('first');
+                    $cadenaCorreos=$email->email;
+                    Log::info("cadena correo $cadenaCorreos");
+                }else{
+                    $cadenaCorreos=$cadenaCorreos.','.$email->email;
+                }
+            }
+                  
+            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos));
         }
         return view('home');
     } 
@@ -120,11 +137,29 @@ class PlanificacionObservaciones extends Controller
                     $bitacora->save();
                     $cambioEstado=  HPMEConstants::SI;
                 }
-            }
+            } 
+            $this->enviarNotificacion($request->asunto, $request->para,$request->mensaje);
             return response()->json(array('ide_usuario'=>$user->ide_usuario,'usuario'=>$user->usuario,'nombres'=>$user->nombres,'apellidos'=>$user->apellidos,'cambioEstado'=>$cambioEstado));
         }else{
             return response()->json(array('error'=>'Su usuario no tiene permisos para agregar mensajes a la bit&aacute;cora.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
+    }
+    
+    private function enviarNotificacion($asunto,$para,$mensaje){
+        $emails=  explode(",", $para);
+        if(strlen($para)>0 && !is_null($emails) && count($emails)>0){
+            $user=Auth::user();
+            Mail::send('emails.reminder', ['title' => $asunto, 'content' => $mensaje], function ($message) use ($user,$asunto,$emails)
+            {
+                $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
+
+                $message->to($emails);
+                
+                $message->subject($asunto);
+
+            });
+        }
+        
     }
     
     public function marcarBitacora(Request $request){

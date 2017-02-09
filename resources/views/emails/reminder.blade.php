@@ -953,7 +953,7 @@ body{background-color:#f5f7fa}.mso h1{}.mso h1{font-family:sans-serif !important
     </div>
         
             <div class="column__padding--inline">
-      <h2 style="text-align: center;"><strong>Let us help plan your trip</strong></h2><p class="size-16" style="font-size: 16px; line-height: 24px; text-align: center;" lang="x-size-16">[firstname,fallback=Hi there],&nbsp;this month&#8217;s featured vacation hot spot is Fiji and we&#8217;re here to help you plan the perfect tropical getaway. Check out our tips below on how to make the most out of your time in Fiji.</p>
+                <h2 style="text-align: center;"><strong>Observaci&oacute;n</strong></h2><p class="size-16" style="font-size: 16px; line-height: 24px; text-align: center;" lang="x-size-16">{{$content}}</p>
     </div>
         
           </div>
@@ -973,7 +973,7 @@ body{background-color:#f5f7fa}.mso h1{}.mso h1{font-family:sans-serif !important
                   
                 </div>
                 <div class="email-footer__permission--inline">
-                  <div>Trvl Tips is a&nbsp;leading specialist in travel for Australia,<br>New Zealand and the South West Pacific</div>
+                  <div>&copy;  Habitat para la Humanidad Guatemala &nbsp;2016 &nbsp;<br></div>
                 </div>
               </div>
             </div>
@@ -992,7 +992,7 @@ body{background-color:#f5f7fa}.mso h1{}.mso h1{font-family:sans-serif !important
             <div class="column">
               <div class="column__padding--inline">
                 <div class="email-footer__subscription--inline">
-                  <span><preferences style="text-decoration: underline;" lang="en">Preferences</preferences>&nbsp;&nbsp;|&nbsp;&nbsp;</span><unsubscribe style="text-decoration: underline;">Unsubscribe</unsubscribe>
+                  <span><preferences style="text-decoration: underline;" lang="en"></preferences></span><unsubscribe style="text-decoration: underline;"></unsubscribe>
                 </div>
               </div>
             </div>
