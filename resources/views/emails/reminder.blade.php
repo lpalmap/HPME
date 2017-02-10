@@ -953,7 +953,7 @@ body{background-color:#f5f7fa}.mso h1{}.mso h1{font-family:sans-serif !important
     </div>
         
             <div class="column__padding--inline">
-                <h2 style="text-align: center;"><strong>Observaci&oacute;n</strong></h2><p class="size-16" style="font-size: 16px; line-height: 24px; text-align: center;" lang="x-size-16">{{$content}}</p>
+                <h2 style="text-align: center;"><strong>{{$title}}</strong></h2><p class="size-16" style="font-size: 16px; line-height: 24px; text-align: center;" lang="x-size-16">{{$content}}</p>
     </div>
         
           </div>

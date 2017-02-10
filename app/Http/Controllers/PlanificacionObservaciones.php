@@ -14,6 +14,7 @@ use App\PlnBitacoraProyectoRegion;
 use App\PlnBitacoraMensaje;
 use App\PrivilegiosConstants;
 use Mail;
+use App\CfgParametro;
 
 
 class PlanificacionObservaciones extends Controller
@@ -28,10 +29,14 @@ class PlanificacionObservaciones extends Controller
             if(is_null($proyectoRegion)){
                 return view('home');
             }
+            //Determina si el usuario logueado es el administrador de la region
+            $administradorRegion=false;
             if($rol=='AFILIADO' || ($ingresaPlan && !$consultaPlanificacion)){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion) || $ideRegion!=$proyectoRegion->ide_region){
                     return view ('home');
+                }else{
+                    $administradorRegion=true;
                 }
             }
             $bitacora=$this->bitacoraPorProyectoRegion($proyectoRegion->ide_proyecto_region);
@@ -53,23 +58,53 @@ class PlanificacionObservaciones extends Controller
             $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PLANIFICACION,array('ideBitacora'=>$bitacora->ide_bitacora_proyecto_region,'myUsuario'=>$myusuario->ide_usuario));
             $cadenaCorreos='';
             $first=true;
-            Log::info($emails);
+            
+            $emailTarget='';
+            if($administradorRegion){
+                //Se busca el correo del coordinar de monitoreo
+                $emailTarget=$this->emailPlanificacion();
+            }else{
+                //se coloca por defecto el correo del administrador de la region
+                $emailTarget=$this->emailAdministradorRegion($proyectoRegion->ide_region);             
+            }  
+            $incluirEmailTarjet=true;
             foreach($emails as $email){
+                if($email->email===$emailTarget){
+                    $incluirEmailTarjet=false;
+                }
                 if($first){
                     $first=false;
-                    Log::info('first');
                     $cadenaCorreos=$email->email;
-                    Log::info("cadena correo $cadenaCorreos");
                 }else{
                     $cadenaCorreos=$cadenaCorreos.','.$email->email;
                 }
             }
-                  
+            if($incluirEmailTarjet){
+                if($first){
+                    $cadenaCorreos=$emailTarget;
+                }else{
+                    $cadenaCorreos=$emailTarget.','.$cadenaCorreos;
+                }
+                
+            }         
             return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos));
         }
         return view('home');
     } 
     
+    private function emailAdministradorRegion($ideRegion){
+        $emails=DB::select(HPMEConstants::PLN_OBSERVACIONES_EMAIL_ADMINISTRADOR,array('ideRegion'=>$ideRegion));
+        if(count($emails)>0){
+            return $emails[0]->email;
+        } 
+        return '';
+    }
+
+    private function emailPlanificacion(){
+        $email= CfgParametro::where('nombre','=', HPMEConstants::PARAM_EMAIL_PLANIFICACION)->pluck('valor')->first();
+        return $email;
+    }
+
     private function ingresoPlanificacion(){
         $privilegios=request()->session()->get('privilegios');
         if(isset($privilegios)){
@@ -138,7 +173,11 @@ class PlanificacionObservaciones extends Controller
                     $cambioEstado=  HPMEConstants::SI;
                 }
             } 
-            $this->enviarNotificacion($request->asunto, $request->para,$request->mensaje);
+            try{
+                $this->enviarNotificacion($request->asunto, $request->para,$request->mensaje);
+            } catch(\Exception $e){
+                //Si ocurre un error al enviar el correo se ignora y se agrega el mensaje en bitacora de todos modos
+            }           
             return response()->json(array('ide_usuario'=>$user->ide_usuario,'usuario'=>$user->usuario,'nombres'=>$user->nombres,'apellidos'=>$user->apellidos,'cambioEstado'=>$cambioEstado));
         }else{
             return response()->json(array('error'=>'Su usuario no tiene permisos para agregar mensajes a la bit&aacute;cora.'), HPMEConstants::HTTP_AJAX_ERROR);
@@ -149,7 +188,7 @@ class PlanificacionObservaciones extends Controller
         $emails=  explode(",", $para);
         if(strlen($para)>0 && !is_null($emails) && count($emails)>0){
             $user=Auth::user();
-            Mail::send('emails.reminder', ['title' => $asunto, 'content' => $mensaje], function ($message) use ($user,$asunto,$emails)
+            Mail::send('emails.reminder', ['title' => 'Observaci&oacute;n', 'content' => $mensaje], function ($message) use ($user,$asunto,$emails)
             {
                 $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
 
