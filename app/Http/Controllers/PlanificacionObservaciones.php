@@ -55,7 +55,10 @@ class PlanificacionObservaciones extends Controller
             $nombreRegion=CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->pluck('nombre')->first();
             
             $myusuario=Auth::user();
-            $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PLANIFICACION,array('ideBitacora'=>$bitacora->ide_bitacora_proyecto_region,'myUsuario'=>$myusuario->ide_usuario));
+            $emails=array();
+            if(!is_null($bitacora)){
+                $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PLANIFICACION,array('ideBitacora'=>$bitacora->ide_bitacora_proyecto_region,'myUsuario'=>$myusuario->ide_usuario));
+            }
             $cadenaCorreos='';
             $first=true;
             

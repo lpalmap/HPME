@@ -24,6 +24,8 @@ $(document).ready(function(){
         $('#loading').modal('show');
         var formData = {
             ide_presupuesto_departamento: $(this).val(),
+            asunto:$('#inAsunto').val(),
+            para:$('#inPara').val(),
             mensaje:$('#inMensaje').val()
         };   
               

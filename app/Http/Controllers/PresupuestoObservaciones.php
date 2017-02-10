@@ -35,10 +35,12 @@ class PresupuestoObservaciones extends Controller
             if(!$this->verificarContador($presupuesto->ide_departamento)){
                 return view('home');
             }
-            
+            $administradorDepartamento=false;
             if($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'){
                 if(!$this->departamentoDirector($presupuesto->ide_departamento)){
                     return view ('home');
+                }else{
+                    $administradorDepartamento=true;
                 }
             }
             $bitacora=$this->bitacoraPorProyectoDepartamento($presupuesto->ide_presupuesto_departamento);
@@ -58,9 +60,60 @@ class PresupuestoObservaciones extends Controller
             $nombreProyecto=  PlnProyectoPresupuesto::where('ide_proyecto_presupuesto','=',$presupuesto->ide_proyecto_presupuesto)->pluck('descripcion')->first();
             $nombreDepartamento=  CfgDepartamento::where('ide_departamento','=',$presupuesto->ide_departamento)->pluck('nombre')->first();
             $aprueba=$this->apruebaPrivilegio();
-            return view('observaciones_presupuesto',array('idePresupuestoDepartamento'=>$id,'estado'=>$presupuesto->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombre'=>$nombreDepartamento,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'aprueba'=>$aprueba));
+            
+            $myusuario=Auth::user();
+            $emails=  array();
+            if(!is_null($bitacora)){
+                $emails=DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PRESUPUESTO,array('ideBitacora'=>$bitacora->ide_bitacora_presupuesto,'myUsuario'=>$myusuario->ide_usuario));            
+            }
+            $cadenaCorreos='';
+            $first=true;
+            
+            $emailTarget='';
+            if($administradorDepartamento){
+                //Se busca el correo del coordinar de monitoreo
+                $emailTarget=$this->emailPresupuesto();
+            }else{
+                //se coloca por defecto el correo del administrador de la region
+                $emailTarget=$this->emailAdministradorDepartamento($presupuesto->ide_departamento);             
+            }  
+            $incluirEmailTarjet=true;
+            foreach($emails as $email){
+                if($email->email===$emailTarget){
+                    $incluirEmailTarjet=false;
+                }
+                if($first){
+                    $first=false;
+                    $cadenaCorreos=$email->email;
+                }else{
+                    $cadenaCorreos=$cadenaCorreos.','.$email->email;
+                }
+            }
+            if($incluirEmailTarjet){
+                if($first){
+                    $cadenaCorreos=$emailTarget;
+                }else{
+                    $cadenaCorreos=$emailTarget.','.$cadenaCorreos;
+                }
+                
+            }  
+            
+            
+            return view('observaciones_presupuesto',array('idePresupuestoDepartamento'=>$id,'estado'=>$presupuesto->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombre'=>$nombreDepartamento,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'aprueba'=>$aprueba,'correos'=>$cadenaCorreos));
         }
         return view('home');
+    }
+    
+    private function emailAdministradorDepartamento($ideDepartamento){
+        $emails=DB::select(HPMEConstants::PLN_OBSERVACIONES_EMAIL_ADMINISTRADOR,array('ideDepartamento'=>$ideDepartamento));
+        if(count($emails)>0){
+            return $emails[0]->email;
+        } 
+    }
+
+    private function emailPresupuesto(){
+        $email= CfgParametro::where('nombre','=', HPMEConstants::PARAM_EMAIL_PRESUPUESTO)->pluck('valor')->first();
+        return $email;
     }
     
     private function vistaPrivilegio(){

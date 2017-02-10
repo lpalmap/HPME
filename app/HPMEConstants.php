@@ -55,7 +55,9 @@ class HPMEConstants
     const PLN_PRESUPUESTO_CUENTAS_COMPLETADAS="SELECT c.ide_cuenta FROM pln_colaborador_cuenta p,cfg_cuenta c WHERE c.ide_cuenta=p.ide_cuenta AND c.ide_cuenta_padre=:ideCuenta AND p.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     const PLN_PRESUPUESTO_ESTADO_DEPARTAMENTO_COLABORADOR="SELECT d.estado FROM pln_presupuesto_colaborador c,pln_presupuesto_departamento d WHERE c.ide_presupuesto_departamento=d.ide_presupuesto_departamento and c.ide_presupuesto_colaborador=:idePresupuestoColaborador";
     const PLN_PRESUPUESTO_DEPARTAMENTO_USUARIO_SIN_PRESUPUESTO="SELECT d.ide_departamento FROM cfg_departamento d WHERE d.ide_usuario_director=:ideUsuario AND NOT EXISTS(SELECT p.ide_departamento FROM pln_presupuesto_departamento p WHERE p.ide_departamento=d.ide_departamento);";
-
+    const PLN_USUARIOS_BITACORA_PRESUPUESTO="SELECT distinct u.email FROM pln_bitacora_mensaje_presupuesto b,seg_usuario u WHERE b.ide_bitacora_presupuesto=:ideBitacora AND b.ide_usuario=u.ide_usuario AND b.ide_usuario<>:myUsuario";
+    const PLN_OBSERVACIONES_PRESUPUESTO_EMAIL_ADMINISTRADOR="SELECT u.email FROM cfg_departamento d,seg_usuario u WHERE r.ide_usuario=u.ide_usuario AND r.ide_region=:ideRegion";
+    
     //cuentas
     const CFG_CUENTAS_PARENT="SELECT T2.ide_cuenta, T2.nombre FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
     const CFG_CUENTAS_PARENT_SOLO_ID="SELECT T2.ide_cuenta FROM (SELECT @r AS _id, (SELECT @r := ide_cuenta_padre FROM cfg_cuenta WHERE ide_cuenta = _id) AS ide_cuenta_padre, @l := @l + 1 AS lvl FROM (SELECT @r := :ideCuenta, @l := 0) vars, cfg_cuenta m WHERE @r <> 0) T1 JOIN cfg_cuenta T2 ON T1._id = T2.ide_cuenta ORDER BY T1.lvl DESC";
