@@ -18,6 +18,8 @@ use App\PlnBitacoraMensajePresupuesto;
 use App\PlnProyectoPresupuesto;
 use App\CfgDepartamento;
 use App\PrivilegiosConstants;
+use App\CfgParametro;
+use Mail;
 
 
 class PresupuestoObservaciones extends Controller
@@ -105,7 +107,7 @@ class PresupuestoObservaciones extends Controller
     }
     
     private function emailAdministradorDepartamento($ideDepartamento){
-        $emails=DB::select(HPMEConstants::PLN_OBSERVACIONES_EMAIL_ADMINISTRADOR,array('ideDepartamento'=>$ideDepartamento));
+        $emails=DB::select(HPMEConstants::PLN_OBSERVACIONES_PRESUPUESTO_EMAIL_ADMINISTRADOR,array('ideDepartamento'=>$ideDepartamento));
         if(count($emails)>0){
             return $emails[0]->email;
         } 
@@ -219,8 +221,28 @@ class PresupuestoObservaciones extends Controller
                     $cambioEstado=  HPMEConstants::SI;
                 }
             }
+            //try{
+                $this->enviarNotificacion($request->asunto, $request->para,$request->mensaje);
+            //} catch(\Exception $e){
+                //Si ocurre un error al enviar el correo se ignora y se agrega el mensaje en bitacora de todos modos
+            //} 
             return response()->json(array('ide_usuario'=>$user->ide_usuario,'usuario'=>$user->usuario,'nombres'=>$user->nombres,'apellidos'=>$user->apellidos,'cambioEstado'=>$cambioEstado));
         }
+    }
+    
+    private function enviarNotificacion($asunto,$para,$mensaje){
+        $emails=  explode(",", $para);
+        if(strlen($para)>0 && !is_null($emails) && count($emails)>0){
+            $user=Auth::user();
+            Mail::send('emails.reminder', ['title' => 'Presupuesto', 'content' => $mensaje], function ($message) use ($user,$asunto,$emails)
+            {
+                $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
+                $message->to($emails);              
+                $message->subject($asunto);
+
+            });
+        }
+        
     }
     
     public function marcarBitacora(Request $request){
@@ -440,12 +462,8 @@ class PresupuestoObservaciones extends Controller
     private function departamentoDirector($ideDepartamento){
         $user=Auth::user();       
         $regiones=CfgDepartamento::where(array('ide_usuario_director'=>$user->ide_usuario))->pluck('ide_departamento');//DB::select(HPMEConstants::PLN_DEPARTAMENTO_POR_USUARIO,array('ideUsuario'=>$user->ide_usuario));
-        Log::info("#### validando $ideDepartamento");
-        Log::info($regiones);
         foreach($regiones as $region){
-            Log::info($region);
             if($region===$ideDepartamento){
-                Log::info("$$$$$ true $region dep $ideDepartamento");
                 return TRUE;
             }
         }
