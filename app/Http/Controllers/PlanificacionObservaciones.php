@@ -200,8 +200,7 @@ class PlanificacionObservaciones extends Controller
                 $message->subject($asunto);
 
             });
-        }
-        
+        }     
     }
     
     public function marcarBitacora(Request $request){

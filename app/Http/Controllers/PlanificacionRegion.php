@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 use App\PlnBitacoraProyectoRegion;
 use App\PrivilegiosConstants;
+use App\SegUsuario;
+use Mail;
 
 
 class PlanificacionRegion extends Controller
@@ -180,8 +182,32 @@ class PlanificacionRegion extends Controller
             $planificacion->estado=  HPMEConstants::APROBADO;
             $planificacion->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
             $planificacion->save();
+            $planificacion->region;
+            try{
+                $region=  CfgRegion::where('ide_region','=',$planificacion->ide_region)->first();
+                $region->administradores();
+                $proyecto = PlnProyectoPlanificacion::where('ide_proyecto','=',$planificacion->ide_proyecto_planificacion)->pluck('descripcion')->first();
+                $this->enviarNotificacionAprobado($proyecto.'/'.$region['nombre'],$region->administradores[0]); 
+            } catch(\Exception $e){
+                //Si ocurre un error al enviar el correo se ignora y se agrega el mensaje en bitacora de todos modos
+            } 
             return response()->json();
         }
+    }
+    
+    private function enviarNotificacionAprobado($asunto,$usuario){
+        $para=$usuario->email;
+        $user=Auth::user();
+        if(strlen($para)>0){   
+            $mensaje='Felicidades!!! Su planificaci&oacute;n para el proyecto '.$asunto.' ha sido aprobada.';
+            Mail::send('emails.reminder', ['title' => 'Aprobaci&oacute;n Planificaci&oacute;n', 'content' => $mensaje], function ($message) use ($user,$asunto,$para)
+            {
+                $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
+                $message->to(array($para));              
+                $message->subject($asunto);
+
+            });
+        }     
     }
 
     public function planificacionProyectoDetalle($id){ 
