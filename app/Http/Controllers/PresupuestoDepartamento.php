@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use App\PlnBitacoraPresupuesto;
 use App\CfgDepartamento;
 use App\PrivilegiosConstants;
+use App\SegUsuario;
+use Mail;
 
 class PresupuestoDepartamento extends Controller
 {
@@ -156,24 +158,21 @@ class PresupuestoDepartamento extends Controller
             
             try{
                 $proyecto= PlnProyectoPresupuesto::where('ide_proyecto_presupuesto','=',$planificacion->ide_proyecto_presupuesto)->pluck('descripcion')->first();
-                $departamento=  CfgDepartamento::where('ide_departamento','=',$planificacion->ide_departamento)->pluck('nombre,ide_usuario_director')->first();
-                $proyecto = PlnProyectoPlanificacion::where('ide_proyecto','=',$planificacion->ide_proyecto_planificacion)->pluck('descripcion')->first();
-                $this->enviarNotificacionAprobado($proyecto.'/'.$region['nombre'],$region->administradores[0]); 
+                $departamento=  CfgDepartamento::find($planificacion->ide_departamento);
+                $this->enviarNotificacionAprobado($proyecto.'/'.$departamento->nombre,$departamento->ide_usuario_director); 
             } catch(\Exception $e){
                 //Si ocurre un error al enviar el correo se ignora y se agrega el mensaje en bitacora de todos modos
-            } 
-            
+            }             
             return response()->json();
         }
     }
     
     private function enviarNotificacionAprobado($asunto,$usuario){
-        $para=$usuario->email;
-        $para='luispalma34@gmail.com';
+        $para=SegUsuario::where('ide_usuario','=',$usuario)->pluck('email')->first();
         $user=Auth::user();
         if(strlen($para)>0){   
-            $mensaje='Felicidades!!! Su planificaci&oacute;n para el proyecto '.$asunto.' ha sido aprobada.';
-            Mail::send('emails.reminder', ['title' => 'Aprobaci&oacute;n Planificaci&oacute;n', 'content' => $mensaje], function ($message) use ($user,$asunto,$para)
+            $mensaje='Felicidades!!! Su presupuesto para el proyecto '.$asunto.' ha sido aprobado.';
+            Mail::send('emails.reminder', ['title' => 'Aprobaci&oacute;n Presupuesto', 'content' => $mensaje], function ($message) use ($user,$asunto,$para)
             {
                 $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
                 $message->to(array($para));              
