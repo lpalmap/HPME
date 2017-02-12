@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    <style>
-        th{
-            text-align: center;
-        }
-    </style>
     <body>
             <table>
-                                    <thead>
-                                        <tr>
+                <thead>
+                                        <tr style="text-align: center;">
                                             <th></th>
                                             <th></th>
                                             <th>%</th>
