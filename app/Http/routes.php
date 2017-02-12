@@ -269,6 +269,7 @@ Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegi
 Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacionProyectoDetalle', 'middleware' => 'auth']);
 Route::post('/planregion/aprobar',['uses' => 'PlanificacionRegion@aprobarPlanificacion', 'middleware' => 'auth']);
+Route::get('/planificaciones/export',['uses' => 'PlanificacionRegion@exportarPlanificacion', 'middleware' => 'auth']);
 
 //Cerrar planificacion
 Route::post('/planificacion/cerrar',['uses' => 'PlantillaPlanificacion@cerrarPlanificacion', 'middleware' => 'auth']);
@@ -296,7 +297,7 @@ Route::get('/presupuestocolaboradortrim/{id}',['uses' => 'PresupuestoConsolidado
 Route::get('/presupuestosdepartamento',['uses' => 'PresupuestoDepartamento@presupuestoDepartamento', 'middleware' => 'auth']);
 Route::get('/presupuestodepartamento/{id}',['uses' => 'PresupuestoConsolidado@consolidadoDepartamento', 'middleware' => 'auth']);
 Route::get('/presupuestodepartamentotrim/{id}',['uses' => 'PresupuestoConsolidado@consolidadoTrimestralDepartamento', 'middleware' => 'auth']);
-
+Route::get('/presupuestodepartamento/export/{id}',['uses' => 'PresupuestoConsolidado@exportConsolidadoDepartamento', 'middleware' => 'auth']);
 
 //ver observaciones
 Route::get('/observacionespresupuesto/{id}',['uses' => 'PresupuestoObservaciones@observacionesDepartamento', 'middleware' => 'auth']);

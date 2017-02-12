@@ -14,6 +14,7 @@ use App\PlnBitacoraProyectoRegion;
 use App\PrivilegiosConstants;
 use App\SegUsuario;
 use Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class PlanificacionRegion extends Controller
@@ -38,6 +39,19 @@ class PlanificacionRegion extends Controller
             }          
         }        
         return view('planificacionregion');
+    }
+    
+    public function exportarPlanificacion(){
+        Excel::create('Laravel Excel', function($excel) {
+ 
+            $excel->sheet('Productos', function($sheet) {
+ 
+                $products = PlnProyectoRegion::all();
+ 
+                $sheet->fromArray($products);
+ 
+            });
+        })->export('xls');     
     }
     
     private function puedeCerrar(){

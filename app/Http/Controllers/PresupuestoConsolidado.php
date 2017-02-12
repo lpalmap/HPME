@@ -10,6 +10,7 @@ use App\PlnPresupuestoDepartamento;
 use App\CfgDepartamento;
 use Illuminate\Support\Facades\Auth;
 use App\PrivilegiosConstants;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PresupuestoConsolidado extends Controller
 {
@@ -34,6 +35,28 @@ class PresupuestoConsolidado extends Controller
         
         $consolidado=$this->buildConsolidado(array('idePresupuestoColaborador'=>$idePresupuestoColaborador),FALSE);
         return view('presupuesto_consolidado',array('cuentas'=>$consolidado,'idePresupuestoColaborador'=>$idePresupuestoColaborador,'nombre'=>$nombreColaborador,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
+    }
+    
+    public function exportConsolidadoDepartamento($idePresupuestoDepartamento){
+        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        if(!$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+            if(!$this->vistaPrivilegio($presupuestoDepartamento->ide_departamento)){
+                return view('home');
+            } 
+        }
+        $presupuestoDepartamento->departamento;
+        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;
+        $consolidado=$this->buildConsolidado(array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento),FALSE); 
+        Excel::create("Presupuesto $nombreDepartamento", function($excel) use($consolidado) {
+            $excel->sheet('Presupuesto', function($sheet) use ($consolidado){
+                $sheet->loadView('presupuesto_depto_export', array('cuentas' => $consolidado));
+                //$sheet->freezeFirstRow();
+                //$sheet->freezeFirstRowAndColumn();
+                $sheet->setFreeze('D2');
+            });
+        })->export('xls');
+
+        //return view('presupuesto_depto_export',array('cuentas'=>$consolidado));        
     }
     
     private function vistaPrivilegio($ideDepartamento){

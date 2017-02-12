@@ -45,6 +45,10 @@
                             <button  id="btnAprobarPlan" value="{{$idePresupuestoDepartamento}}">
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar presupuesto departamento"/></button>
                             @endif
+                             &nbsp;
+                            &nbsp;
+                            <a href="{{url('presupuestodepartamento/export/'.$idePresupuestoDepartamento)}}" >
+                                <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar presupuesto a Excel"/></a>
                             <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>                            
                         </div>
                         
