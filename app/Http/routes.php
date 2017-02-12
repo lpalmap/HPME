@@ -312,7 +312,14 @@ Route::post('/presupuestos/aprobar',['uses' => 'PresupuestoDepartamento@aprobarP
 //Cerrar presupuesto
 Route::post('/presupuesto/cerrar',['uses' => 'ProyectoPresupuesto@cerrarPresupuesto', 'middleware' => 'auth']);
 
-Route::get('/insert', function() {
-    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
-    return 'Usuario Agregado 222';
-});
+
+/*  MONITOREO  */
+Route::get('/adminmonitoreo',['uses' => 'MonitoreoProyecto@index', 'middleware' => 'auth']);
+Route::get('/adminmonitoreo/{id}',['uses' => 'MonitoreoProyecto@adminProyecto', 'middleware' => 'auth']);
+Route::post('/adminmonitoreo/iniciar',['uses' => 'MonitoreoProyecto@iniciarMonitoreo', 'middleware' => 'auth']);
+Route::post('/adminmonitoreo/habilitar',['uses' => 'MonitoreoProyecto@habilitarPeriodo', 'middleware' => 'auth']);
+
+//Route::get('/insert', function() {
+//    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
+//    return 'Usuario Agregado 222';
+//});

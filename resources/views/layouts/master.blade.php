@@ -359,9 +359,9 @@
                     </ul>
                 </li>
                 
-                 <!-- MENU MONITOREO -->
+<!--                  MENU MONITOREO -->
                  
-<!--                <li class="panel ">
+                <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_monitoreo.png')}}"/>  Monitoreo
 	   
@@ -371,13 +371,15 @@
                           &nbsp; <span class="label label-success">0</span>&nbsp;
                     </a>
                     <ul class="collapse" id="form-nav">
-                        <li class=""><a href="forms_general.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_admin.png')}}"/>  Administraci&#243;n Monitoreo Trimestral</a></li>
-                        <li class=""><a href="forms_advance.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Formato Trimestral </a></li>
+                        @if(in_array(200,$privilegios))
+                        <li class=""><a href="{{url('adminmonitoreo')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_admin.png')}}"/>  Administraci&#243;n Monitoreo</a></li>
+                        @endif
+<!--                        <li class=""><a href="forms_advance.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Formato Trimestral </a></li>
                         <li class=""><a href="forms_validation.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_avances.png')}}"/>  Monitoreo de Avances </a></li>
                         <li class=""><a href="forms_fileupload.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_historial.png')}}"/>  Historial de Formatos </a></li>
-                        <li class=""><a href="forms_editors.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/>  Backup Formato Trimestral </a></li>
+                        <li class=""><a href="forms_editors.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/>  Backup Formato Trimestral </a></li>-->
                     </ul>
-                </li>-->
+                </li>
                 
                 <!-- MENU MONITOREO -->
 

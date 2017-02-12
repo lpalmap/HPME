@@ -129,6 +129,8 @@ class HPMEConstants
     const PUBLICADO='PUBLICADO';
     const EJECUTADO='EJECUTADO';
     const ENVIADO='ENVIADO';
+    const INACTIVO='INACTIVO';
+    const MONITOREO='MONITOREO';
     const DATE_FORMAT='Y-m-d';
     const DATETIME_FORMAT='Y-m-d H:i:s';
     const TIME_ZONE='America/Guatemala';
