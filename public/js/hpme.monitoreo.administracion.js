@@ -8,6 +8,12 @@ $(document).ready(function(){
         "language": window.lang.language
     });
     
+    $("#btnMonitoreo").click(function (e) { 
+        $('#loading').modal('show');
+        $('#iniciarModal').modal('show');
+        $('#loading').modal('hide');
+    });
+   
     $("#btnIniciar").click(function (e) { 
         $('#loading').modal('show');
         var ideProyecto=$(this).val();
