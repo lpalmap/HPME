@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Administraci&oacute;n de Monitoreo</h2>
+                        <h2>Ingreso Monitoreo Planificaci&oacute;n</h2>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto}}">
                                             <td>{{$items[$i]->fecha_proyecto}}</td>
                                             <td>{{$items[$i]->fecha_cierre}}</td>
-                                            <td><a href="{{url('/adminmonitoreo/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
+                                            <td><a href="{{url('/monitoreoafiliado/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
                                             <td>{{$items[$i]->periodicidad->descripcion}}</td>
                                             <td>{{$items[$i]->estado}}</td>
                                         </tr>
@@ -70,6 +70,6 @@
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
-        <script src="{{asset('js/hpme.monitoreo.administracion.js')}}"></script>
+        <script src="{{asset('js/hpme.monitoreo.proyectos.js')}}"></script>
 <!--        <script src="{{asset('js/hpme.proyectos.js')}}"></script>-->
 @endsection

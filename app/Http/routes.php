@@ -318,6 +318,11 @@ Route::get('/adminmonitoreo',['uses' => 'MonitoreoProyecto@index', 'middleware' 
 Route::get('/adminmonitoreo/{id}',['uses' => 'MonitoreoProyecto@adminProyecto', 'middleware' => 'auth']);
 Route::post('/adminmonitoreo/iniciar',['uses' => 'MonitoreoProyecto@iniciarMonitoreo', 'middleware' => 'auth']);
 Route::post('/adminmonitoreo/habilitar',['uses' => 'MonitoreoProyecto@habilitarPeriodo', 'middleware' => 'auth']);
+Route::get('/monitoreoafiliado',['uses' => 'MonitoreoProyecto@monitoreoafiliado', 'middleware' => 'auth']);
+Route::get('/monitoreoafiliado/{id}',['uses' => 'MonitoreoProyecto@monitoreoAfiliadoProyecto', 'middleware' => 'auth']);
+//Route::get('/monitoreoafiliadodetalle/{id}',['uses' => 'MonitoreoProyecto@monitoreoAfiliadoDetalle', 'middleware' => 'auth']);
+Route::get('/monitoreoafiliadodetalle/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle', 'middleware' => 'auth']);
+Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle2', 'middleware' => 'auth']);
 
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

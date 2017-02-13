@@ -374,8 +374,10 @@
                         @if(in_array(200,$privilegios))
                         <li class=""><a href="{{url('adminmonitoreo')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_admin.png')}}"/>  Administraci&#243;n Monitoreo</a></li>
                         @endif
-<!--                        <li class=""><a href="forms_advance.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Formato Trimestral </a></li>
-                        <li class=""><a href="forms_validation.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_avances.png')}}"/>  Monitoreo de Avances </a></li>
+                        @if(in_array(100,$privilegios))
+                        <li class=""><a href="{{url('monitoreoafiliado')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Monitoreo Planificaci&oacute;n</a></li>
+                        @endif
+<!--                        <li class=""><a href="forms_validation.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_avances.png')}}"/>  Monitoreo Afiliados </a></li>
                         <li class=""><a href="forms_fileupload.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_historial.png')}}"/>  Historial de Formatos </a></li>
                         <li class=""><a href="forms_editors.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/>  Backup Formato Trimestral </a></li>-->
                     </ul>

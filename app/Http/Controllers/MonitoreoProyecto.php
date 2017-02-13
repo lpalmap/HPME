@@ -61,6 +61,7 @@ class MonitoreoProyecto extends Controller
 //            
 //        }
         $periodo->estado=HPMEConstants::ABIERTO;
+        $periodo->fecha_habilitacion=date(HPMEConstants::DATE_FORMAT,  time());
         $periodo->save();
         return response()->json();
     }
@@ -74,6 +75,33 @@ class MonitoreoProyecto extends Controller
             }
         }  
         return FALSE;
+    }
+    
+    private function ingresoMonitoreo(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFIACION_INGRESAR_PLANIFICACION,$privilegios)){
+                return TRUE;
+            }
+        }  
+        return FALSE;
+    }
+    
+    public function monitoreoAfiliado(){
+        $proyectos=  PlnProyectoPlanificacion::orderBy('fecha_proyecto', 'desc')->get();
+        if(!$this->ingresoMonitoreo()){
+            return view('home');
+        }
+        return view('monitoreo_afiliado_proyectos',array('items'=>$proyectos));
+    }
+    
+    public function monitoreoAfiliadoProyecto($ideProyecto){
+        if(!$this->ingresoMonitoreo()){
+            return view('home');
+        }
+        $proyecto=  PlnProyectoPlanificacion::find($ideProyecto);
+        $periodos=  MonProyectoPeriodo::where('ide_proyecto','=',$ideProyecto)->where('estado','!=','INACTIVO')->orderBy('no_periodo','asc')->get();   
+        return view('monitoreo_afiliado_proyecto',array('proyecto'=>$proyecto->descripcion,'ideProyecto'=>$proyecto->ide_proyecto,'items'=>$periodos,'estado'=>$proyecto->estado));
     }
     
     

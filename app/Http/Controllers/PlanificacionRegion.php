@@ -15,6 +15,7 @@ use App\PrivilegiosConstants;
 use App\SegUsuario;
 use Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\MonProyectoPeriodo;
 
 
 class PlanificacionRegion extends Controller
@@ -415,6 +416,56 @@ class PlanificacionRegion extends Controller
         $valores=DB::select(HPMEConstants::PLN_DETALLE_POR_PRODUCTO_REGION,array('ideRegionProducto'=>$ideRegionProducto));
         //Log::info('Count valores.... '.count($valores));
         return $valores;
+    }
+    
+    
+    public function monitoreoAfiliadoDetalle($idePeriodoMonitoreo){
+        $monitoreo=  MonProyectoPeriodo::find($idePeriodoMonitoreo);
+        $ideRegion=$this->regionUsuario();
+        $id=7;
+        $proyectouser=  PlnProyectoRegion::where('ide_region',$ideRegion)->where('ide_proyecto_planificacion',$monitoreo->ide_proyecto)->pluck('ide_proyecto_region')->first();
+        $id=$proyectouser;
+                
+        
+        $proyectoRegion=  PlnProyectoRegion::find($id);
+        $rol=  request()->session()->get('rol');
+        
+        $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
+
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            return view('monitoreo_afiliado_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
+    }
+    
+    public function monitoreoAfiliadoDetalle2($idePeriodoMonitoreo){
+        $monitoreo=  MonProyectoPeriodo::find($idePeriodoMonitoreo);
+        $ideRegion=$this->regionUsuario();
+        $id=7;
+        $proyectouser=  PlnProyectoRegion::where('ide_region',$ideRegion)->where('ide_proyecto_planificacion',$monitoreo->ide_proyecto)->pluck('ide_proyecto_region')->first();
+        $id=$proyectouser;
+                
+        
+        $proyectoRegion=  PlnProyectoRegion::find($id);
+        $rol=  request()->session()->get('rol');
+        
+        $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
+
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            
+            $encabezados=array();
+            $encabezados[]='Enero-Marzo';
+            return view('monitoreo_afiliado_detalle2',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
     }
     
 }
