@@ -269,7 +269,7 @@ Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegi
 Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
 Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacionProyectoDetalle', 'middleware' => 'auth']);
 Route::post('/planregion/aprobar',['uses' => 'PlanificacionRegion@aprobarPlanificacion', 'middleware' => 'auth']);
-Route::get('/planificaciones/export',['uses' => 'PlanificacionRegion@exportarPlanificacion', 'middleware' => 'auth']);
+Route::get('/plandetalleexport/{id}',['uses' => 'PlanificacionRegion@exportarPlanificacionRegion', 'middleware' => 'auth']);
 
 //Cerrar planificacion
 Route::post('/planificacion/cerrar',['uses' => 'PlantillaPlanificacion@cerrarPlanificacion', 'middleware' => 'auth']);

@@ -468,4 +468,51 @@ class PlanificacionRegion extends Controller
             return view('monitoreo_afiliado_detalle2',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
     }
     
+    public function exportarPlanificacionRegion($id){ 
+        $proyectoRegion=  PlnProyectoRegion::find($id);
+        $rol=  request()->session()->get('rol');
+        $ingresaPlan=  $this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $rol == 'AFILIADO' || $ingresaPlan || $consultaPlanificacion)){   
+            if($rol=='AFILIADO' || ($ingresaPlan && (!$consultaPlanificacion))){
+                $ideRegion=$this->regionUsuario();
+                if(is_null($ideRegion)){
+                    return view('home');
+                }else{
+                    if($ideRegion!=$proyectoRegion->ide_region){
+                        return view('home');
+                    }
+                }
+            }
+            //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
+            $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+            //Log::info($proyectoPlanificacion->descripcion);
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
+
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            
+            $encabezados=array();
+            $encabezados[]='Enero-Marzo';
+            $encabezados[]='Abril-Junio';
+            $encabezados[]='Julio-Septiembre';
+            $encabezados[]='Octubre-Diciembre';
+            
+            Excel::create("Planificación $nombreRegion", function($excel) use($plantilla,$encabezados) {
+            $excel->sheet('Planificado', function($sheet) use ($plantilla,$encabezados){
+                $sheet->loadView('planificacion_region_export', array('plantilla'=>$plantilla,'num_items'=>count($encabezados),'encabezados'=>$encabezados));
+                $sheet->freezeFirstRow();
+                //$sheet->freezeFirstRowAndColumn();
+                //$sheet->setFreeze('D2');
+            });
+            })->export('xls');
+        
+            //return view('planificacion_region_export',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE));
+            //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
+        }else{
+            return view('home');
+        }      
+    }
+    
 }
