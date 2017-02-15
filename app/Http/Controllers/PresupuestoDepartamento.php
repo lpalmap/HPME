@@ -28,7 +28,7 @@ class PresupuestoDepartamento extends Controller
         $ultimoProyecto=  PlnProyectoPresupuesto::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto_presupuesto','descripcion','estado']);
         //$privilegios=request()->session()->get('privilegios');
         //Log::info($privilegios);
-        if(is_null($ultimoProyecto) || ($rol!='DIRECTOR ADMIN Y FINANZAS')){
+        if(is_null($ultimoProyecto)){
             if(!$this->vistaPrivilegio()){
                 return view('home');
             }           
