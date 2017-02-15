@@ -35,6 +35,12 @@
                                 <button id="btnCerrar" value="{{$ideProyecto}}">                      
                                 <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyecto}}" title="Cerrar Plantilla"/></button>
                                 @endif
+                                &nbsp;
+                                &nbsp;
+                                <a href="{{url('planificacionesexport/'.$ideProyecto)}}" >
+                                <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar todas las regiones a Excel"/></a>  
+                                
+                                
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->
                              <div class="table-responsive" id="tableContent">
                                  
