@@ -25,6 +25,14 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">{{isset($plantilla)?$plantilla['proyecto']:''}}</span>
+                            &nbsp;
+                            &nbsp;
+                            <button id="cleanVacio">
+                                <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>
+                            &nbsp;
+                            &nbsp;
+                            <a href="{{url('planconsolidadoexport/'.$ideProyecto)}}" >
+                                <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar planificaci&oacute;n consolidada a Excel(No se incluye productos con planificaci&oacute;n 0)"/></a>                                
                         </div>
                         
                          <div class="panel-body">
@@ -87,23 +95,25 @@
                                                             foreach($productos as $producto){
                                                                 $detalles=$producto['detalles'];
                                                                 $total=0;
+                                                                foreach ($detalles as $detalle){
+                                                                    $total=$total+$detalle->valor;
+                                                                } 
                                                     ?>
-                                                        <tr class="info" style="text-align: center" >
+                                                        <tr class="info {{$total>0?'':'goodbye'}}" style="text-align: center" >
                                                             <td>{{$objetivo['objetivo']->nombre}}</td>
                                                             <td>{{$indicador['indicador']->nombre}}</td>
                                                             <td>{{$producto['producto']->nombre}}</td>
                                                             <?php
                                                                 foreach ($detalles as $detalle){
-                                                                    $total=$total+$detalle->valor;
                                                             ?>
-                                                            <td style="text-align: right;background: #BDD7EE;">{{intval($detalle->valor)}}</td>
+                                                                <td style="text-align: right;background: #BDD7EE;">{{number_format(intval($detalle->valor))}}</td>
                                                             <?php
                                                                 }
                                                             ?>
-                                                            <td style="text-align: right;background: greenyellow;">{{$total}}</td>
+                                                            <td style="text-align: right;background: greenyellow;">{{number_format($total)}}</td>
                                                         </tr>
                                                     <?php
-                                                       }}}
+                                                                }}}
                                                     ?>
                                                 <?php                                              
                                                 }}
@@ -151,9 +161,5 @@
 @endsection
 @section('footer')
     @parent
-<!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-        <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
-        <script src="{{asset('js/hpme.lang.js')}}"></script>
-        <script src="{{asset('js/hpme.planificacion.js')}}"></script>-->
-<!--        <script src="{{asset('js/hpme.proyectos.js')}}"></script>-->
+        <script src="{{asset('js/hpme.planificacion.consolidado.js')}}"></script>
 @endsection

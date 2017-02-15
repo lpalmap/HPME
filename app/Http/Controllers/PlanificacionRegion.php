@@ -86,16 +86,8 @@ class PlanificacionRegion extends Controller
     public function planificacionConsolidada($ideProyecto){
         $rol=  request()->session()->get('rol');
         if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
-            //Log::info("Proyecto region plan ".$proyectoRegion->ide_proyecto_planificacion);
-            $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
-            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto);         
-            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
-            $encabezados=array();
-            $encabezados[]='Ene-Mar';
-            $encabezados[]='Abr-Jun';
-            $encabezados[]='Jul-Sep';
-            $encabezados[]='Oct-Dic';
-            return view('planificacion_detalle_consolidado',array('plantilla'=>$plantilla,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol));
+            $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
+            return view('planificacion_detalle_consolidado',$parametrosVista);
         }else{
             return view('home');
         } 
@@ -513,6 +505,38 @@ class PlanificacionRegion extends Controller
         }else{
             return view('home');
         }      
+    }
+    
+    public function exportPlanificacionConsolidada($ideProyecto){
+        $rol=  request()->session()->get('rol');
+        if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
+            $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
+            $nombreArchivo='Consolidado '.$parametrosVista['plantilla']['proyecto'];
+            
+            Excel::create($nombreArchivo, function($excel) use($parametrosVista) {
+                $excel->sheet('Planificado', function($sheet) use ($parametrosVista){
+                    $sheet->loadView('planificacion_consolidado_export', $parametrosVista);
+                    $sheet->freezeFirstRow();
+                    //$sheet->freezeFirstRowAndColumn();
+                    //$sheet->setFreeze('D2');
+                });
+            })->export('xls');
+            ///return view('planificacion_consolidado_export',$parametrosVista);
+        }else{
+            return view('home');
+        }      
+    }
+    //Construye la vista para la planificacion consolidada
+    private function parametrosConsolidado($ideProyecto){
+        $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
+        $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto);         
+        $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+        $encabezados=array();
+        $encabezados[]='Ene-Mar';
+        $encabezados[]='Abr-Jun';
+        $encabezados[]='Jul-Sep';
+        $encabezados[]='Oct-Dic';
+        return array('plantilla'=>$plantilla,'ideProyecto'=>$ideProyecto,'num_items'=>count($encabezados),'encabezados'=>$encabezados);
     }
     
 }

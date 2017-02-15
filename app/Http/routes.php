@@ -267,6 +267,7 @@ Route::post('/planproducto/retriveDetalle',['uses' => 'PlanificacionProducto@ret
 Route::get('/planificaciones',['uses' => 'PlanificacionRegion@planificacionRegion', 'middleware' => 'auth']);
 Route::get('/plandetalle/{id}',['uses' => 'PlanificacionRegion@planificacionRegionDetalle', 'middleware' => 'auth']);
 Route::get('/planconsolidado/{id}',['uses' => 'PlanificacionRegion@planificacionConsolidada', 'middleware' => 'auth']);
+Route::get('/planconsolidadoexport/{id}',['uses' => 'PlanificacionRegion@exportPlanificacionConsolidada', 'middleware' => 'auth']);
 Route::get('/proyectodetalle/{id}',['uses' => 'PlanificacionRegion@planificacionProyectoDetalle', 'middleware' => 'auth']);
 Route::post('/planregion/aprobar',['uses' => 'PlanificacionRegion@aprobarPlanificacion', 'middleware' => 'auth']);
 Route::get('/plandetalleexport/{id}',['uses' => 'PlanificacionRegion@exportarPlanificacionRegion', 'middleware' => 'auth']);
