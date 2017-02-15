@@ -19,12 +19,12 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    @if(isset($rol) && ($rol=='DIRECTOR DEPARTAMENTO' || $rol=='AFILIADO'))
-                            <a href="{{url('departamento/'.$idePresupuestoDepartamento)}}" >
+                    @if($vistaGeneral)
+                        <a href="{{url('presupuestosdepartamento')}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @else
-                         <a href="{{url('presupuestosdepartamento')}}" >
-                        <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
+                        <a href="{{url('departamento/'.$idePresupuestoDepartamento)}}" >
+                        <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>   
                     @endif
                     
 <!--                                                <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i> Ver consolidado</button>-->

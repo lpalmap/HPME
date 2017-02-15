@@ -67,32 +67,7 @@ class ProyectoPresupuesto extends Controller
         $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO_USUARIO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideUsuario'=>$ideUsuario));
         if(count($presupuestos)>0){
             return view('presupuesto_departamentos',array('items'=>$presupuestos));
-        }
-        
-//        else{
-//            $presupuesto=new PlnPresupuestoDepartamento();
-//            $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
-//            $presupuesto->estado= HPMEConstants::ABIERTO;
-//            $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
-//            $presupuesto->ide_departamento=$ideDepartamento;
-//            $presupuesto->save();
-//            $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-//        }
-            
-        //if(!is_null($ideDepartamento)){
-//            $presupuestos=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-//            if(count($presupuestos)>0){
-//                return view('presupuesto_departamentos',array('items'=>$presupuestos));
-//            }else{
-//                $presupuesto=new PlnPresupuestoDepartamento();
-//                $presupuesto->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
-//                $presupuesto->estado= HPMEConstants::ABIERTO;
-//                $presupuesto->ide_proyecto_presupuesto=$ideProyectoPresupuesto;
-//                $presupuesto->ide_departamento=$ideDepartamento;
-//                $presupuesto->save();
-//                $items=DB::select(HPMEConstants::PLN_PRESUPUESTO_POR_DEPARTAMENTO,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto,'ideDepartamento'=>$ideDepartamento));
-//            }
-        //}       
+        }     
         return view('presupuesto_departamentos',array('items'=>$items));
     }
     

@@ -343,14 +343,14 @@
                         @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR' || in_array(101,$privilegios))
                         <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/afiliados.png')}}"/>     Planificaci&#243;n Afiliados</a></li>
                         @endif
-                        @if(Session::get('rol')=='AFILIADO' || in_array(100,$privilegios))
+                        @if(in_array(100,$privilegios))
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_afiliado.png')}}"/>     Planificaci&#243;n Afiliado</a></li>
                         @endif 
-                        @if(Session::get('rol')=='DIRECTOR DEPARTAMENTO' || Session::get('rol')=='AFILIADO' || ((null!==Session::get('privilegios')) && in_array(3,Session::get('privilegios'))))
+                        @if(in_array(3,$privilegios))
                         <li class=""><a href="{{url('presupuestos')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/presupuesto.png')}}"/>     Presupuesto</a></li>
                         @endif
-                        @if(Session::get('rol')=='DIRECTOR ADMIN Y FINANZAS' || (array_intersect([1,2,4],$privilegios)))
-                        <li class=""><a href="{{url('presupuestosdepartamento')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/budget.png')}}"/>Presupuesto Departamento</a></li>
+                        @if(array_intersect([1,2,4],$privilegios))
+                        <li class=""><a href="{{url('presupuestosdepartamento')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/budget.png')}}"/>Presupuesto Departamentos</a></li>
                         @endif
 <!--                    <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_aut.png')}}"/> Autorizaci&#243;n Planificaci&#243;n</a></li>
                         <li class=""><a href=""><i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/plan_cerrar.png')}}"/> Cerrar Planificaci&#243;n</a></li>

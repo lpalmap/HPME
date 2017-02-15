@@ -28,10 +28,10 @@ class PlantillaPlanificacion extends Controller
         //NOMBRE_ROL_POR_USUARIO
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
-        if($rol=='AFILIADO' || $ingresaPlan ){
+        if($ingresaPlan){
             $ideProyecto=null;
             foreach ($data as $proyecto){
-                if($proyecto['estado']=='PUBLICADO'){
+                if($proyecto['estado']===HPMEConstants::PUBLICADO){
                     $ideProyecto=$proyecto['ide_proyecto'];
                     break;
                 }
@@ -167,7 +167,7 @@ class PlantillaPlanificacion extends Controller
     public function enviarPlantilla(Request $request){
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();   
-        if($rol!='AFILIADO' && !$ingresaPlan){
+        if(!$ingresaPlan){
             return response()->json(array('error'=>'Solo los adminitradores de una regi&oacute;n enviar plantillas.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);

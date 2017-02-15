@@ -32,7 +32,7 @@ class PlanificacionProducto extends Controller
         $rol=  request()->session()->get('rol');
         $produtosIngresados=array();
         $ingresaPlan=$this->ingresaPlanificacion();
-        if($rol=='AFILIADO' || $ingresaPlan){
+        if($ingresaPlan){
             $region=$this->regionUsuario($indicador->ide_proyecto);
             if(!is_null($region)){
                 $ingresados=DB::select(HPMEConstants::PLN_PRODUCTOS_COMPLETADOS,array('ideIndicadorArea'=>$ideIndicadorArea,'ideRegion'=>$region));
@@ -194,7 +194,7 @@ class PlanificacionProducto extends Controller
             }else{
                 $ideProyectoRegion=$regionProyecto[0]['ide_proyecto_region'];
                 if($regionProyecto[0]['estado']!=HPMEConstants::ABIERTO){
-                    return response()->json(array('error'=>'La proyecto para la regi&oacute;n se encuentra '.$regionProyecto[0]['estado'].' debe estar '.HPMEConstants::ABIERTO.' para ingresar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
+                    return response()->json(array('error'=>'El proyecto para la regi&oacute;n se encuentra '.$regionProyecto[0]['estado'].' debe estar '.HPMEConstants::ABIERTO.' para ingresar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
                 }
             }
             

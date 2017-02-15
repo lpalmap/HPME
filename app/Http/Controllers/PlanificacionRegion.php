@@ -91,14 +91,17 @@ class PlanificacionRegion extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=  $this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $rol == 'AFILIADO' || $ingresaPlan || $consultaPlanificacion)){   
-            if($rol=='AFILIADO' || ($ingresaPlan && (!$consultaPlanificacion))){
+        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion)){
+            $adminRegion=false;
+            if($ingresaPlan && (!$consultaPlanificacion)){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion)){
                     return view('home');
                 }else{
                     if($ideRegion!=$proyectoRegion->ide_region){
                         return view('home');
+                    }else{
+                        $adminRegion=true;
                     }
                 }
             }
@@ -116,7 +119,7 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$adminRegion));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
@@ -172,7 +175,7 @@ class PlanificacionRegion extends Controller
         $proyectoPlanificacion = PlnProyectoPlanificacion::find($id);     
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
-        if(!is_null($proyectoPlanificacion) && ($rol=='AFILIADO' || $ingresaPlan)){
+        if(!is_null($proyectoPlanificacion) && ($ingresaPlan)){
             $ideRegion=$this->regionUsuario();
             if(is_null($ideRegion)){
                 return view('home');
@@ -356,8 +359,8 @@ class PlanificacionRegion extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=  $this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $rol == 'AFILIADO' || $ingresaPlan || $consultaPlanificacion)){   
-            if($rol=='AFILIADO' || ($ingresaPlan && (!$consultaPlanificacion))){
+        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion)){   
+            if($ingresaPlan && !$consultaPlanificacion){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion)){
                     return view('home');

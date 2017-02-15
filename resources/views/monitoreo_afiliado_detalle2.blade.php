@@ -20,7 +20,7 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    @if(isset($rol) && ($rol=='AFILIADO'||$ingresaPlan))
+                    @if($ingresaPlan)
                     <a href="{{url('proyecto')}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @else

@@ -60,7 +60,7 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_producto_indicador}}">
-                                            @if(isset($rol) && $rol=='AFILIADO' || $ingresaPlan)
+                                            @if($ingresaPlan)
                                             <td><button id="btn{{$items[$i]->ide_producto_indicador}}" class="btn2 btn {{in_array($items[$i]->ide_producto_indicador,$ingresados)?'btn-success':'btn-primary'}} btn-round" value="{{$items[$i]->ide_producto_indicador}}"  title="{{$items[$i]->producto->descripcion}}">{{$items[$i]->producto->nombre}}</button></td>
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
@@ -128,29 +128,7 @@
                             </div>
                     </div>
 
-<!-- Modal for displaying the messages -->
-<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Errores</h4>
-            </div>
 
-            <div class="modal-body">
-                <!-- The messages container -->
-<!--                <div id="erroresContent"></div>-->
-                   <ul style="list-style-type:circle" id="erroresContent"></ul>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="col-lg-12">
                         <div class="modal fade" id="ingresarDetalleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -177,16 +155,16 @@
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
                                             <td>
-                                                <input maxlength="7" tabindex="1" autofocus="true" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="primerTrim" />  
+                                                <input maxlength="8" tabindex="1" autofocus="true" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="primerTrim" />  
                                             </td>
                                             <td>
-                                                <input maxlength="7" tabindex="2" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="segundoTrim" />
+                                                <input maxlength="8" tabindex="2" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="segundoTrim" />
                                             </td>
                                             <td>
-                                                <input maxlength="7" tabindex="3" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="tercerTrim"/>
+                                                <input maxlength="8" tabindex="3" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="tercerTrim"/>
                                             </td>
                                             <td>
-                                                <input maxlength="7" tabindex="4" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="cuartoTrim"/>
+                                                <input maxlength="8" tabindex="4" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="cuartoTrim"/>
                                             </td>
                                             <td>
                                                 <input align="right" class="form-control" disabled="true"  value="0" id="totalInput"/>
@@ -213,6 +191,30 @@
                                 </div>
                             </div>
                     </div>
+
+<!-- Modal for displaying the messages -->
+<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Errores</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+                   <ul style="list-style-type:circle" id="erroresContent"></ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 @section('footer')

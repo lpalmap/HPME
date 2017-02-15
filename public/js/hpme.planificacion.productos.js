@@ -334,7 +334,7 @@ $(document).ready(function(){
     $("#btnGuardarDetalle").click(function (e) { 
         $('#loading').modal('show');
         
-        
+        alert('sdfsdf');  
         var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var ideProductoIndicador=$("#btnGuardarDetalle").val();
         var descripcion='';//$("#inDescripcion").val();
@@ -396,12 +396,12 @@ $(document).ready(function(){
             },
             error: function (data) {
                 //console.log(data);
-                $('#ingresarDetalleModal').modal('hide');
+                //$('#ingresarDetalleModal').modal('hide');
                 $('#loading').modal('hide');
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
                     for( var e in data.responseJSON){
-                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                        errHTML+="<li>"+data.responseJSON[e]+"asdfasdf</li>";
                     }
                 }else{
                     errHTML+='<li>Error al guardar el producto</li>';

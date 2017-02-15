@@ -19,7 +19,7 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    @if(isset($rol) && ($rol=='AFILIADO'||$ingresaPlan))
+                    @if($ingresaPlan)
                     <a href="{{url('proyecto')}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @else
@@ -130,11 +130,11 @@
                                                             <?php
                                                                 foreach ($valores as $valor){                                                                    
                                                             ?>
-                                                            <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
+                                                            <td style="text-align: right;background: #BDD7EE;">{{number_format(intval($valor->valor))}}</td>
                                                             <?php
                                                                 }
                                                             ?>
-                                                            <td style="text-align: right;background: greenyellow;">{{$total}}</td>
+                                                            <td style="text-align: right;background: greenyellow;">{{number_format($total)}}</td>
                                                         </tr>
                                                     <?php
                                                         }}}

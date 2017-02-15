@@ -45,7 +45,7 @@
                                             <th>Descripci&oacute;n</th>
                                             <th>Periodicidad</th>
                                             <th>Estado Plantilla</th>
-                                            @if(isset($rol) && $rol=='AFILIADO')
+                                            @if($ingresaPlan)
                                                 <th>Estado Planificaci&oacute;n</th>
                                             @else
                                             <th>Acciones</th>
@@ -67,7 +67,7 @@
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                                 @endif
-                                                @if(isset($rol) && ($rol=='AFILIADO' || $ingresaPlan) && $items[$i]->estado=='PUBLICADO')
+                                                @if($ingresaPlan && $items[$i]->estado=='PUBLICADO')
                                                     @if(isset($estadoRegion))
                                                         <a href="{{asset('proyectodetalle/'.($items[$i]->ide_proyecto))}}">
                                                         <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificaci&oacute;n"/></a>
@@ -184,7 +184,7 @@
     </div>
 @endif
 
-@if(isset($rol) && ($rol=='AFILIADO' || $ingresaPlan))
+@if($ingresaPlan)
     <div class="modal fade" id="enviarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
