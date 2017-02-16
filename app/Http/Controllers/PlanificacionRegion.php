@@ -166,6 +166,7 @@ class PlanificacionRegion extends Controller
         $proyectoPlanificacion = PlnProyectoPlanificacion::find($id);     
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
         if(!is_null($proyectoPlanificacion) && ($ingresaPlan)){
             $ideRegion=$this->regionUsuario();
             if(is_null($ideRegion)){
@@ -180,7 +181,7 @@ class PlanificacionRegion extends Controller
             
             if(is_null($ideProyectoRegion)){
                 $region=  CfgRegion::find($ideRegion);
-                return view('planificacion_region_detalle',array('plantilla'=>array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> array()),'region'=>$region->nombre,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan));
+                return view('planificacion_region_detalle',array('plantilla'=>array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> array()),'region'=>$region->nombre,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan,'apruebaPlanificacion'=>$apruebaPlanificacion));
             }
             
             $proyectoRegion=  PlnProyectoRegion::find($ideProyectoRegion);
@@ -194,7 +195,7 @@ class PlanificacionRegion extends Controller
             $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
             $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
             
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$ingresaPlan));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$ingresaPlan,'apruebaPlanificacion'=>$apruebaPlanificacion));
         }else{
             return view('home');
         }      
@@ -264,6 +265,7 @@ class PlanificacionRegion extends Controller
     
     private function obtenerProductos($ideIndicadorArea,$ideProyectoRegion=null){
         $productos=DB::select(HPMEConstants::PLN_PRODUCTOS_POR_INDICADOR,array('ideIndicadorArea'=>$ideIndicadorArea));    
+        Log::info("### productos $ideIndicadorArea");
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);
