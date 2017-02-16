@@ -10,8 +10,7 @@ class Metas extends Controller
     //
     //Obtiene metas y crea vista
     public function index(){
-        $metas=new CfgMeta();
-        $data=$metas->all(); 
+        $data= CfgMeta::all(); 
         return view('metas',array('items'=>$data));
     }
     
