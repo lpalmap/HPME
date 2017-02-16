@@ -44,6 +44,7 @@
                                         <tr>
                                             <th>Meta</th>
                                             <th>Obligatoria</th>
+                                            <th>Orden</th>>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -51,7 +52,7 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_proyecto_meta}}">
-                                            <td><a href="{{url('/meta/'.($items[$i]->ide_proyecto_meta))}}">{{$items[$i]->meta->nombre}}</a></td>
+                                            <td><a href="{{url('/meta/'.($items[$i]->ide_proyecto_meta))}}" title="{{$items[$i]->meta->descripcion}}">{{$items[$i]->meta->nombre}}</a></td>
                                             <td style="text-align: center">
                                                 <div class="checkbox">
                                                     @if($creaPlanificacion)
@@ -61,6 +62,7 @@
                                                     @endif
                                                 </div>
                                             </td>
+                                            <td>{{$items[$i]->meta->orden}}</td>
                                             <td>
                                                 @if($creaPlanificacion)
                                                     <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
