@@ -47,7 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th>&Aacute;rea de Atenci&oacute;n</th>
-                                            <td>Orden</td>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

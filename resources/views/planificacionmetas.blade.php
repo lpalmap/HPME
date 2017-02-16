@@ -44,7 +44,7 @@
                                         <tr>
                                             <th>Meta</th>
                                             <th>Obligatoria</th>
-                                            <th>Orden</th>>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

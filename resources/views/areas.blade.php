@@ -32,7 +32,7 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
-                                            <td>Orden</td>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -104,7 +104,7 @@
                                                 <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
                                                 </div>
                                            <div class="form-group">
-                                                <label>Nombre</label>
+                                                <label>Orden</label>
                                                 <input class="form-control" id="inOrden" required="true"/>
                                                 </div>
                                         </form>

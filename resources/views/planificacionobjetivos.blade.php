@@ -45,7 +45,7 @@
                                     <thead>
                                         <tr>
                                             <th>Objetivo</th>
-                                            <td>Orden</td>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

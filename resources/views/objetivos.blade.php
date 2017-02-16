@@ -32,7 +32,7 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
-                                            <td>Orden</td>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>

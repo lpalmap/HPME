@@ -49,6 +49,7 @@
                                     <thead>
                                         <tr>
                                             <th>Indicador</th>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -56,7 +57,8 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_indicador_area}}">
-                                            <td><a href="{{url('/indicador/'.$items[$i]->ide_indicador_area)}}">{{$items[$i]->indicador->nombre}}</a></td>
+                                            <td><a href="{{url('/indicador/'.$items[$i]->ide_indicador_area)}}" title="{{$items[$i]->indicador->descripcion}}">{{$items[$i]->indicador->nombre}}</a></td>
+                                            <td>{{$items[$i]->indicador->orden}}</td>
                                             <td>
                                                 @if($creaPlanificacion)
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_indicador_area}}"><i class="icon-remove icon-white"></i> Eliminar</button>

@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTableItems').DataTable(window.lang);
+    var dataTable=$('#dataTableItems').DataTable({
+        "order": [[ 1, "asc" ]],
+        "language": window.lang.language
+    });
     var url = window.location;
     url=(""+url).replace("#","");
     
@@ -39,7 +42,6 @@ $(document).ready(function(){
                 data: formData,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     var item='';
                     for(var i in data){
                         item+='<div class="checkbox"><input type="checkbox" name="ckItem" value="'+data[i].ide_indicador+'"/><label>'+data[i].nombre+'</label></div>'; 
@@ -53,7 +55,6 @@ $(document).ready(function(){
                 },
                 error: function (data) {
                     $('#loading').modal('hide');
-                    console.log('Error:', data);
                     $('#agregarEditarModal').modal('hide'); 
                     $("#erroresContent").html("<li>Error al agregar indicador</li>"); 
                     $('#erroresModal').modal('show');              
@@ -79,21 +80,18 @@ $(document).ready(function(){
             type: "DELETE",
             url: url + '/' + item_id,
             success: function (data) {
-                console.log(data);
                 dataTable.row( $('#item'+item_id)).remove().draw();
                 $('#eliminarModal').modal('hide');
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error borrando objetivo:', data);
                 $("#erroresContent").html("<li>Error al borrar el indicador</li>"); 
                 $('#erroresModal').modal('show');
             }
         });
     });
      
-    //create new task / update existing task
     $("#btnGuardar").click(function (e) {  
         $('#loading').modal('show');
         var text = '{ "items" : [';
@@ -107,7 +105,6 @@ $(document).ready(function(){
                     seleccion=true;
                 }           
             }
-            //console.log( this.value + ":" + this.checked );
         });
         
         
@@ -129,18 +126,11 @@ $(document).ready(function(){
                 data: JSON.parse(text),
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
-//                    var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
-//                    item+='<td>'+data.nombre+'</td>'
-//                    item+='<td>'+data.descripcion+'</td>';
-//                    item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_meta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-//                    item+='<button class="btn btn-danger" value="'+data.ide_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
-//                    
-//                  
                     var item;
                     for(var i in data){
                         item='<tr class="even gradeA" id="item'+data[i].ide_indicador_area+'">';
                         item+='<td><a href="'+url_target+'/'+data[i].ide_indicador_area+'">'+data[i].indicador.nombre+'</a></td>';
+                        item+='<td>'+data[i].indicador.orden+'</td>';
                         item+='<td><button class="btn btn-danger" value="'+data[i].ide_indicador_area+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
