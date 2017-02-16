@@ -32,6 +32,7 @@
                                         <tr>
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
+                                            <th>Orden</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -41,6 +42,7 @@
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_meta}}">
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
+                                            <td>{{$items[$i]->orden}}
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_meta}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -100,7 +102,11 @@
                                                 <label>Descripci&oacute;n</label>
 <!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
                                                 <textarea class="form-control" id="inDescripcion" rows="3" style="width: 100%"></textarea>
-                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Orden</label>
+                                                <input class="form-control" id="inOrden" required="true"/>
+                                            </div>
                                         </form>
                                         </div>
                                         <div class="modal-footer">
