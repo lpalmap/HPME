@@ -36,7 +36,8 @@ class Productos extends Controller
         $this->validateRequest($request);
         $item= CfgProducto::find($id);
         $item->nombre=$request->nombre;
-        $item->descripcion=$request->descripcion;        
+        $item->descripcion=$request->descripcion; 
+        $item->orden=$request->orden;
         $item->save();
         return response()->json($item);       
     }
@@ -45,6 +46,7 @@ class Productos extends Controller
         $rules=[
         'nombre' => 'required|max:100',
         'descripcion' => 'required|max:200',
+        'orden'=>'max:4'    
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',

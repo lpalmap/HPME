@@ -5,7 +5,9 @@
  */
 $(document).ready(function(){
     var dataTable=$('#dataTableItems').DataTable({"language":window.lang.language,
+        "order": [[ 1, "asc" ]],
     "iDisplayLength": 50});
+
     var url = window.location;
     url=(""+url).replace("#","");
     var inVal;
@@ -289,19 +291,12 @@ $(document).ready(function(){
                 url: my_url,
                 data: JSON.parse(text),
                 dataType: 'json',
-                success: function (data) {
-                    //console.log(data);
-//                    var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
-//                    item+='<td>'+data.nombre+'</td>'
-//                    item+='<td>'+data.descripcion+'</td>';
-//                    item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_meta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-//                    item+='<button class="btn btn-danger" value="'+data.ide_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
-//                    
-//                  
+                success: function (data) {              
                     var item;
                     for(var i in data){
                         item='<tr class="even gradeA" id="item'+data[i].ide_producto_indicador+'">';
                         item+='<td><label>'+data[i].producto.nombre+'</label></td>';
+                        item+='<td>'+data[i].producto.orden+'</td>';
                         item+='<td><button class="btn btn-danger" value="'+data[i].ide_producto_indicador+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
@@ -400,7 +395,7 @@ $(document).ready(function(){
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
                     for( var e in data.responseJSON){
-                        errHTML+="<li>"+data.responseJSON[e]+"asdfasdf</li>";
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
                     errHTML+='<li>Error al guardar el producto</li>';

@@ -51,6 +51,7 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Producto</th>
+                                            <th style="text-align: center">Orden</th>
                                             @if($creaPlanificacion)
                                             <th style="text-align: center">Acciones</th>
                                             @endif
@@ -65,6 +66,7 @@
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
                                             @endif
+                                            <td>{{$items[$i]->producto->orden}}</td>
                                             @if($creaPlanificacion)
                                             <td>                     
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_producto_indicador}}"><i class="icon-remove icon-white"></i> Eliminar</button>   
