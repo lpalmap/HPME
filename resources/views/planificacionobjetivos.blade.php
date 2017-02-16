@@ -45,6 +45,7 @@
                                     <thead>
                                         <tr>
                                             <th>Objetivo</th>
+                                            <td>Orden</td>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -52,7 +53,8 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                         <tr class="even gradeA" id="item{{$items[$i]->ide_objetivo_meta}}">
-                                            <td><a href="{{url('/objetivo/'.$items[$i]->ide_objetivo_meta)}}">{{$items[$i]->objetivo->nombre}}</a></td>
+                                            <td><a href="{{url('/objetivo/'.$items[$i]->ide_objetivo_meta)}}" title="{{$items[$i]->objetivo->descripcion}}">{{$items[$i]->objetivo->nombre}}</a></td>
+                                            <td>{{$items[$i]->objetivo->orden}}</a></td>
                                             <td>
                                                 @if($creaPlanificacion)
                                                     <button class="btn btn-danger" value="{{$items[$i]->ide_objetivo_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>

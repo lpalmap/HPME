@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTables-example').DataTable(window.lang);
+    var dataTable=$('#dataTables-example').DataTable({
+        "order": [[ 2, "asc" ]],
+        "language": window.lang.language
+    });
     var url = window.location;
     url=(""+url).replace("#","");
     
@@ -37,7 +40,7 @@ $(document).ready(function(){
                 $('#loading').modal('hide');
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
-                    for( er in data.responseJSON){
+                    for( var er in data.responseJSON){
                         errHTML+="<li>"+data.responseJSON[er]+"</li>";
                     }
                 }else{
@@ -108,7 +111,6 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
                 var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
                     item+='<td>'+data.nombre+'</td>'
                     item+='<td>'+data.descripcion+'</td>';
@@ -129,7 +131,7 @@ $(document).ready(function(){
                 $('#loading').modal('hide');
                 var errHTML="";
                 if((typeof data.responseJSON != 'undefined')){
-                    for( er in data.responseJSON){
+                    for( var er in data.responseJSON){
                         errHTML+="<li>"+data.responseJSON[er]+"</li>";
                     }
                 }else{

@@ -6,6 +6,6 @@ class CfgObjetivo extends BaseModel
 {
     protected $primaryKey = 'ide_objetivo';
     protected $table = 'cfg_objetivo';
-    protected $fillable = array('nombre','descripcion');
+    protected $fillable = array('nombre','descripcion','orden');
     public $timestamps = false;
 }

@@ -36,7 +36,8 @@ class Objetivos extends Controller
         $this->validateRequest($request);
         $item= CfgObjetivo::find($id);
         $item->nombre=$request->nombre;
-        $item->descripcion=$request->descripcion;        
+        $item->descripcion=$request->descripcion; 
+        $item->orden=$request->orden;
         $item->save();
         return response()->json($item);       
     }
@@ -45,6 +46,7 @@ class Objetivos extends Controller
         $rules=[
         'nombre' => 'required|max:250',
         'descripcion' => 'required|max:250',
+        'orden' => 'max:4'    
         ];
         $messages=[
         'required' => 'Debe ingresar :attribute.',

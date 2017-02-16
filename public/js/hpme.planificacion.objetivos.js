@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 $(document).ready(function(){
-    var dataTable=$('#dataTableItems').DataTable(window.lang);
+    var dataTable=$('#dataTableItems').DataTable({
+        "order": [[ 1, "asc" ]],
+        "language": window.lang.language
+    });
     var url = window.location;
     url=(""+url).replace("#","");
     
@@ -39,7 +42,6 @@ $(document).ready(function(){
                 data: formData,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     var item='';
                     for(var i in data){
                         item+='<div class="checkbox"><input type="checkbox" name="ckItem" value="'+data[i].ide_objetivo+'"/><label>'+data[i].nombre+'</label></div>'; 
@@ -85,21 +87,18 @@ $(document).ready(function(){
             type: "DELETE",
             url: url + '/' + item_id,
             success: function (data) {
-                console.log(data);
                 dataTable.row( $('#item'+item_id)).remove().draw();
                 $('#eliminarModal').modal('hide');
                 $('#loading').modal('hide');
             },
             error: function (data) {
                 $('#loading').modal('hide');
-                console.log('Error borrando objetivo:', data);
                 $("#erroresContent").html("<li>Error al borrar el objetivo.</li>"); 
                 $('#erroresModal').modal('show');
             }
         });
     });
      
-    //create new task / update existing task
     $("#btnGuardar").click(function (e) {  
         $('#loading').modal('show');
         var text = '{ "items" : [';
@@ -113,7 +112,6 @@ $(document).ready(function(){
                     seleccion=true;
                 }           
             }
-            //console.log( this.value + ":" + this.checked );
         });
         
         if(seleccion){
@@ -132,18 +130,12 @@ $(document).ready(function(){
                 url: my_url,
                 data: JSON.parse(text),
                 dataType: 'json',
-                success: function (data) {
-//                    var item = '<tr class="even gradeA" id="item'+data.ide_meta+'">'
-//                    item+='<td>'+data.nombre+'</td>'
-//                    item+='<td>'+data.descripcion+'</td>';
-//                    item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_meta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
-//                    item+='<button class="btn btn-danger" value="'+data.ide_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
-//                    
-//                  
+                success: function (data) {                
                     var item;
                     for(var i in data){
                         item='<tr class="even gradeA" id="item'+data[i].ide_objetivo_meta+'">';
                         item+='<td><a href="'+url_target+'/'+data[i].ide_objetivo_meta+'">'+data[i].objetivo.nombre+'</a></td>';
+                        item+='<td>'+data[i].objetivo.orden+'</td>';
                         item+='<td><button class="btn btn-danger" value="'+data[i].ide_objetivo_meta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                         dataTable.rows.add($(item)).draw(); 
                     }
