@@ -24,7 +24,8 @@ class PlanificacionObservaciones extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($id);
             if(is_null($proyectoRegion)){
                 return view('home');
@@ -91,7 +92,7 @@ class PlanificacionObservaciones extends Controller
                 }
                 
             }         
-            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos));
+            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos,'apruebaPlanificacion'=>$apruebaPlanificacion));
         }
         return view('home');
     } 
@@ -129,6 +130,16 @@ class PlanificacionObservaciones extends Controller
         return FALSE;
     }
     
+    private function apruebaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
     private function bitacoraPorProyectoRegion($ideProyectoRegion){
         $bitacoras=  PlnBitacoraProyectoRegion::where('ide_proyecto_region','=',$ideProyectoRegion)->get();
         if(count($bitacoras)>0){
@@ -141,7 +152,8 @@ class PlanificacionObservaciones extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion){
             $proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
             if(is_null($proyectoRegion)){
                 return response()->json(array('error'=>'Solo pudo guardar el pensaje para el proyecto de la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
@@ -167,7 +179,7 @@ class PlanificacionObservaciones extends Controller
             $bitacoraMensaje->ide_bitacora_proyecto_region=$bitacora->ide_bitacora_proyecto_region;
             $bitacoraMensaje->mensaje=$request->mensaje;
             $bitacoraMensaje->save();      
-            if($rol=='COORDINADOR'){
+            if($apruebaPlanificacion){
                 //$proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
                 if($proyectoRegion->estado==HPMEConstants::ENVIADO){
                     $proyectoRegion->estado=HPMEConstants::ABIERTO;

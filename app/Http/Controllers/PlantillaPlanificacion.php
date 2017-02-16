@@ -28,6 +28,8 @@ class PlantillaPlanificacion extends Controller
         //NOMBRE_ROL_POR_USUARIO
         $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
+        $creaPlanificacion=$this->creaPlanificacion();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
         if($ingresaPlan){
             $ideProyecto=null;
             foreach ($data as $proyecto){
@@ -41,13 +43,13 @@ class PlantillaPlanificacion extends Controller
             if(!is_null($region) && !is_null($ideProyecto)){
                 $regionProyecto=PlnProyectoRegion::where(array("ide_region"=>$region,"ide_proyecto_planificacion"=>$ideProyecto))->pluck('estado')->first(); 
                 if(!is_null($regionProyecto)){
-                    return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'estadoRegion'=>$regionProyecto,'ingresaPlan'=>$ingresaPlan));
+                    return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'estadoRegion'=>$regionProyecto,'ingresaPlan'=>$ingresaPlan,'apruebaPlanificacion'=>$apruebaPlanificacion,'creaPlanificacion'=>$creaPlanificacion));
                 }
                 
             }
             
         }
-        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan));
+        return view('planificacionanual',array('items'=>$data,'periodos'=>$periodos,'rol'=>$rol,'ingresaPlan'=>$ingresaPlan,'apruebaPlanificacion'=>$apruebaPlanificacion,'creaPlanificacion'=>$creaPlanificacion));
     }
     
     private function ingresoPlanificacion(){
@@ -122,8 +124,8 @@ class PlantillaPlanificacion extends Controller
     }
     
     public function publicarPlantilla(Request $request){
-        $rol=  request()->session()->get('rol');
-        if($rol!='COORDINADOR'){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!$apruebaPlanificacion){
             return response()->json(array('error'=>'Solo el usuario autorizado puede publicar una plantilla.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
@@ -145,8 +147,8 @@ class PlantillaPlanificacion extends Controller
     }
     
     public function cerrarPlanificacion(Request $request){
-        $rol=  request()->session()->get('rol');
-        if($rol!='COORDINADOR'){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!$apruebaPlanificacion){
             return response()->json(array('error'=>'Solo el usuario autorizado puede cerrar una plantilla.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         $proyecto=  PlnProyectoPlanificacion::find($request->ide_proyecto);
@@ -163,6 +165,8 @@ class PlantillaPlanificacion extends Controller
         $proyecto->save();
         return response()->json();
     }
+    
+    
     
     public function enviarPlantilla(Request $request){
         $rol=  request()->session()->get('rol');
@@ -209,7 +213,29 @@ class PlantillaPlanificacion extends Controller
             return null;
         }
     }
+    
+    private function apruebaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)
+                    || in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
 
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
 
 //    public function addPlantilla(Request $request){
 //        $listaItems=$request->items;

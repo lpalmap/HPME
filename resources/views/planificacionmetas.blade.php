@@ -34,7 +34,7 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">Metas</a>
                                 </li>
                             </ul>
-                             @if(isset($rol) && $rol=='COORDINADOR')
+                             @if($creaPlanificacion)
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar Meta</button>
                              @endif
                              <div class="table-responsive" id="tableContent">
@@ -54,7 +54,7 @@
                                             <td><a href="{{url('/meta/'.($items[$i]->ide_proyecto_meta))}}">{{$items[$i]->meta->nombre}}</a></td>
                                             <td style="text-align: center">
                                                 <div class="checkbox">
-                                                    @if(isset($rol) && $rol=='COORDINADOR')
+                                                    @if($creaPlanificacion)
                                                         <input class="uniform" type="checkbox" value="{{$items[$i]->ide_proyecto_meta}}" {{$items[$i]->ind_obligatorio=='S'?'checked':''}}/>
                                                     @else
                                                     <label value="{{$items[$i]->ide_proyecto_meta}}"> {{$items[$i]->ind_obligatorio=='S'?'SI':'NO'}}</label>
@@ -62,7 +62,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                @if(isset($rol) && $rol=='COORDINADOR')
+                                                @if($creaPlanificacion)
                                                     <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto_meta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                                 @endif
                                             </td>

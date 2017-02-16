@@ -29,7 +29,7 @@ class PlanificacionProducto extends Controller
         $ideObjetivoMeta=$indicador->areaObjetivo->ide_objetivo_meta;
         $ideAreaObjetivo=$indicador->ide_area_objetivo;
         $productos=  PlnProductoIndicador::with("producto")->where("ide_indicador_area",$ideIndicadorArea)->get();
-        $rol=  request()->session()->get('rol');
+        $creaPlanificacion=$this->creaPlanificacion();
         $produtosIngresados=array();
         $ingresaPlan=$this->ingresaPlanificacion();
         if($ingresaPlan){
@@ -41,7 +41,18 @@ class PlanificacionProducto extends Controller
                 }
             }
         }
-        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'rol'=>$rol,'ingresados'=>$produtosIngresados,'ingresaPlan'=>$ingresaPlan));    
+        return view('planificacionproductos',array('items'=>$productos,'indicador'=>$indicador->indicador->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'ideIndicadorArea'=>$ideIndicadorArea,'creaPlanificacion'=>$creaPlanificacion,'ingresados'=>$produtosIngresados,'ingresaPlan'=>$ingresaPlan));    
+    }
+    
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     private function ingresaPlanificacion(){

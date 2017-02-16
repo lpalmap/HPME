@@ -7,6 +7,7 @@ use App\PlnProyectoMeta;
 use App\HPMEConstants;
 use App\PlnObjetivoMeta;
 use App\CfgObjetivo;
+use App\PrivilegiosConstants;
 
 class PlanificacionObjetivo extends Controller
 {
@@ -17,8 +18,19 @@ class PlanificacionObjetivo extends Controller
         $meta->meta; 
         $ideProyecto=$meta->ide_proyecto;
         $objetivos= PlnObjetivoMeta::with("objetivo")->where("ide_proyecto_meta",$ideProyectoMeta)->get(); 
-        $rol=  request()->session()->get('rol');
-        return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'rol'=>$rol));    
+        $creaPlanificacion=$this->creaPlanificacion();
+        return view('planificacionobjetivos',array('items'=>$objetivos,'meta'=>$meta->meta->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'creaPlanificacion'=>$creaPlanificacion));    
+    }
+    
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function deleteObjetivo($ideObjetivoMeta){

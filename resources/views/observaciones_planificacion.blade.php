@@ -32,7 +32,7 @@
                                 <button id="btnAgregar" value="{{$ideProyectoRegion}}">
                                     <img src="{{asset('images/add_mail.png')}}" class="menu-imagen-big" alt="" title="Agregar Observaci&oacute;n"/></button>
                                 @endif
-                                @if($rol=='COORDINADOR' && !is_null($estadoBitacora) && $estadoBitacora=='ABIERTO')
+                                @if($apruebaPlanificacion && !is_null($estadoBitacora) && $estadoBitacora=='ABIERTO')
                                 <button id="btnCerrar" value="{{$ideProyectoRegion}}">
                                     <img src="{{asset('images/ok.png')}}" class="menu-imagen-big" alt="" title="Marcar observaciones como resultas."/></button>
                                 @endif

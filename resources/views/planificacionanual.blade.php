@@ -32,7 +32,7 @@
                                 <li class="active"><a href="#tableContent" data-toggle="tab">Plantillas</a>
                                 </li>
                             </ul>
-                             @if(isset($rol) && $rol=='COORDINADOR')
+                             @if($creaPlanificacion)
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Nueva Plantilla</button>
                              @endif
                              <div class="table-responsive" id="tableContent">
@@ -62,7 +62,7 @@
                                             <td>{{$items[$i]->periodicidad->descripcion}}</td>
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
-                                                @if(isset($rol) && $rol=='COORDINADOR' && $items[$i]->estado=='ABIERTO')
+                                                @if($apruebaPlanificacion && $items[$i]->estado=='ABIERTO')
                                                 <button class="btn btn-success btn-publicar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Publicar</button>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -158,7 +158,7 @@
 
 
 
-@if(isset($rol) && $rol=='COORDINADOR')
+@if($apruebaPlanificacion)
     <div class="modal fade" id="publicarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

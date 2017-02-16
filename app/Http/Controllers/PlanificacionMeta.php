@@ -7,6 +7,7 @@ use App\PlnProyectoPlanificacion;
 use App\PlnProyectoMeta;
 use App\CfgMeta;
 use App\HPMEConstants;
+use App\PrivilegiosConstants;
 
 class PlanificacionMeta extends Controller
 {
@@ -15,8 +16,19 @@ class PlanificacionMeta extends Controller
     public function metasProyecto($ideProyecto){
         $proyecto=  PlnProyectoPlanificacion::findOrFail($ideProyecto);
         $metas = PlnProyectoMeta::with("meta")->where('ide_proyecto', $ideProyecto)->get();
-        $rol=  request()->session()->get('rol');
-        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto,'rol'=>$rol));
+        $creaPlanificacion=$this->creaPlanificacion();
+        return view('planificacionmetas',array('items'=>$metas,'proyecto'=>$proyecto->descripcion,'ideProyecto'=>$ideProyecto,'creaPlanificacion'=>$creaPlanificacion));
+    }
+    
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function metasPorProyecto($ideProyecto){

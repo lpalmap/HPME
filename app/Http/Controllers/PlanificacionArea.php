@@ -7,6 +7,7 @@ use App\HPMEConstants;
 use App\PlnObjetivoMeta;
 use App\PlnAreaObjetivo;
 use App\CfgAreaAtencion;
+use App\PrivilegiosConstants;
 
 class PlanificacionArea extends Controller
 {
@@ -16,8 +17,19 @@ class PlanificacionArea extends Controller
         $ideProyecto=$objetivo->ide_proyecto;
         $ideProyectoMeta=$objetivo->ide_proyecto_meta;     
         $areas= PlnAreaObjetivo::with("area")->where("ide_objetivo_meta",$ideObjetivoMeta)->get();
-        $rol=  request()->session()->get('rol');
-        return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'rol'=>$rol));    
+        $creaPlanificacion=$this->creaPlanificacion();
+        return view('planificacionarea',array('items'=>$areas,'objetivo'=>$objetivo->objetivo->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'creaPlanificacion'=>$creaPlanificacion));    
+    }
+    
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function areaPorObjetivo($ideProyecto){

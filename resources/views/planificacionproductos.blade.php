@@ -42,7 +42,7 @@
                                 <li class="active"><a href="#profile-pills" data-toggle="tab">Productos</a>
                                 </li>
                             </ul>
-                             @if(isset($rol) && $rol=='COORDINADOR')
+                             @if($creaPlanificacion)
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-plus icon-white" ></i>Agregar Producto</button>
                              @endif
                              <div class="table-responsive" id="tableContent">
@@ -51,7 +51,7 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Producto</th>
-                                            @if(isset($rol) && $rol=='COORDINADOR')
+                                            @if($creaPlanificacion)
                                             <th style="text-align: center">Acciones</th>
                                             @endif
                                         </tr>
@@ -65,7 +65,7 @@
                                             @else
                                             <td><label>{{$items[$i]->producto->nombre}}</label></td>
                                             @endif
-                                            @if(isset($rol) && $rol=='COORDINADOR')
+                                            @if($creaPlanificacion)
                                             <td>                     
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_producto_indicador}}"><i class="icon-remove icon-white"></i> Eliminar</button>   
                                             </td>

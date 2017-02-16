@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use App\CfgRegion;
 use App\PlnBitacoraProyectoRegion;
 use App\PrivilegiosConstants;
-use App\SegUsuario;
 use Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\MonProyectoPeriodo;
@@ -24,8 +23,9 @@ class PlanificacionRegion extends Controller
         $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion','estado']);
         $rol=  request()->session()->get('rol');
         $consulta=$this->consultaPlanificacion();
-        if(!is_null($ultimoProyecto) && $rol=='COORDINADOR' || $consulta){
-            $puedeCerrar=$this->puedeCerrar();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ultimoProyecto) && ($apruebaPlanificacion || $consulta)){
+            $puedeCerrar=$apruebaPlanificacion;
             $regiones=  DB::select(HPMEConstants::PROYECTOS_REGION_QUERY,array('ideProyecto'=>$ultimoProyecto->ide_proyecto)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
             if(count($regiones)>0){
                 return view('planificacionregion',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>$ultimoProyecto->estado,'puedeCerrar'=>$puedeCerrar));
@@ -47,11 +47,13 @@ class PlanificacionRegion extends Controller
         })->export('xls');     
     }
     
-    private function puedeCerrar(){
-        $rol=  request()->session()->get('rol');
-        if($rol=='COORDINADOR'){
-            return TRUE;
-        } 
+    private function apruebaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
         return FALSE;
     }
     
@@ -77,7 +79,8 @@ class PlanificacionRegion extends Controller
     
     public function planificacionConsolidada($ideProyecto){
         $rol=  request()->session()->get('rol');
-        if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
             $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
             return view('planificacion_detalle_consolidado',$parametrosVista);
         }else{
@@ -91,7 +94,8 @@ class PlanificacionRegion extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=  $this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion)){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($proyectoRegion) && ($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion)){
             $adminRegion=false;
             if($ingresaPlan && (!$consultaPlanificacion)){
                 $ideRegion=$this->regionUsuario();
@@ -119,7 +123,7 @@ class PlanificacionRegion extends Controller
             $encabezados[]='Abr-Jun';
             $encabezados[]='Jul-Sep';
             $encabezados[]='Oct-Dic';
-            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$adminRegion));
+            return view('planificacion_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$adminRegion,'apruebaPlanificacion'=>$apruebaPlanificacion));
             //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
         }else{
             return view('home');
@@ -359,7 +363,8 @@ class PlanificacionRegion extends Controller
         $rol=  request()->session()->get('rol');
         $ingresaPlan=  $this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
-        if(!is_null($proyectoRegion) && ($rol=='COORDINADOR' || $ingresaPlan || $consultaPlanificacion)){   
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($proyectoRegion) && ($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion)){   
             if($ingresaPlan && !$consultaPlanificacion){
                 $ideRegion=$this->regionUsuario();
                 if(is_null($ideRegion)){
@@ -396,7 +401,8 @@ class PlanificacionRegion extends Controller
     
     public function exportPlanificacionConsolidada($ideProyecto){
         $rol=  request()->session()->get('rol');
-        if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
             $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
             $nombreArchivo='Consolidado '.$parametrosVista['plantilla']['proyecto'];
             
@@ -438,7 +444,8 @@ class PlanificacionRegion extends Controller
 
     public function planificacionExport($ideProyecto){
         $rol=  request()->session()->get('rol');
-        if(!is_null($ideProyecto) && ($rol=='COORDINADOR' || $this->consultaPlanificacion())){
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
             $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
             $nombreArchivo='Consolidado '.$parametrosVista['plantilla']['proyecto'];
             Log::info('Test');

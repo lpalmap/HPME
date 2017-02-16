@@ -334,7 +334,6 @@ $(document).ready(function(){
     $("#btnGuardarDetalle").click(function (e) { 
         $('#loading').modal('show');
         
-        alert('sdfsdf');  
         var ideProyecto=$('meta[name="_proyecto"]').attr('content');
         var ideProductoIndicador=$("#btnGuardarDetalle").val();
         var descripcion='';//$("#inDescripcion").val();

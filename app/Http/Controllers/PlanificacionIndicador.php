@@ -7,6 +7,7 @@ use App\HPMEConstants;
 use App\PlnIndicadorArea;
 use App\CfgIndicador;
 use App\PlnAreaObjetivo;
+use App\PrivilegiosConstants;
 
 class PlanificacionIndicador extends Controller
 {
@@ -25,8 +26,19 @@ class PlanificacionIndicador extends Controller
         $ideProyectoMeta=$area->objetivoMeta->ide_proyecto_meta;
         $ideObjetivoMeta=$area->ide_objetivo_meta;
         $indicadores=PlnIndicadorArea::with("indicador")->where("ide_area_objetivo",$ideAreaObjetivo)->get();
-        $rol=  request()->session()->get('rol');
-        return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'rol'=>$rol));    
+        $creaPlanificacion=$this->creaPlanificacion();
+        return view('planificacionindicadores',array('items'=>$indicadores,'area'=>$area->area->nombre,'ideProyecto'=>$ideProyecto,'ideProyectoMeta'=>$ideProyectoMeta,'ideObjetivoMeta'=>$ideObjetivoMeta,'ideAreaObjetivo'=>$ideAreaObjetivo,'creaPlanificacion'=>$creaPlanificacion));    
+    }
+    
+    private function creaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO, $privilegios)
+                    ){
+                return TRUE;
+            }
+        }      
+        return FALSE;
     }
     
     public function deleteIndicador($ideIndicadorArea){

@@ -319,11 +319,13 @@
                 </div>
                 <br />
             </div>
-
+           <?php
+                        $privilegios=Session::get('privilegios');
+                    ?>
             <ul id="menu" class="collapse">
                  
                 <!-- MENU PLANIFICACION -->
-                 
+                @if(array_intersect([1,2,3,4,100,101,102,103],$privilegios)) 
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#component-nav">
 <!--                        <i class="icon-tasks"> </i>     -->
@@ -332,15 +334,12 @@
                           <i class="icon-angle-left"></i>
                         </span>
                        &nbsp; <span class="label label-default">0</span>&nbsp;
-                    </a>
-                    <?php
-                        $privilegios=Session::get('privilegios');
-                    ?>
+                    </a>                    
                     <ul class="collapse" id="component-nav">                   
-                        @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
+                        @if(array_intersect([102,103],$privilegios))
                         <li class=""><a href="{{url('proyecto')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/plan_anual.png')}}"/>&nbspPlanificaci&#243;n Anual</a></li>
                         @endif
-                        @if(Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR' || in_array(101,$privilegios))
+                        @if(array_intersect([101,102,103],$privilegios))
                         <li class=""><a href="{{url('planificaciones')}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-angle-right"></i></i><img class="menu-imagen"src="{{asset('images/afiliados.png')}}"/>     Planificaci&#243;n Afiliados</a></li>
                         @endif
                         @if(in_array(100,$privilegios))
@@ -358,9 +357,9 @@
                          <li class=""><a href=""><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/></i> Backup Planificaci&#243;n Anual</a></li>-->
                     </ul>
                 </li>
-                
+                @endif
 <!--                  MENU MONITOREO -->
-                 
+                @if(array_intersect([100,200],$privilegios))  
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_monitoreo.png')}}"/>  Monitoreo
@@ -382,6 +381,7 @@
                         <li class=""><a href="forms_editors.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/calc.png')}}"/>  Backup Formato Trimestral </a></li>-->
                     </ul>
                 </li>
+                @endif
                 
                 <!-- MENU MONITOREO -->
 
@@ -402,7 +402,7 @@
                     </ul>
                 </li>-->
                 
-                @if (Session::get('rol')=='COORDINADOR' || Session::get('rol')=='ADMINISTRADOR')
+                @if (in_array(400,$privilegios))
                 <!-- MENU CONFIGURACION -->
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#DDL-nav">
@@ -471,8 +471,9 @@
                         
                     </ul>
                 </li>
-                
+                @endif
                 <!-- MENU SEGURIDAD -->
+                @if(in_array(500,$privilegios))
                 <li class="panel">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#chart-nav">
                         <img class="menu-imagen"src="{{asset('images/seg_lock.png')}}"/> Seguridad
