@@ -34,19 +34,6 @@ class PlanificacionRegion extends Controller
         return view('planificacionregion');
     }
     
-    public function exportarPlanificacion(){
-        Excel::create('Laravel Excel', function($excel) {
- 
-            $excel->sheet('Productos', function($sheet) {
- 
-                $products = PlnProyectoRegion::all();
- 
-                $sheet->fromArray($products);
- 
-            });
-        })->export('xls');     
-    }
-    
     private function apruebaPlanificacion(){
         $privilegios=request()->session()->get('privilegios');
         if(isset($privilegios)){
