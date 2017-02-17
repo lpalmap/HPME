@@ -73,6 +73,11 @@ $(document).ready(function(){
             $('#inNombre').val(data.nombre);
             $('#inDescripcion').val(data.descripcion);
             $('#inOrden').val(data.orden);
+            if(data.orden_especial=='S'){
+                $('#inOrdenEspecial').prop('checked', true);
+            }else{
+                $('#inOrdenEspecial').prop('checked', false);
+            }
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.ide_area);
@@ -81,11 +86,16 @@ $(document).ready(function(){
     });    
 
     //create new task / update existing task
-    $("#btnGuardar").click(function (e) {      
+    $("#btnGuardar").click(function (e) { 
+        var ordenEspecial='N';
+        if($('#inOrdenEspecial').prop('checked')){
+            ordenEspecial='S';
+        }
         var formData = {
             nombre: $('#inNombre').val(),
             descripcion: $('#inDescripcion').val(),
-            orden : $('#inOrden').val()
+            orden : $('#inOrden').val(),
+            orden_especial : ordenEspecial
         };   
         $('#loading').modal('show');
         $.ajaxSetup({

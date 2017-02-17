@@ -243,7 +243,7 @@ class PlanificacionRegion extends Controller
         $areas=DB::select(HPMEConstants::PLN_AREAS_POR_OBJETIVO,array('ideObjetivoMeta'=>$ideObjetivoMeta));              
         $result=array();
         foreach ($areas as $area){
-            $indicadores=$this->obtenerIndicadores($area->ide_area_objetivo,$ideProyectoRegion);
+            $indicadores=$this->obtenerIndicadores($area->ide_area_objetivo,$area->orden_especial,$ideProyectoRegion);
             if(!empty($indicadores)){
                 $result[]=array('area'=>$area,'indicadores'=>$indicadores);
             }   
@@ -251,17 +251,37 @@ class PlanificacionRegion extends Controller
         return $result; 
     }
     
-    private function obtenerIndicadores($ideAreaObjetivo,$ideProyectoRegion=null){   
+    private function obtenerIndicadores($ideAreaObjetivo,$ordenEspecial,$ideProyectoRegion=null){   
         $indicadores=DB::select(HPMEConstants::PLN_INDICADORES_POR_AREA,array('ideAreaObjetivo'=>$ideAreaObjetivo));
         $result=array();
+        $ordenPorProducto=FALSE;
+        if($ordenEspecial==='S'){
+            $ordenPorProducto=TRUE;
+        }
         foreach ($indicadores as $indicador){
             $productos=$this->obtenerProductos($indicador->ide_indicador_area,$ideProyectoRegion);
             if(!empty($productos)){
-                $result[]=array('indicador'=>$indicador,'productos'=>$productos);
+                if($ordenPorProducto){
+                    foreach ($productos as $producto) {
+                        //Log::info($producto);
+                        $result[]=array('indicador'=>$indicador,'productos'=>array($producto),'orden'=>$producto['producto']->orden);
+                    }
+                    //Log::info($result);
+                }else{
+                    $result[]=array('indicador'=>$indicador,'productos'=>$productos);
+                } 
             }
         }
+        if($ordenPorProducto){
+            usort($result, function($a, $b) {
+                return $a['orden'] - $b['orden'];
+            });
+        }        
         return $result;     
     }
+    
+    
+    
     
     private function obtenerProductos($ideIndicadorArea,$ideProyectoRegion=null){
         $productos=DB::select(HPMEConstants::PLN_PRODUCTOS_POR_INDICADOR,array('ideIndicadorArea'=>$ideIndicadorArea));    

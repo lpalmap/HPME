@@ -38,6 +38,7 @@ class Areas extends Controller
         $item->nombre=$request->nombre;
         $item->descripcion=$request->descripcion; 
         $item->orden=$request->orden;
+        $item->orden_especial=$request->orden_especial;
         $item->save();
         return response()->json($item);       
     }

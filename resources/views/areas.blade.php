@@ -107,6 +107,11 @@
                                                 <label>Orden</label>
                                                 <input class="form-control" id="inOrden" required="true"/>
                                                 </div>
+                                           <div class="form-group">
+                                               <label>Orden Especial(Por producto)</label>
+<!--                                                <input class="form-control" id="inDescripcion" required="true"/>-->
+                                                <input class="uniform" type="checkbox" id="inOrdenEspecial"/>
+                                           </div>
                                         </form>
                                         </div>
                                         <div class="modal-footer">
