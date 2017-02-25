@@ -100,7 +100,7 @@
                                                 <td style="text-align: center">{{$cuentas[$i]['cuenta']}}</td>
                                                 <td style="text-align: center">{{$cuentas[$i]['nombre']}}</td>
                                                 @endif
-                                                <td></td>
+                                                <td style="font-weight: bolder">{{isset($cuentas[$i]['porc'])?number_format($cuentas[$i]['porc'],2):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item1'])?number_format($cuentas[$i]['item1'],(fmod($cuentas[$i]['item1'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item2'])?number_format($cuentas[$i]['item2'],(fmod($cuentas[$i]['item2'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item3'])?number_format($cuentas[$i]['item3'],(fmod($cuentas[$i]['item3'], 1) !== 0.00)?2:0):'0'}}</td>

@@ -248,13 +248,18 @@ class PresupuestoConsolidado extends Controller
         foreach ($cuentasIniciales as $root){
              $result_cuenta=$this->buildReporteCuenta($root, $cuentasPadre, $cuentasConsolidar, $parameterQuery,$trimestral);
              if(!is_null($result_cuenta)){
+                 $totalCuentas=count($result_cuenta);
+                 if($totalCuentas>0){
+                     $totalCuentaRaiz=$result_cuenta[0]['total'];
+                     if($totalCuentaRaiz>0){
+                         for($i=0;$i<$totalCuentas;$i++){
+                             $result_cuenta[$i]['porc']=($result_cuenta[$i]['total']/$totalCuentaRaiz)*100;      
+                         }                         
+                     }
+                 }
                 $result=array_merge($result, $result_cuenta);
              }
-        }    
-        //Log::info("**************** ROOT ********************");
-        //Log::info($result);
-        //Log::info("**************** END ROOT ********************");
-    
+        }        
         return $result;
     }
     
@@ -279,13 +284,16 @@ class PresupuestoConsolidado extends Controller
                             //sumariazar
                             $itemCuenta=$this->totalizar($itemCuenta, $result_hija[0],$trimestral);
                             $result=array_merge($result,$result_hija);
+                            //Log::info("*****ACTUALIZANDO HIJAS******");
+                            //Log::info($result_hija);
+                            //Log::info("********************FIN HIJAS***********");
                         }
                     }
                     //Log::info("*********** print array "); 
                     //Log::info($itemCuenta);
                     $itemCuenta['nivel']=$nivel;
                     $result[0]=$itemCuenta;
-                    //Log::info($result);
+                    //Log::info($result);                 
                     return $result;
             }
         }       
