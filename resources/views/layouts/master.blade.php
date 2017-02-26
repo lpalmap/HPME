@@ -359,7 +359,7 @@
                 </li>
                 @endif
 <!--                  MENU MONITOREO -->
-                @if(array_intersect([100,200],$privilegios))  
+                @if(array_intersect([100,200,201],$privilegios))  
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_monitoreo.png')}}"/>  Monitoreo
@@ -373,7 +373,7 @@
                         @if(in_array(200,$privilegios))
                         <li class=""><a href="{{url('adminmonitoreo')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_admin.png')}}"/>  Administraci&#243;n Monitoreo</a></li>
                         @endif
-                        @if(in_array(100,$privilegios))
+                        @if(array_intersect([100,201],$privilegios))
                         <li class=""><a href="{{url('monitoreoafiliado')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Monitoreo Planificaci&oacute;n</a></li>
                         @endif
 <!--                        <li class=""><a href="forms_validation.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_avances.png')}}"/>  Monitoreo Afiliados </a></li>
@@ -486,7 +486,7 @@
                     <ul class="collapse" id="chart-nav">
                         <li><a href="{{url('usuarios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/user.jpg')}}"/> Usuarios </a></li>
                         <li><a href="{{url('roles')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_roles.png')}}"/> Roles </a></li>
-                        <li><a href="{{url('privilegios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privelgios </a></li>
+                        <li><a href="{{url('privilegios')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/seg_privilegio.png')}}"/> Privilegios </a></li>
                     </ul>
                 </li>
                 @endif

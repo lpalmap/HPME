@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\PlnProyectoPlanificacion;
 use App\HPMEConstants;
 use App\MonProyectoPeriodo;
 use App\PrivilegiosConstants;
 use App\CfgListaValor;
+use App\MonPeriodoRegion;
+use App\CfgRegion;
+use App\PlnProyectoRegion;
 
 class MonitoreoProyecto extends Controller
 {
@@ -70,7 +74,7 @@ class MonitoreoProyecto extends Controller
     private function vistaPrivilegio(){
         $privilegios=request()->session()->get('privilegios');
         if(isset($privilegios)){
-            if(in_array(PrivilegiosConstants::MONITEO_ADMINISTRACION, $privilegios)){
+            if(in_array(PrivilegiosConstants::MONITOREO_ADMINISTRACION, $privilegios)){
                 return TRUE;
             }
         }  
@@ -96,12 +100,44 @@ class MonitoreoProyecto extends Controller
     }
     
     public function monitoreoAfiliadoProyecto($ideProyecto){
-        if(!$this->ingresoMonitoreo()){
+        $regionUsuario=$this->regionUsuario();        
+        if(!$this->ingresoMonitoreo() || is_null($regionUsuario)){
             return view('home');
         }
-        $proyecto=  PlnProyectoPlanificacion::find($ideProyecto);
-        $periodos=  MonProyectoPeriodo::where('ide_proyecto','=',$ideProyecto)->where('estado','!=','INACTIVO')->orderBy('no_periodo','asc')->get();   
-        return view('monitoreo_afiliado_proyecto',array('proyecto'=>$proyecto->descripcion,'ideProyecto'=>$proyecto->ide_proyecto,'items'=>$periodos,'estado'=>$proyecto->estado));
+        $nombreRegion=  CfgRegion::where('ide_region','=',$regionUsuario)->pluck('nombre')->first();
+        $proyecto=  PlnProyectoPlanificacion::find($ideProyecto);//proyecto anual
+        $ideProyectoRegion=PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$proyecto->ide_proyecto,'ide_region'=>$regionUsuario))->pluck('ide_proyecto_region')->first(); //proyecto especifico de la region
+        //$periodos=  MonProyectoPeriodo::where('ide_proyecto','=',$ideProyecto)->where('estado','!=','INACTIVO')->orderBy('no_periodo','asc')->get();       
+        $periodos=  MonProyectoPeriodo::where('ide_proyecto','=',$ideProyecto)->where('estado','!=','INACTIVO')->orderBy('no_periodo','asc')->pluck('ide_periodo_monitoreo');
+        $periodosRegion=array();
+        foreach ($periodos as $periodo){
+            $region=  MonPeriodoRegion::where(array('ide_periodo_monitoreo'=>$periodo,'ide_proyecto_region'=>$ideProyectoRegion))->first();
+            if(is_null($region)){
+                $region=new MonPeriodoRegion;
+                $region->estado=  HPMEConstants::ABIERTO;
+                $region->ide_periodo_monitoreo=$periodo;
+                $region->ide_proyecto_region=$ideProyectoRegion;
+                $region->create($region->toArray());
+                $region->periodo();
+                $periodosRegion[]=$region;
+            }else{
+                $region->periodo;
+                $periodosRegion[]=$region;
+            }          
+        }
+        
+        return view('monitoreo_afiliado_proyecto',array('proyecto'=>$proyecto->descripcion,'ideProyecto'=>$proyecto->ide_proyecto,'items'=>$periodosRegion,'region' =>$nombreRegion));
+    }
+    
+    private function regionUsuario(){
+        $user=Auth::user();
+        $regionQuery=new CfgRegion();
+        $regiones=$regionQuery->selectQuery(HPMEConstants::REGION_USUARIO_ADMINISTRADOR_QUERY, array('ideUsuario'=>$user->ide_usuario));
+        if(count($regiones)>0){
+            return $regiones[0]->ide_region;           
+        }else{
+            return null;
+        }
     }
     
     

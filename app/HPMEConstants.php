@@ -33,6 +33,7 @@ class HPMEConstants
     const PLN_PRODUCTOS_POR_INDICADOR="SELECT p.ide_producto_indicador,c.nombre,c.orden  FROM pln_producto_indicador p,cfg_producto c WHERE c.ide_producto=p.ide_producto AND p.ide_indicador_area=:ideIndicadorArea ORDER BY c.orden";
     const PLN_REGION_PRODUCTO="SELECT r.ide_region_producto,p.nombre as proyecto,r.descripcion FROM pln_region_producto r left join cfg_proyecto p on r.ide_proyecto=p.ide_proyecto WHERE r.ide_proyecto_region=:ideProyectoRegion AND r.ide_producto_indicador=:ideProductoIndicador";    
     const PLN_DETALLE_POR_PRODUCTO_REGION="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto GROUP BY d.num_detalle ORDER BY d.num_detalle";
+    const PLN_DETALLE_POR_PRODUCTO_REGION_PERIODO="SELECT d.num_detalle,sum(d.valor) as valor,sum(d.ejecutado) as ejecutado FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_region_producto=:ideRegionProducto and d.num_detalle=:periodo GROUP BY d.num_detalle";
     const PLN_CONSOLIDADO_POR_PRODUCTO="SELECT d.num_detalle,sum(d.valor) as valor FROM pln_region_producto r,pln_region_producto_detalle d WHERE d.ide_region_producto=r.ide_region_producto and r.ide_producto_indicador=:ideProductoIndicador GROUP BY d.num_detalle ORDER BY d.num_detalle";
     const PLN_USUARIOS_BITACORA_PLANIFICACION="SELECT distinct u.email FROM pln_bitacora_mensaje b,seg_usuario u WHERE b.ide_bitacora_proyecto_region=:ideBitacora AND b.ide_usuario=u.ide_usuario AND b.ide_usuario<>:myUsuario";
     const PLN_OBSERVACIONES_EMAIL_ADMINISTRADOR="SELECT u.email FROM seg_usuario_region r,seg_usuario u WHERE r.ide_usuario=u.ide_usuario AND r.ide_region=:ideRegion";
@@ -139,5 +140,6 @@ class HPMEConstants
     const PROYECTO='Proyecto';
     const PARAM_EMAIL_PLANIFICACION='EMAIL_PLANIFICACION';
     const PARAM_EMAIL_PRESUPUESTO='EMAIL_PRESUPUESTO';
+    const FILTRO_TODO=0;
     
 }

@@ -15,8 +15,8 @@ class PrivilegiosConstants
     const PLANIFICACION_APROBAR_PLANIFICACION=103;
       
     /* MONITOREO */
-    const MONITEO_ADMINISTRACION=200;
-    
+    const MONITOREO_ADMINISTRACION=200;
+    const MONITOREO_INGRESO=201;
     /* REPORTES */
 
     /* CONFIGURACION */

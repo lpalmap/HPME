@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>{{$proyecto}}</h2>
+                        <h2>{{$proyecto}}/{{$region}}</h2>
                     </div>
                 </div>
 
@@ -47,9 +47,9 @@
                                         @if (isset($items))
                                             @for ($i=0;$i<count($items);$i++)
                                                 <tr class="even gradeA" id="item{{$items[$i]->ide_periodo_monitoreo}}">
-                                                    <td>{{$items[$i]->fecha_habilitacion}}</td>
-                                                    <td>{{$items[$i]->fecha_cierre}}</td>
-                                                    <td><a href="{{url('/monitoreoafiliadodetalle/'.$items[$i]->ide_periodo_monitoreo)}}">{{$items[$i]->descripcion}}</a></td>
+                                                    <td>{{$items[$i]->periodo->fecha_habilitacion}}</td>
+                                                    <td>{{$items[$i]->periodo->fecha_cierre}}</td>
+                                                    <td><a href="{{url('/periodoregion/'.$items[$i]->ide_periodo_region)}}">{{$items[$i]->periodo->descripcion}}</a></td>
                                                     <td>{{$items[$i]->estado}}</td>
                                                     @if($items[$i]->estado==='ABIERTO')
                                                     <td></td>

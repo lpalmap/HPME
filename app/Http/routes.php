@@ -326,6 +326,9 @@ Route::get('/monitoreoafiliado/{id}',['uses' => 'MonitoreoProyecto@monitoreoAfil
 Route::get('/monitoreoafiliadodetalle/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle', 'middleware' => 'auth']);
 Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle2', 'middleware' => 'auth']);
 
+Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'middleware' => 'auth']);
+
+
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
 //    return 'Usuario Agregado 222';
