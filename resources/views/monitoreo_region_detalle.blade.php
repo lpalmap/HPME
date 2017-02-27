@@ -132,7 +132,7 @@
                                                                 }
                                                             ?>
                                                             <td>
-                                                                <button class="btn-editar-valor">
+                                                                <button class="btn-editar-valor" value="{{$detalle['detalle']->ide_region_producto}}">
                                 <img src="{{asset('images/editar.png')}}" class="menu-imagen" alt="" title="Editar"/></button>
                                                             </td>
                                                         </tr>
@@ -252,10 +252,10 @@
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
                                             <td>
-                                                <input maxlength="7" disabled="true" tabindex="1" autofocus="true" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="primerTrim" value="45" />  
+                                                <input maxlength="13" disabled="true" tabindex="1" autofocus="true" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="planificado" value="0" />  
                                             </td>
                                             <td>
-                                                <input maxlength="7" tabindex="1" autofocus="true" align="right" class="form-control TabOnEnter" type="text" data-mask="999999" id="primerTrim" value="" />  
+                                                <input maxlength="13" disabled="{{$estado==='ABIERTO'?'false':'true'}}"tabindex="1" autofocus="true" align="right" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="ejecutado" value="0" />  
                                             </td>
                                         </tr>
                                     </tbody>
@@ -301,8 +301,9 @@
 @section('footer')
     @parent
     <meta name="_token" content="{!! csrf_token() !!}" />
-    <meta name="_urlTarget" content="{{url('planregion')}}"/>
+    <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
+    <meta name="_periodo" content="{{$periodo}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>

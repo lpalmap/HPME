@@ -9,7 +9,15 @@ $(document).ready(function(){
     $( document ).on( 'click', '.btn-editar-valor', function() {
         $('#loading').modal('show');
         $('#ingresarDetalleModal').modal('show');
-        $('#loading').modal('hide');
+        var ideRegionProducto=$(this).val();
+        var targetURL=$('meta[name="_urlTarget"]').attr('content');
+        var periodo=$('meta[name="_periodo"]').attr('content');
+        $.get(targetURL + '/producto/' + ideRegionProducto+'/periodo/'+periodo, function (data) {
+            //success data
+            $('#planificado').val(data.valor);
+            $('#ejecutado').val(data.ejecutado);          
+            $('#loading').modal('hide');
+        });
     });
     
     $('#btnAprobarPlan').click(function(){

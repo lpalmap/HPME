@@ -14,6 +14,7 @@ use App\CfgListaValor;
 use App\MonPeriodoRegion;
 use App\CfgRegion;
 use App\PlnProyectoRegion;
+use App\PlnRegionProductoDetalle;
 
 class MonitoreoRegion extends Controller
 {
@@ -49,7 +50,7 @@ class MonitoreoRegion extends Controller
 
         $encabezados=array();
         $encabezados[]=  MonProyectoPeriodo::where('ide_periodo_monitoreo','=',$periodoRegion->ide_periodo_monitoreo)->pluck('descripcion')->first();
-        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'ingresaPlan'=>FALSE)); 
+        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'ingresaPlan'=>FALSE,'periodo'=>$periodo)); 
     }
     
     
@@ -221,4 +222,9 @@ class MonitoreoRegion extends Controller
         return $valores;
     }
     
+    public function detalleProducto($ideRegionProducto,$periodo){
+       Log::info("Producto: $ideRegionProducto periodo $periodo");
+       $detalle=PlnRegionProductoDetalle::where(array('ide_region_producto'=>$ideRegionProducto,'num_detalle'=>$periodo))->first();
+       return response()->json($detalle);
+    }
 }

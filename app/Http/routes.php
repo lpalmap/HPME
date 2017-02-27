@@ -327,6 +327,8 @@ Route::get('/monitoreoafiliadodetalle/{id}',['uses' => 'PlanificacionRegion@moni
 Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle2', 'middleware' => 'auth']);
 
 Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'middleware' => 'auth']);
+Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
+
 
 
 //Route::get('/insert', function() {
