@@ -252,10 +252,10 @@
                                     <tbody id="lista-items2" name="lista-items">                                      
                                         <tr class="even gradeA">
                                             <td>
-                                                <input maxlength="13" disabled="true" tabindex="1" autofocus="true" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="planificado" value="0" />  
+                                                <input maxlength="13"  readonly="true"  tabindex="1" autofocus="true" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="planificado" value="0" />  
                                             </td>
                                             <td>
-                                                <input maxlength="13" disabled="{{$estado==='ABIERTO'?'false':'true'}}"tabindex="1" autofocus="true" align="right" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="ejecutado" value="0" />  
+                                                <input maxlength="13" {{$estado==='ABIERTO'?'':'disabled'}} tabindex="1" autofocus="true" align="right" style="text-align: right;" class="form-control TabOnEnter" type="text" data-mask="999999" id="ejecutado" value="0" />  
                                             </td>
                                         </tr>
                                     </tbody>
