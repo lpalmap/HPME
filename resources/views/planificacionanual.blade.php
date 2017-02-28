@@ -67,10 +67,12 @@
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_proyecto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
                                                 @endif
-                                                @if($ingresaPlan && $items[$i]->estado=='PUBLICADO')
-                                                    @if(isset($estadoRegion))
-                                                        <a href="{{asset('proyectodetalle/'.($items[$i]->ide_proyecto))}}">
+                                                @if($ingresaPlan && $items[$i]->estado!=='ABIERTO')
+                                                <a href="{{asset('proyectodetalle/'.($items[$i]->ide_proyecto))}}">
                                                         <img src="{{asset('images/detail.png')}}" class="menu-imagen" alt="" title="Ver detalle planificaci&oacute;n"/></a>
+                                                @endif
+                                                @if($ingresaPlan && $items[$i]->estado=='PUBLICADO')
+                                                    @if(isset($estadoRegion))                                                       
                                                         @if($estadoRegion=='ABIERTO')
                                                             <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_proyecto}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>
                                                         @else
