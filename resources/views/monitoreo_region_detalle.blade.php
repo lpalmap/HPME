@@ -30,6 +30,22 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <span style="font-weight: bold">Regi&oacute;n {{$region}}/{{isset($plantilla)?$plantilla['proyecto']:''}}</span>                                
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            <a href="{{url('monobservaciones/'.$idePeriodoRegion)}}" >
+                                <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
+                            &nbsp;
+                            &nbsp;
+                            @if($estado!='APROBADO')
+                            <button  id="btnAprobarPlan" value="{{$ideProyectoRegion}}">
+                                <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Planificaci&oacute;n"/></button>
+                            @endif
+                            <button id="cleanVacio">
+                                <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>                            
                             <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
                         </div>
                         
@@ -304,6 +320,7 @@
     <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
     <meta name="_periodo" content="{{$periodo}}"/>
+    <meta name"_periodoRegion" content="{{$idePeriodoRegion}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>

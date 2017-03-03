@@ -50,7 +50,7 @@ class MonitoreoRegion extends Controller
 
         $encabezados=array();
         $encabezados[]=  MonProyectoPeriodo::where('ide_periodo_monitoreo','=',$periodoRegion->ide_periodo_monitoreo)->pluck('descripcion')->first();
-        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'ingresaPlan'=>FALSE,'periodo'=>$periodo)); 
+        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'ingresaPlan'=>FALSE,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion)); 
     }
     
     
