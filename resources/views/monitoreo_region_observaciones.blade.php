@@ -33,7 +33,7 @@
                                     <img src="{{asset('images/add_mail.png')}}" class="menu-imagen-big" alt="" title="Agregar Observaci&oacute;n"/></button>
                                 @endif
                                 @if($apruebaPlanificacion && !is_null($estadoBitacora) && $estadoBitacora=='ABIERTO')
-                                <button id="btnCerrar" value="{{$ideProyectoRegion}}">
+                                <button id="btnCerrar" value="{{$idePeriodoRegion}}">
                                     <img src="{{asset('images/ok.png')}}" class="menu-imagen-big" alt="" title="Marcar observaciones como resultas."/></button>
                                 @endif
                             </span>
@@ -154,7 +154,7 @@
 @section('footer')
     @parent
     <meta name="_token" content="{!! csrf_token() !!}" />
-    <meta name="_urlTarget" content="{{url('observacion')}}"/>
+    <meta name="_urlTarget" content="{{url('monobservaciones')}}"/>
     <meta name="_usuario" content="{{$usuario}}"/>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
         <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>

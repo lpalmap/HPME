@@ -23,7 +23,7 @@ $(document).ready(function(){
     $("#btnGuardar").click(function (e) {      
         $('#loading').modal('show');
         var formData = {
-            ide_proyecto_region: $(this).val(),
+            ide_periodo_region: $(this).val(),
             asunto:$('#inAsunto').val(),
             para:$('#inPara').val(),
             mensaje:$('#inMensaje').val()
@@ -85,7 +85,7 @@ $(document).ready(function(){
     $("#btnMarcar").click(function (e) {      
         $('#loading').modal('show');
         var formData = {
-            ide_proyecto_region: $(this).val()
+            ide_periodo_region: $(this).val()
         };   
               
         $.ajaxSetup({

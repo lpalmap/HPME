@@ -20,7 +20,7 @@ use App\MonBitacoraPeriodo;
 use App\MonBitacoraPeriodoMensaje;
 
 
-class PlanificacionObservaciones extends Controller
+class MonitoreoObservaciones extends Controller
 {      
     public function observacionesRegion($idePerioRegion){
         $rol=  request()->session()->get('rol');
@@ -43,7 +43,7 @@ class PlanificacionObservaciones extends Controller
                     $administradorRegion=true;
                 }
             }
-            $bitacora=$this->bitacoraPorProyectoRegion($periodoRegion->ide_periodo_region);
+            $bitacora=$this->bitacoraPorPeriodoRegion($periodoRegion->ide_periodo_region);
             $mensajes=array();
             $usuarioPrimerMensaje=-1;
             $estadoBitacora=null;
@@ -54,14 +54,14 @@ class PlanificacionObservaciones extends Controller
                 }
                $estadoBitacora= MonBitacoraPeriodo::where('ide_bitacora_periodo','=',$bitacora->ide_bitacora_periodo)->pluck('estado')->first();
             }
-            $proyectoPlan=PlnProyectoRegion::where('ide_periodo_region','=',$periodoRegion->ide_periodo_region)->pluck('ide_periodo_planificacion')->first(); 
-            $nombreProyecto=PlnProyectoPlanificacion::where('ide_proyecto','=',$periodoRegion)->pluck('descripcion')->first();
+            $proyectoPlan=PlnProyectoRegion::where('ide_proyecto_region','=',$periodoRegion->ide_proyecto_region)->pluck('ide_proyecto_planificacion')->first(); 
+            $nombreProyecto=PlnProyectoPlanificacion::where('ide_proyecto','=',$proyectoPlan)->pluck('descripcion')->first();
             $nombreRegion=CfgRegion::where('ide_region','=',$region)->pluck('nombre')->first();
             
             $myusuario=Auth::user();
             $emails=array();
             if(!is_null($bitacora)){
-                $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_PLANIFICACION,array('ideBitacora'=>$bitacora->ide_bitacora_proyecto_region,'myUsuario'=>$myusuario->ide_usuario));
+                $emails=  DB::select(HPMEConstants::PLN_USUARIOS_BITACORA_MONITOREO,array('ideBitacora'=>$bitacora->ide_bitacora_periodo,'myUsuario'=>$myusuario->ide_usuario));
             }
             $cadenaCorreos='';
             $first=true;
@@ -72,7 +72,7 @@ class PlanificacionObservaciones extends Controller
                 $emailTarget=$this->emailPlanificacion();
             }else{
                 //se coloca por defecto el correo del administrador de la region
-                $emailTarget=$this->emailAdministradorRegion($proyectoRegion->ide_region); 
+                $emailTarget=$this->emailAdministradorRegion($region); 
             }  
             $incluirEmailTarjet=true;
             foreach($emails as $email){
@@ -95,7 +95,7 @@ class PlanificacionObservaciones extends Controller
                 }
                 
             }         
-            return view('observaciones_planificacion',array('ideProyectoRegion'=>$id,'estado'=>$proyectoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos,'apruebaPlanificacion'=>$apruebaPlanificacion));
+            return view('monitoreo_region_observaciones',array('idePeriodoRegion'=>$idePerioRegion,'estado'=>$periodoRegion->estado,'rol'=>$rol,'nombreProyecto'=>$nombreProyecto,'nombreRegion'=>$nombreRegion,'bitacora'=>$bitacora,'mensajes'=>$mensajes,'usuario'=>$usuarioPrimerMensaje,'estadoBitacora'=>$estadoBitacora,'correos'=>$cadenaCorreos,'apruebaPlanificacion'=>$apruebaPlanificacion));
         }
         return view('home');
     } 
@@ -143,7 +143,7 @@ class PlanificacionObservaciones extends Controller
         return FALSE;
     }
     
-    private function bitacoraPorProyectoRegion($idePeriodoRegion){
+    private function bitacoraPorPeriodoRegion($idePeriodoRegion){
         $bitacoras= MonBitacoraPeriodo::where('ide_periodo_region','=',$idePeriodoRegion)->get();
         if(count($bitacoras)>0){
             return $bitacoras[0];
@@ -152,34 +152,33 @@ class PlanificacionObservaciones extends Controller
     }
     
     public function addMessage(Request $request){
-        $rol=  request()->session()->get('rol');
         $ingresaPlan=$this->ingresoPlanificacion();
         $consultaPlanificacion=$this->consultaPlanificacion();
         $apruebaPlanificacion=$this->apruebaPlanificacion();
         if($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion){
-            $proyectoRegion=  PlnProyectoRegion::find($request->ide_proyecto_region);
+            $proyectoRegion= MonPeriodoRegion::find($request->ide_periodo_region);
             if(is_null($proyectoRegion)){
-                return response()->json(array('error'=>'Solo pudo guardar el pensaje para el proyecto de la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+                return response()->json(array('error'=>'Solo pudo guardar el mensaje para el proyecto de la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
             }
             if($proyectoRegion->estado==HPMEConstants::APROBADO){
-                return response()->json(array('error'=>'No se puede agregar nuevos mensajes a una planificaci&oacute;n aprobada.'), HPMEConstants::HTTP_AJAX_ERROR);
+                return response()->json(array('error'=>'No se puede agregar nuevos mensajes a un periodo aprobado.'), HPMEConstants::HTTP_AJAX_ERROR);
             }
             
-            $bitacora=$this->bitacoraPorProyectoRegion($request->ide_proyecto_region);
+            $bitacora=$this->bitacoraPorPeriodoRegion($request->ide_periodo_region);
             $cambioEstado=  HPMEConstants::NO;
             if(is_null($bitacora)){
-                $bitacora=new PlnBitacoraProyectoRegion();
-                $bitacora->ide_proyecto_region=$request->ide_proyecto_region;
+                $bitacora=new MonBitacoraPeriodo();
+                $bitacora->ide_periodo_region=$request->ide_periodo_region;
                 $bitacora->estado=HPMEConstants::ABIERTO;
                 $bitacora->save();
                 $cambioEstado=  HPMEConstants::SI;
             }
             $user=Auth::user();
-            $bitacoraMensaje=new PlnBitacoraMensaje();
+            $bitacoraMensaje=new MonBitacoraPeriodoMensaje();
             $bitacoraMensaje->ide_usuario=$user->ide_usuario;
             date_default_timezone_set(HPMEConstants::TIME_ZONE);
             $bitacoraMensaje->fecha=date(HPMEConstants::DATETIME_FORMAT,  time());
-            $bitacoraMensaje->ide_bitacora_proyecto_region=$bitacora->ide_bitacora_proyecto_region;
+            $bitacoraMensaje->ide_bitacora_periodo=$bitacora->ide_bitacora_periodo;
             $bitacoraMensaje->mensaje=$request->mensaje;
             $bitacoraMensaje->save();      
             if($apruebaPlanificacion){
@@ -220,7 +219,7 @@ class PlanificacionObservaciones extends Controller
     }
     
     public function marcarBitacora(Request $request){
-        $bitacora=$this->bitacoraPorProyectoRegion($request->ide_proyecto_region);
+        $bitacora=$this->bitacoraPorPeriodoRegion($request->ide_periodo_region);
         if(is_null($bitacora)){
             return response()->json(array('error'=>'No se entraron observaciones para la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
         }else{

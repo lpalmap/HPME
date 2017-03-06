@@ -13,7 +13,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Planificaci&oacute;n por Regi&oacute;n</h2>
+                        <h2>Monitoreo por Regi&oacute;n</h2>
                     </div>
                 </div>
 
@@ -320,7 +320,7 @@
     <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
     <meta name="_periodo" content="{{$periodo}}"/>
-    <meta name"_periodoRegion" content="{{$idePeriodoRegion}}"/>
+    <meta name="_periodoRegion" content="{{$idePeriodoRegion}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>

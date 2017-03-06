@@ -22,18 +22,15 @@ class MonitoreoRegion extends Controller
         $vistaPrivilegio=$this->vistaPrivilegio();
         $periodoRegion=  MonPeriodoRegion::find($idePeriodoRegion);
         $region=PlnProyectoRegion::where('ide_proyecto_region','=',$periodoRegion->ide_proyecto_region)->pluck('ide_region')->first();
-        Log::info("Region proyecto $region");
         if(!$vistaPrivilegio){
             $ingresaMon=$this->ingresoMonitoreo();
             if($ingresaMon){
                 $regionUsuario=  $this->regionUsuario();
                 Log::info("Region usuario: $regionUsuario");
                 if($region!==$regionUsuario){
-                    Log::info("flasdjflkasdf region no valida");
                     return view('home');
                 }
             }else{
-                 Log::info("no ingresa mon");
                 return view('home');
             }          
         }

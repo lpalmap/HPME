@@ -329,6 +329,11 @@ Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@mon
 Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'middleware' => 'auth']);
 Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
 
+Route::get('/monobservaciones/{id}',['uses' => 'MonitoreoObservaciones@observacionesRegion', 'middleware' => 'auth']);
+//agregar mensaje
+Route::post('/monobservaciones/add',['uses' => 'MonitoreoObservaciones@addMessage', 'middleware' => 'auth']);
+//marcar resuelto
+Route::post('/monobservaciones/marcar',['uses' => 'MonitoreoObservaciones@marcarBitacora', 'middleware' => 'auth']);
 
 
 //Route::get('/insert', function() {
