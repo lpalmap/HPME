@@ -44,6 +44,8 @@ class HPMEConstants
     
     //Querys monitoreo
     const PLN_USUARIOS_BITACORA_MONITOREO="SELECT distinct u.email FROM mon_bitacora_periodo_mensaje b,seg_usuario u WHERE b.ide_bitacora_periodo=:ideBitacora AND b.ide_usuario=u.ide_usuario AND b.ide_usuario<>:myUsuario";
+    //Monitoreo todas las regiones
+    const MONITOREO_REGION_QUERY="SELECT p.ide_periodo_region,r.nombre,u.usuario,DATE_FORMAT(p.fecha_aprobacion,'%d-%m-%Y') as fecha_aprobacion,p.estado FROM mon_periodo_region p,mon_proyecto_periodo mp,pln_proyecto_region pr,cfg_region r,seg_usuario u WHERE p.ide_proyecto_region=pr.ide_proyecto_region and p.ide_periodo_monitoreo=mp.ide_periodo_monitoreo and pr.ide_region=r.ide_region and pr.ide_usuario_creacion=u.ide_usuario and mp.estado=:estado and pr.ide_proyecto_planificacion=:ideProyecto ORDER BY r.nombre asc";
     
     
     //Presupuesto

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\PlnProyectoPlanificacion;
 use App\HPMEConstants;
 use App\MonProyectoPeriodo;
@@ -14,6 +15,7 @@ use App\MonPeriodoRegion;
 use App\CfgRegion;
 use App\PlnProyectoRegion;
 
+
 class MonitoreoProyecto extends Controller
 {
     public function index(){
@@ -22,6 +24,20 @@ class MonitoreoProyecto extends Controller
             return view('home');
         }
         return view('monitoreo_admon_proyectos',array('items'=>$proyectos));
+    }
+    
+    public function monitoreoProyecto(){
+        $ultimoProyecto=PlnProyectoPlanificacion::where('estado','!=',HPMEConstants::EJECUTADO)->first(['ide_proyecto','descripcion','estado']);
+        $consulta=$this->consultaPlanificacion();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ultimoProyecto) && ($apruebaPlanificacion || $consulta)){
+            $puedeCerrar=$apruebaPlanificacion;
+            $regiones=  DB::select(HPMEConstants::MONITOREO_REGION_QUERY,array('ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>  HPMEConstants::PUBLICADO)); //PlnProyectoRegion::where(array('ide_proyecto_planificacion'=>$ultimoProyecto))->get(['ide_proyecto_planificacion','estado']);
+            if(count($regiones)>0){
+                return view('monitoreo_regiones',array('regiones'=>$regiones,'proyecto'=>$ultimoProyecto->descripcion,'ideProyecto'=>$ultimoProyecto->ide_proyecto,'estado'=>$ultimoProyecto->estado,'puedeCerrar'=>$puedeCerrar));
+            }          
+        }        
+        return view('monitoreo_regiones');
     }
     
     public function adminProyecto($ideProyecto){
@@ -64,7 +80,7 @@ class MonitoreoProyecto extends Controller
 //        }else{
 //            
 //        }
-        $periodo->estado=HPMEConstants::ABIERTO;
+        $periodo->estado=HPMEConstants::PUBLICADO;
         $periodo->fecha_habilitacion=date(HPMEConstants::DATE_FORMAT,  time());
         $periodo->save();
         return response()->json();
@@ -78,6 +94,26 @@ class MonitoreoProyecto extends Controller
                 return TRUE;
             }
         }  
+        return FALSE;
+    }
+    
+    private function consultaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_CONSULTA_REGIONES, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
+    private function apruebaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
         return FALSE;
     }
     

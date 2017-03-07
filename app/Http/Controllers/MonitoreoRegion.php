@@ -47,7 +47,7 @@ class MonitoreoRegion extends Controller
 
         $encabezados=array();
         $encabezados[]=  MonProyectoPeriodo::where('ide_periodo_monitoreo','=',$periodoRegion->ide_periodo_monitoreo)->pluck('descripcion')->first();
-        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'ingresaPlan'=>FALSE,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion)); 
+        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'vistaPrivilegio'=>$vistaPrivilegio,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion,'ideProyectoPlanificacion'=>$proyectoRegion->ide_proyecto_planificacion)); 
     }
     
     
@@ -84,6 +84,7 @@ class MonitoreoRegion extends Controller
             if(in_array(PrivilegiosConstants::MONITOREO_ADMINISTRACION, $privilegios)
                     || in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)
                             || in_array(PrivilegiosConstants::PLANIFICACION_CONSULTA_REGIONES, $privilegios)
+                                    || in_array(PrivilegiosConstants::PLANIFICACION_CREAR_PROYECTO,$privilegios)
                     ){
                 return TRUE;
             }

@@ -373,6 +373,9 @@
                         @if(in_array(200,$privilegios))
                         <li class=""><a href="{{url('adminmonitoreo')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_admin.png')}}"/>  Administraci&#243;n Monitoreo</a></li>
                         @endif
+                        @if(array_intersect([101,102,103,200],$privilegios))
+                        <li class=""><a href="{{url('monitoreoproyecto')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/monitoreo_afiliados.png')}}"/>  Monitoreo Afiliados</a></li>
+                        @endif
                         @if(array_intersect([100,201],$privilegios))
                         <li class=""><a href="{{url('monitoreoafiliado')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Monitoreo Planificaci&oacute;n</a></li>
                         @endif

@@ -11,10 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::get('/','Login@login')->name('login');
 Route::get('/login/{error?}','Login@login')->name('login');
 Route::post('/login','Login@auth');
 Route::get('/logout','Login@logout');
@@ -335,6 +335,8 @@ Route::post('/monobservaciones/add',['uses' => 'MonitoreoObservaciones@addMessag
 //marcar resuelto
 Route::post('/monobservaciones/marcar',['uses' => 'MonitoreoObservaciones@marcarBitacora', 'middleware' => 'auth']);
 
+/* MONITOREO AFILAIDO*/
+Route::get('/monitoreoproyecto',['uses' => 'MonitoreoProyecto@monitoreoProyecto', 'middleware' => 'auth']);
 
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

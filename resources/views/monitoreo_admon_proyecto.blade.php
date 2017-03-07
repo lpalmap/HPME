@@ -52,7 +52,7 @@
                                                     <td>{{$items[$i]->fecha_cierre}}</td>
                                                     <td>{{$items[$i]->descripcion}}</td>
                                                     <td>{{$items[$i]->estado}}</td>
-                                                    @if($items[$i]->estado==='ABIERTO')
+                                                    @if($items[$i]->estado==='PUBLICADO')
                                                     <td></td>
                                                     @else
                                                     <td><button type="button" class="btn btn-primary btn-habilitar" value="{{$items[$i]->ide_periodo_monitoreo}}">Habilitar</button></td>   

@@ -20,11 +20,11 @@
                 <hr />
                 <div class="row">
                 <div class="col-lg-12">
-                    @if($ingresaPlan)
-                    <a href="{{url('proyecto')}}" >
+                    @if($vistaPrivilegio)
+                    <a href="{{url('monitoreoproyecto')}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @else
-                        <a href="{{url('planificaciones')}}" >
+                        <a href="{{url('monitoreoafiliado/'.$ideProyectoPlanificacion)}}" >
                         <img src="{{asset('images/back.png')}}" class="menu-imagen-big" alt="" title="Atr&aacute;s"/></a>
                     @endif
                     <div class="panel panel-default">
