@@ -112,7 +112,7 @@
                                 </table>
                             </div>
                             @else
-                            <span>No hay proyectos de planificaci&oacute;n por regi&oacute;n ingresados</span>
+                            <span>No hay periodos ingresados</span>
                             @endif                          
                         </div>
                         </div>

@@ -139,7 +139,9 @@
                                                             <td>{{$detalle['detalle']->proyecto}}</td>
                                                             <td>{{$producto['producto']->nombre}}</td>
                                                             <?php
-                                                                foreach ($valores as $valor){                                                                    
+                                                                $ideDetalle=null;
+                                                                foreach ($valores as $valor){
+                                                                    $ideDetalle=$valor->ide_region_producto_detalle;
                                                             ?>
                                                             <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
                                                             <td style="text-align: right;background:  #f4c37d">{{number_format($valor->ejecutado,(fmod($valor->ejecutado, 1) !== 0.00)?2:0)}}</td>
@@ -148,7 +150,7 @@
                                                                 }
                                                             ?>
                                                             <td>
-                                                                <button class="btn-editar-valor" value="{{$detalle['detalle']->ide_region_producto}}">
+                                                                <button class="btn-editar-valor" value="{{$ideDetalle}}">
                                 <img src="{{asset('images/editar.png')}}" class="menu-imagen" alt="" title="Editar"/></button>
                                                             </td>
                                                         </tr>
@@ -252,7 +254,7 @@
                                             <h4 class="modal-title">Planficaci&oacute;n/Ejecuci&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
-                                       <form role="form" id="formAgregarDetalle" method="POST" action="{{url('fileupload')}}" enctype="multipart/form-data">
+                                       <form role="form" id="formAgregarDetalle" method="POST" enctype="multipart/form-data">
                                            <div class="form-group">
                                                    <table class="table table-striped table-bordered table-hover" id="dataTableItems2">
                                     <thead>
@@ -278,27 +280,42 @@
                                                 
                                            </div>
                                                 
-                                           <div class="form-group">
-                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-
-
-
-                                <div class="input-group">                                     
-                                        <span class="btn btn-file btn-info">
-                                            <span class="fileupload-new">Seleccionar Archivo</span>
-                                            <span class="fileupload-exists">Cambiar</span>
-                                            <input type="file" multiple="true" name="files"/>
-                                        </span> 
-                                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remover</a>
-                                        <input class="btn-primary" type="submit" value="Subir Archivos"/>    
-                                        <br /> <br />
-                                        <div class="col-lg-3">
-                                            <i class="icon-file fileupload-exists"></i>
-                                            <span class="fileupload-preview"></span>
-                                        </div>
-                                </div>
-                        </div>                                            
-                                                </div>                                     
+                                 
+                                                     <div class="form-group">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <span class="btn btn-file btn-default">
+                                        <span class="fileupload-new">Seleccionar Archivo</span>
+                                    <span class="fileupload-exists">Cambiar</span>
+                                    <input type="file" multiple="true" name="files" id="fileUpload"/>
+                                </span>
+                                <span class="fileupload-preview"></span>
+                                <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+                                <input class="btn btn-primary" type="submit" value="Subir Archivos" id="subirArchivo"/> 
+                            </div>
+                    </div>
+                                           
+                                         <div class="form-group">  
+                                                <div class="panel panel-default">
+                                                 <div class="panel-heading">
+                                                     Archivos Cargados
+                                                 </div>
+                                                 <div class="panel-body">
+                                                     <div class="table-responsive">
+                                                         <table class="table" id="tabla_archivos">
+                                                             <thead>
+                                                                 <tr style="text-align: center">
+                                                                     <th>Nombre</th>
+                                                                     <th>Fecha/Hora</th>
+                                                                     <th>Descargar</th>
+                                                                 </tr>
+                                                             </thead>
+                                                             <tbody>
+                                                             </tbody>
+                                                         </table>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
                                        </form>
                                         </div>
                                         <div class="modal-footer">
@@ -316,9 +333,11 @@
     <meta name="_token" content="{!! csrf_token() !!}" />
     <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
     <meta name="_urlUpload" content="{{url('fileupload')}}"/>
+    <meta name="_urlDownload" content="{{url('filedownload/monitoreo')}}"/> 
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
     <meta name="_periodo" content="{{$periodo}}"/>
     <meta name="_periodoRegion" content="{{$idePeriodoRegion}}"/>
+    <meta name="_download" content="{{asset('images/download2.png')}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>

@@ -9,13 +9,25 @@ $(document).ready(function(){
     $( document ).on( 'click', '.btn-editar-valor', function() {
         $('#loading').modal('show');
         $('#ingresarDetalleModal').modal('show');
-        var ideRegionProducto=$(this).val();
+        var ideRegionProductoDetalle=$(this).val();
+        $('#btnGuardarDetalle').val(ideRegionProductoDetalle);
         var targetURL=$('meta[name="_urlTarget"]').attr('content');
-        var periodo=$('meta[name="_periodo"]').attr('content');
-        $.get(targetURL + '/producto/' + ideRegionProducto+'/periodo/'+periodo, function (data) {
+        //var periodo=$('meta[name="_periodo"]').attr('content');
+        $.get(targetURL + '/detalleproducto/'+ideRegionProductoDetalle, function (data) {
             //success data
             $('#planificado').val(data.valor);
-            $('#ejecutado').val(data.ejecutado);          
+            $('#ejecutado').val(data.ejecutado); 
+            $('#tabla_archivos tbody').html('');
+            console.log(data);
+            if(data.hasOwnProperty("archivos") && data.archivos){
+                var tabla=$('#tabla_archivos tbody');
+                var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
+                var download_image=(""+$('meta[name="_download"]').attr('content'));
+                var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
+                for(var e in data.archivos){
+                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
+                }
+            }
             $('#loading').modal('hide');
         });
     });
@@ -112,22 +124,34 @@ $(document).ready(function(){
     });
     
     $( '#formAgregarDetalle' ).submit( function( e ) {
-        alert('iniciasubida');
+        alert('iniciasubida test 1');
         var url_target=(""+$('meta[name="_urlUpload"]').attr('content'));
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         }); 
+        
+        var data=new FormData(this);
+        alert("enviando form data");
+        data.append('ide_region_producto_detalle',$("#btnGuardarDetalle").val());
+        
         $.ajax( {
           url: url_target,
           type: 'POST',
-          data: new FormData( this ),
+          data: data,
           processData: false,
           contentType: false,
           uploadMultiple : true,
           success: function(data){
-            alert('Exxito');
+              var tabla=$('#tabla_archivos tbody');
+              var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
+              var download_image=(""+$('meta[name="_download"]').attr('content'));
+              var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
+              for(var e in data.archivos){
+                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
+              }
+              $("#fileUpload").reset();
           },
           error:function(data){
             alert('nop');

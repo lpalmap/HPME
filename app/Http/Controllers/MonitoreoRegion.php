@@ -220,9 +220,18 @@ class MonitoreoRegion extends Controller
         return $valores;
     }
     
-    public function detalleProducto($ideRegionProducto,$periodo){
-       Log::info("Producto: $ideRegionProducto periodo $periodo");
-       $detalle=PlnRegionProductoDetalle::where(array('ide_region_producto'=>$ideRegionProducto,'num_detalle'=>$periodo))->first();
-       return response()->json($detalle);
+//    public function detalleProducto($ideRegionProducto,$periodo){
+//       Log::info("Producto: $ideRegionProducto periodo $periodo");
+//       $detalle=PlnRegionProductoDetalle::where(array('ide_region_producto'=>$ideRegionProducto,'num_detalle'=>$periodo))->first();
+//       return response()->json($detalle);
+//    }
+    
+    public function detalleProducto($ideRegionProductoDetalle){
+       //Log::info("Producto: $ideRegionProducto periodo $periodo");
+       Log::info("Region producto detalle $ideRegionProductoDetalle");
+       //$detalle=PlnRegionProductoDetalle::where(array('ide_region_producto'=>$ideRegionProducto,'num_detalle'=>$periodo))->first();
+       $detalle=  PlnRegionProductoDetalle::find($ideRegionProductoDetalle);//where(array('ide_region_producto_detalle'=>$ideRegionProductoDetalle))->first();   
+       $detalle->archivos;
+       return response()->json($detalle);     
     }
 }

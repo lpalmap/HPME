@@ -327,7 +327,10 @@ Route::get('/monitoreoafiliadodetalle/{id}',['uses' => 'PlanificacionRegion@moni
 Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@monitoreoAfiliadoDetalle2', 'middleware' => 'auth']);
 
 Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'middleware' => 'auth']);
-Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
+//Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
+Route::get('/periodoregion/detalleproducto/{id}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
+
+
 
 Route::get('/monobservaciones/{id}',['uses' => 'MonitoreoObservaciones@observacionesRegion', 'middleware' => 'auth']);
 //agregar mensaje
@@ -338,7 +341,8 @@ Route::post('/monobservaciones/marcar',['uses' => 'MonitoreoObservaciones@marcar
 /* MONITOREO AFILAIDO*/
 Route::get('/monitoreoproyecto',['uses' => 'MonitoreoProyecto@monitoreoProyecto', 'middleware' => 'auth']);
 
-Route::post('/fileupload',['uses' => 'FileUpload@upload', 'middleware' => 'auth']);
+Route::post('/fileupload',['uses' => 'FileController@upload', 'middleware' => 'auth']);
+Route::get('/filedownload/monitoreo/{id}',['uses' => 'FileController@monitoreoDownload', 'middleware' => 'auth']);
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
 //    return 'Usuario Agregado 222';

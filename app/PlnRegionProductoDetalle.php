@@ -12,4 +12,8 @@ class PlnRegionProductoDetalle extends BaseModel
     public function producto(){
         return $this->belongsTo('App\PlnRegionProducto','ide_region_producto');
     }
+    
+    public function archivos(){
+        return $this->hasMany('App\MonArchivoProductoPeriodo','ide_region_producto_detalle');
+    }
 }
