@@ -338,6 +338,7 @@ Route::post('/monobservaciones/marcar',['uses' => 'MonitoreoObservaciones@marcar
 /* MONITOREO AFILAIDO*/
 Route::get('/monitoreoproyecto',['uses' => 'MonitoreoProyecto@monitoreoProyecto', 'middleware' => 'auth']);
 
+Route::post('/fileupload',['uses' => 'FileUpload@upload', 'middleware' => 'auth']);
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
 //    return 'Usuario Agregado 222';

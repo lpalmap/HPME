@@ -111,5 +111,30 @@ $(document).ready(function(){
         $('#confirmacionModal').modal('show');    
     });
     
+    $( '#formAgregarDetalle' ).submit( function( e ) {
+        alert('iniciasubida');
+        var url_target=(""+$('meta[name="_urlUpload"]').attr('content'));
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        }); 
+        $.ajax( {
+          url: url_target,
+          type: 'POST',
+          data: new FormData( this ),
+          processData: false,
+          contentType: false,
+          uploadMultiple : true,
+          success: function(data){
+            alert('Exxito');
+          },
+          error:function(data){
+            alert('nop');
+          }
+        } );
+        e.preventDefault();
+    } 
+    );
     
 });

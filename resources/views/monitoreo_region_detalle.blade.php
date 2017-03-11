@@ -252,8 +252,7 @@
                                             <h4 class="modal-title">Planficaci&oacute;n/Ejecuci&oacute;n</h4>
                                         </div>
                                         <div class="modal-body">
-                                       <form role="form" id="formAgregarDetalle">
-                                           
+                                       <form role="form" id="formAgregarDetalle" method="POST" action="{{url('fileupload')}}" enctype="multipart/form-data">
                                            <div class="form-group">
                                                    <table class="table table-striped table-bordered table-hover" id="dataTableItems2">
                                     <thead>
@@ -284,22 +283,20 @@
 
 
 
-                                <div class="input-group">
-                                    
-
-                                    <span class="btn btn-file btn-info">
-                                        <span class="fileupload-new">Seleccionar Archivo</span>
-                                        <span class="fileupload-exists">Cambiar</span>
-                                        <input type="file" />
-                                    </span> 
-                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remover</a>
-                                    
-                                    <br /> <br />
-                                    <div class="col-lg-3">
-                                        <i class="icon-file fileupload-exists"></i>
-                                        <span class="fileupload-preview"></span>
-                                    </div>
-                            </div>
+                                <div class="input-group">                                     
+                                        <span class="btn btn-file btn-info">
+                                            <span class="fileupload-new">Seleccionar Archivo</span>
+                                            <span class="fileupload-exists">Cambiar</span>
+                                            <input type="file" multiple="true" name="files"/>
+                                        </span> 
+                                        <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload">Remover</a>
+                                        <input class="btn-primary" type="submit" value="Subir Archivos"/>    
+                                        <br /> <br />
+                                        <div class="col-lg-3">
+                                            <i class="icon-file fileupload-exists"></i>
+                                            <span class="fileupload-preview"></span>
+                                        </div>
+                                </div>
                         </div>                                            
                                                 </div>                                     
                                        </form>
@@ -318,6 +315,7 @@
     @parent
     <meta name="_token" content="{!! csrf_token() !!}" />
     <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
+    <meta name="_urlUpload" content="{{url('fileupload')}}"/>
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
     <meta name="_periodo" content="{{$periodo}}"/>
     <meta name="_periodoRegion" content="{{$idePeriodoRegion}}"/>
