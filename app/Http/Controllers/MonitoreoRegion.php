@@ -22,8 +22,8 @@ class MonitoreoRegion extends Controller
         $vistaPrivilegio=$this->vistaPrivilegio();
         $periodoRegion=  MonPeriodoRegion::find($idePeriodoRegion);
         $region=PlnProyectoRegion::where('ide_proyecto_region','=',$periodoRegion->ide_proyecto_region)->pluck('ide_region')->first();
-        if(!$vistaPrivilegio){
-            $ingresaMon=$this->ingresoMonitoreo();
+        $ingresaMon=$this->ingresoMonitoreo();
+        if(!$vistaPrivilegio){          
             if($ingresaMon){
                 $regionUsuario=  $this->regionUsuario();
                 Log::info("Region usuario: $regionUsuario");
@@ -47,35 +47,35 @@ class MonitoreoRegion extends Controller
 
         $encabezados=array();
         $encabezados[]=  MonProyectoPeriodo::where('ide_periodo_monitoreo','=',$periodoRegion->ide_periodo_monitoreo)->pluck('descripcion')->first();
-        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'vistaPrivilegio'=>$vistaPrivilegio,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion,'ideProyectoPlanificacion'=>$proyectoRegion->ide_proyecto_planificacion)); 
+        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'vistaPrivilegio'=>$vistaPrivilegio,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion,'ideProyectoPlanificacion'=>$proyectoRegion->ide_proyecto_planificacion,'ingresaMon'=>$ingresaMon)); 
     }
     
     
-    public function monitoreoAfiliadoDetalle($idePeriodoMonitoreo){
-        $monitoreo=  MonProyectoPeriodo::find($idePeriodoMonitoreo);
-        $ideRegion=$this->regionUsuario();
-        $id=7;
-        $proyectouser=  PlnProyectoRegion::where('ide_region',$ideRegion)->where('ide_proyecto_planificacion',$monitoreo->ide_proyecto)->pluck('ide_proyecto_region')->first();
-        $id=$proyectouser;
-                
-        
-        $proyectoRegion=  PlnProyectoRegion::find($id);
-        $rol=  request()->session()->get('rol');
-        
-        $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
-            $proyectoRegion->region;
-            $nombreRegion=$proyectoRegion->region->nombre;
-
-            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
-            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
-            
-            $encabezados=array();
-            $encabezados[]='Ene-Mar';
-            $encabezados[]='Abr-Jun';
-            $encabezados[]='Jul-Sep';
-            $encabezados[]='Oct-Dic';
-            return view('monitoreo_afiliado_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
-    }
+//    public function monitoreoAfiliadoDetalle($idePeriodoMonitoreo){
+//        $monitoreo=  MonProyectoPeriodo::find($idePeriodoMonitoreo);
+//        $ideRegion=$this->regionUsuario();
+//        $id=7;
+//        $proyectouser=  PlnProyectoRegion::where('ide_region',$ideRegion)->where('ide_proyecto_planificacion',$monitoreo->ide_proyecto)->pluck('ide_proyecto_region')->first();
+//        $id=$proyectouser;
+//                
+//        
+//        $proyectoRegion=  PlnProyectoRegion::find($id);
+//        $rol=  request()->session()->get('rol');
+//        
+//        $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+//            $proyectoRegion->region;
+//            $nombreRegion=$proyectoRegion->region->nombre;
+//
+//            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+//            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+//            
+//            $encabezados=array();
+//            $encabezados[]='Ene-Mar';
+//            $encabezados[]='Abr-Jun';
+//            $encabezados[]='Jul-Sep';
+//            $encabezados[]='Oct-Dic';
+//            return view('monitoreo_afiliado_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
+//    }
     
     
     private function vistaPrivilegio(){

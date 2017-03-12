@@ -42,7 +42,7 @@
                             &nbsp;
                             @if($estado!='APROBADO')
                             <button  id="btnAprobarPlan" value="{{$ideProyectoRegion}}">
-                                <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Planificaci&oacute;n"/></button>
+                                <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Ejecuci&oacute;n"/></button>
                             @endif
                             <button id="cleanVacio">
                                 <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>                            
@@ -67,7 +67,7 @@
                                             <?php
                                                 }
                                             ?>
-                                            <th>Editar</th>
+                                            <th>Acciones</th>
                                         </tr>
                                         <tr>
                                             <th colspan="4"></th>
@@ -150,8 +150,14 @@
                                                                 }
                                                             ?>
                                                             <td>
+                                                                @if($ingresaMon)
                                                                 <button class="btn-editar-valor" value="{{$ideDetalle}}">
                                 <img src="{{asset('images/editar.png')}}" class="menu-imagen" alt="" title="Editar"/></button>
+                                                                @endif
+                                                                @if($vistaPrivilegio && $producto['producto']->requiere_comprobantes==='S')
+                                                                    <button class="btn-editar-valor" value="{{$ideDetalle}}">
+                                <img src="{{asset('images/files.png')}}" class="menu-imagen" alt="" title="Ver archivos adjuntos"/></button>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     <?php
