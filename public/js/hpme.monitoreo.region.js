@@ -53,7 +53,6 @@ $(document).ready(function(){
         //var periodo=$('meta[name="_periodo"]').attr('content');
         $.get(targetURL + '/detalleproducto/'+ideRegionProductoDetalle, function (data) {
             //success data
-            console.log(data);
             $('#tabla_detalle_archivos tbody').html('');
             if(data.hasOwnProperty("archivos") && data.archivos){
                 var tabla=$('#tabla_detalle_archivos tbody');
