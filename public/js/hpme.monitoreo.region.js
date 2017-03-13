@@ -39,6 +39,29 @@ $(document).ready(function(){
                     $("#subirArchivo").attr('disabled', true);
                     $("#subirArchivo").removeAttr('disabled');
                     $("#archivoLabel").html('');
+                }     
+            }
+            $('#loading').modal('hide');
+        });
+    });
+    
+    $( document ).on( 'click', '.btn-detalle-archivos', function() {
+        $('#loading').modal('show');
+        $('#detalleArchivosModal').modal('show');
+        var ideRegionProductoDetalle=$(this).val();
+        var targetURL=$('meta[name="_urlTarget"]').attr('content');
+        //var periodo=$('meta[name="_periodo"]').attr('content');
+        $.get(targetURL + '/detalleproducto/'+ideRegionProductoDetalle, function (data) {
+            //success data
+            console.log(data);
+            $('#tabla_detalle_archivos tbody').html('');
+            if(data.hasOwnProperty("archivos") && data.archivos){
+                var tabla=$('#tabla_detalle_archivos tbody');
+                var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
+                var download_image=(""+$('meta[name="_download"]').attr('content'));
+                var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
+                for(var e in data.archivos){
+                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
                 }
             }
             $('#loading').modal('hide');

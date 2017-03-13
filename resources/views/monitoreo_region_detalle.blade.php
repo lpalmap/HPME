@@ -155,7 +155,7 @@
                                 <img src="{{asset('images/editar.png')}}" class="menu-imagen" alt="" title="Editar"/></button>
                                                                 @endif
                                                                 @if($vistaPrivilegio && $producto['producto']->requiere_comprobantes==='S')
-                                                                    <button class="btn-editar-valor" value="{{$ideDetalle}}">
+                                                                    <button class="btn-detalle-archivos" value="{{$ideDetalle}}">
                                 <img src="{{asset('images/files.png')}}" class="menu-imagen" alt="" title="Ver archivos adjuntos"/></button>
                                                                 @endif
                                                                 <input type="hidden" id="comprobante{{$ideDetalle}}" value="{{$producto['producto']->requiere_comprobantes}}"/>
@@ -313,6 +313,50 @@
                                 </div>
                             </div>
 
+
+
+<div class="modal fade" id="detalleArchivosModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">Archivos Cargados</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                       <form role="form"  method="POST" enctype="multipart/form-data">
+                                                                                             
+                                         <div class="form-group">  
+                                                <div class="panel panel-default">
+                                                 <div class="panel-heading">
+                                                     Archivos Cargados
+                                                 </div>
+                                                 <div class="panel-body">
+                                                     <div class="table-responsive">
+                                                         <table class="table" id="tabla_detalle_archivos">
+                                                             <thead>
+                                                                 <tr style="text-align: center">
+                                                                     <th>Nombre</th>
+                                                                     <th>Fecha/Hora</th>
+                                                                     <th>Descargar</th>
+                                                                 </tr>
+                                                             </thead>
+                                                             <tbody>
+                                                             </tbody>
+                                                         </table>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                       </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
@@ -336,6 +380,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 @endsection
 @section('footer')
