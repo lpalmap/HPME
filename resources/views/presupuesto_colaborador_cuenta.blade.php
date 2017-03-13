@@ -56,7 +56,10 @@
                                             @if(!isset($cuentas[$i]->hijas) || $cuentas[$i]->hijas>0)
                                             <td class="table-center"><a title="{{$cuentas[$i]->descripcion}}" href="{{url('/colaborador/'.$idePresupuestoColaborador.'/cuenta/'.($cuentas[$i]->ide_cuenta))}}">{{$cuentas[$i]->nombre}}</a></td>
                                             @else
-                                            <td><button class="btn2 btn {{in_array($cuentas[$i]->ide_cuenta,$ingresadas)?'btn-success':'btn-primary'}} btn-round btn-cuenta" id="btn{{$cuentas[$i]->ide_cuenta}}" value="{{$cuentas[$i]->ide_cuenta}}"  title="{{$cuentas[$i]->descripcion}}">{{$cuentas[$i]->nombre}}</button></td>
+                                            <td><button class="btn2 btn {{in_array($cuentas[$i]->ide_cuenta,$ingresadas)?'btn-success':'btn-primary'}} btn-round btn-cuenta" id="btn{{$cuentas[$i]->ide_cuenta}}" value="{{$cuentas[$i]->ide_cuenta}}"  title="{{$cuentas[$i]->descripcion}}">{{$cuentas[$i]->nombre}}</button>                   
+                                            <button class=" btn-clean-cuenta" value="{{$cuentas[$i]->ide_cuenta}}"> 
+                                <img src="{{asset('images/clean.png')}}" class="menu-imagen" alt="" title="Borrar montos ingresados en la cuenta"/></button> 
+                                            </td>
                                             @endif
                                         </tr>
                                             @endfor
@@ -170,6 +173,30 @@
                                 </div>
                             </div>
                     </div>
+
+<div class="modal fade" id="confirmacionModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Limpiar Cuenta</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+<ul style="list-style-type:circle" id="infoContent">Esta seguro de borrar el presupuesto ingresado en la cuenta&quest;</ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" id="btnLimpiarCuenta" >Limpiar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">

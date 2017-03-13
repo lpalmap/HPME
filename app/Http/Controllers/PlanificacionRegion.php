@@ -285,7 +285,6 @@ class PlanificacionRegion extends Controller
     
     private function obtenerProductos($ideIndicadorArea,$ideProyectoRegion=null){
         $productos=DB::select(HPMEConstants::PLN_PRODUCTOS_POR_INDICADOR,array('ideIndicadorArea'=>$ideIndicadorArea));    
-        Log::info("### productos $ideIndicadorArea");
         $result=array();
         foreach($productos as $producto){
             $detalle=$this->obtenerDetalleProductoRegion($producto->ide_producto_indicador, $ideProyectoRegion);

@@ -151,6 +151,58 @@ $(document).ready(function(){
         });      
     });    
 
+    $(document).on('click','.btn-clean-cuenta',function(){
+        $('#loading').modal('show');
+        $('#confirmacionModal').modal('show');
+        $('#btnLimpiarCuenta').val($(this).val());  
+        $('#loading').modal('hide');
+    });   
+    
+    $("#btnLimpiarCuenta").click(function (e) {   
+        $('#loading').modal('show'); 
+        var cuenta=$(this).val();
+        var idePresupuestoColaborador=(""+$('meta[name="_presupuestoColaborador"]').attr('content'));
+  
+        var formData = {
+            ide_cuenta: cuenta,
+            ide_presupuesto_colaborador: idePresupuestoColaborador
+        };   
+        
+        
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url=(""+$('meta[name="_url"]').attr('content')).replace("#","");
+        url+="/cleanCuenta";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                $('#confirmacionModal').modal('hide');
+                $("#btn"+cuenta).removeClass('btn-success').addClass('btn-primary');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( var e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error limpiar la cuenta.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');              
+            }
+        });
+    });
+    
     //create new task / update existing task
     $("#btnGuardar").click(function (e) {   
         $('#loading').modal('show');

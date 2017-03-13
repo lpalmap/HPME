@@ -241,6 +241,17 @@ class ProyectoPresupuesto extends Controller
         return response()->json(array('SUCCESS'=>true));
     }
     
+    public function cleanCuenta(Request $request){
+        Log::info("clean cuenta ");
+        $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
+        Log::info("clean test $ideColaboradorCuenta");
+        if(!is_null($ideColaboradorCuenta)){
+            PlnColaboradorCuentaDetalle::where('ide_colaborador_cuenta','=',$ideColaboradorCuenta)->delete();
+            PlnColaboradorCuenta::destroy($ideColaboradorCuenta);   
+        }
+        return response()->json(array('SUCCESS'=>true));
+    }
+    
     public function estadoPresupuestoDepartamento($idePresupuestoColaborador){
         $estado=DB::select(HPMEConstants::PLN_PRESUPUESTO_ESTADO_DEPARTAMENTO_COLABORADOR,array('idePresupuestoColaborador'=>$idePresupuestoColaborador));
         if(count($estado)>0){

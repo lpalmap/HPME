@@ -290,6 +290,7 @@ Route::delete('/colaborador/eliminar',['uses' => 'ProyectoPresupuesto@deletePres
 
 Route::post('/cuenta/addDetalle',['uses' => 'ProyectoPresupuesto@addDetalleCuenta', 'middleware' => 'auth']);
 Route::post('/cuenta/getDetalle',['uses' => 'ProyectoPresupuesto@getDetalleCuenta', 'middleware' => 'auth']);
+Route::post('/cuenta/cleanCuenta',['uses' => 'ProyectoPresupuesto@cleanCuenta', 'middleware' => 'auth']);
 
 //Presupuesto consolidado 
 Route::get('/presupuestocolaborador/{id}',['uses' => 'PresupuestoConsolidado@consolidadoColaborador', 'middleware' => 'auth']);
