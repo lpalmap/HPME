@@ -144,7 +144,7 @@
                                                                     $ideDetalle=$valor->ide_region_producto_detalle;
                                                             ?>
                                                             <td style="text-align: right;background: #BDD7EE;">{{intval($valor->valor)}}</td>
-                                                            <td style="text-align: right;background:  #f4c37d">{{number_format($valor->ejecutado,(fmod($valor->ejecutado, 1) !== 0.00)?2:0)}}</td>
+                                                            <td style="text-align: right;background:  #f4c37d" id="ejecutado{{$ideDetalle}}" >{{number_format($valor->ejecutado,(fmod($valor->ejecutado, 1) !== 0.00)?2:0)}}</td>
                                                             <?php
                                                                     break;
                                                                 }
@@ -158,6 +158,7 @@
                                                                     <button class="btn-editar-valor" value="{{$ideDetalle}}">
                                 <img src="{{asset('images/files.png')}}" class="menu-imagen" alt="" title="Ver archivos adjuntos"/></button>
                                                                 @endif
+                                                                <input type="hidden" id="comprobante{{$ideDetalle}}" value="{{$producto['producto']->requiere_comprobantes}}"/>
                                                             </td>
                                                         </tr>
                                                     <?php
@@ -206,29 +207,7 @@
         </div>
     </div>
 </div>
-<!-- Modal for displaying the messages -->
-<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">Errores</h4>
-            </div>
 
-            <div class="modal-body">
-                <!-- The messages container -->
-<!--                <div id="erroresContent"></div>-->
-                   <ul style="list-style-type:circle" id="erroresContent"></ul>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="confirmacionModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -242,7 +221,7 @@
             <div class="modal-body">
                 <!-- The messages container -->
 <!--                <div id="erroresContent"></div>-->
-<ul style="list-style-type:circle" id="erroresContent">Se ocultaron todos los productos con planificaci&oacute;n 0.</ul>
+<ul style="list-style-type:circle" id="infoContent">Se ocultaron todos los productos con planificaci&oacute;n 0.</ul>
             </div>
 
             <div class="modal-footer">
@@ -288,6 +267,7 @@
                                                 
                                  
                                                      <div class="form-group">
+                                                         <span id="archivoLabel" style="color: red; " ></span>
                                         <div class="fileupload fileupload-new" data-provides="fileupload">
                                         <span class="btn btn-file btn-default">
                                         <span class="fileupload-new">Seleccionar Archivo</span>
@@ -333,6 +313,30 @@
                                 </div>
                             </div>
 
+<!-- Modal for displaying the messages -->
+<div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Errores</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+                   <ul style="list-style-type:circle" id="erroresContent"></ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @section('footer')
     @parent
@@ -340,10 +344,12 @@
     <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
     <meta name="_urlUpload" content="{{url('fileupload')}}"/>
     <meta name="_urlDownload" content="{{url('filedownload/monitoreo')}}"/> 
+    <meta name="_urlDelete" content="{{url('filedelete')}}"/> 
     <meta name="_ideProyectoRegion" content="{{$ideProyectoRegion}}"/>
     <meta name="_periodo" content="{{$periodo}}"/>
     <meta name="_periodoRegion" content="{{$idePeriodoRegion}}"/>
     <meta name="_download" content="{{asset('images/download2.png')}}"/>
+    <meta name="_delete" content="{{asset('images/delete.png')}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>

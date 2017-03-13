@@ -12,20 +12,33 @@ $(document).ready(function(){
         var ideRegionProductoDetalle=$(this).val();
         $('#btnGuardarDetalle').val(ideRegionProductoDetalle);
         var targetURL=$('meta[name="_urlTarget"]').attr('content');
+        var requiereComprobante=$("#comprobante"+ideRegionProductoDetalle).val();
         //var periodo=$('meta[name="_periodo"]').attr('content');
         $.get(targetURL + '/detalleproducto/'+ideRegionProductoDetalle, function (data) {
             //success data
             $('#planificado').val(data.valor);
             $('#ejecutado').val(data.ejecutado); 
             $('#tabla_archivos tbody').html('');
-            console.log(data);
             if(data.hasOwnProperty("archivos") && data.archivos){
                 var tabla=$('#tabla_archivos tbody');
                 var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
                 var download_image=(""+$('meta[name="_download"]').attr('content'));
+                var url_delete=(""+$('meta[name="_urlDelete"]').attr('content'));
+                var delete_image=(""+$('meta[name="_delete"]').attr('content'));
                 var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
+                var deletefile='<img src="'+delete_image+'" class="menu-imagen" alt="" title="Eliminar archivo"'
                 for(var e in data.archivos){
-                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
+                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a><a href="+url_delete+'/'+data.archivos[e].ide_archivo_producto+">"+deletefile+"</a></td>");
+                }
+                if(requiereComprobante==='S'){
+                    $("#fileUpload").attr('disabled', false);
+                    $("#subirArchivo").attr('disabled', false);
+                    $("#archivoLabel").html('** Este producto requiere cargar archivos para comprobar la ejecuci&oacute;n.');
+                }else{
+                    $("#fileUpload").attr('disabled', true);
+                    $("#subirArchivo").attr('disabled', true);
+                    $("#subirArchivo").removeAttr('disabled');
+                    $("#archivoLabel").html('');
                 }
             }
             $('#loading').modal('hide');
@@ -82,7 +95,8 @@ $(document).ready(function(){
         $('#loading').modal('show');
         var formData = {
             ide_proyecto_region: $(this).val()
-        };   
+            
+        };        
               
         $.ajaxSetup({
             headers: {
@@ -90,6 +104,7 @@ $(document).ready(function(){
             }
         });      
         var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))+'/marcar';
+        
         $.ajax({
             type: 'POST',
             url: url_target,
@@ -123,18 +138,61 @@ $(document).ready(function(){
         $('#confirmacionModal').modal('show');    
     });
     
+    $("#btnGuardarDetalle").click(function (e) {      
+        $('#loading').modal('show');
+        var ejecutado_val=$("#ejecutado").val()
+        var ideRegionProductoDetalle=$(this).val();
+        var requiereComprobante=$("#comprobante"+ideRegionProductoDetalle).val();
+        var formData = {
+            ide_region_producto_detalle: ideRegionProductoDetalle,
+            ejecutado:ejecutado_val,
+            requiere_archivo:requiereComprobante
+        };     
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });      
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))+'/guardar';
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {    
+                $('#ejecutado'+ideRegionProductoDetalle).html(ejecutado_val);
+                $('#ingresarDetalleModal').modal('hide');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al guardar ejecuci&oacute;n</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
+    
     $( '#formAgregarDetalle' ).submit( function( e ) {
-        alert('iniciasubida test 1');
+        $('#loading').modal('show');
         var url_target=(""+$('meta[name="_urlUpload"]').attr('content'));
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         }); 
-        
+        var ideRegionProductoDetalle=$("#btnGuardarDetalle").val();
+
         var data=new FormData(this);
-        alert("enviando form data");
-        data.append('ide_region_producto_detalle',$("#btnGuardarDetalle").val());
+        data.append('ide_region_producto_detalle',ideRegionProductoDetalle);
         
         $.ajax( {
           url: url_target,
@@ -151,10 +209,20 @@ $(document).ready(function(){
               for(var e in data.archivos){
                   tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
               }
-              $("#fileUpload").reset();
+              $('#loading').modal('hide');
           },
-          error:function(data){
-            alert('nop');
+          error:function(data){            
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( var e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al subir el archivo al servidor.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');   
           }
         } );
         e.preventDefault();

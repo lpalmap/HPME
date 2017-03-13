@@ -14,13 +14,9 @@ class FileController extends Controller
     public function upload(Request $request){
         //request()->file('files')->move('archivos','test1.png');
         $files = $request->allFiles();
-        Log::info("archivos ".count($files));
-        Log::info("Print all");
-        Log::info($request->all());
         
         $detalle=$request->ide_region_producto_detalle;
         date_default_timezone_set(HPMEConstants::TIME_ZONE);
-        Log::info("detalle $detalle");
         $archivos=array();
         foreach ($files as $file){
             Log::info("test");
@@ -43,6 +39,9 @@ class FileController extends Controller
             }else{
                 $archivos[]=$new_file;
             }
+        }
+        if(count($archivos)==0){
+            return response()->json(array('error'=>'Debe seleccionar un archivo.'), HPMEConstants::HTTP_AJAX_ERROR);
         }
         return response()->json(array('archivos'=>$archivos));
     } 

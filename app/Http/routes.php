@@ -329,6 +329,7 @@ Route::get('/monitoreoafiliadodetalle2/{id}',['uses' => 'PlanificacionRegion@mon
 Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'middleware' => 'auth']);
 //Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
 Route::get('/periodoregion/detalleproducto/{id}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
+Route::post('/periodoregion/guardar',['uses' => 'MonitoreoRegion@guardarDetalleProducto', 'middleware' => 'auth']);
 
 
 

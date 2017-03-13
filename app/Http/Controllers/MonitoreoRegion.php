@@ -10,11 +10,11 @@ use App\PlnProyectoPlanificacion;
 use App\HPMEConstants;
 use App\MonProyectoPeriodo;
 use App\PrivilegiosConstants;
-use App\CfgListaValor;
 use App\MonPeriodoRegion;
 use App\CfgRegion;
 use App\PlnProyectoRegion;
 use App\PlnRegionProductoDetalle;
+use App\MonArchivoProductoPeriodo;
 
 class MonitoreoRegion extends Controller
 {
@@ -26,7 +26,6 @@ class MonitoreoRegion extends Controller
         if(!$vistaPrivilegio){          
             if($ingresaMon){
                 $regionUsuario=  $this->regionUsuario();
-                Log::info("Region usuario: $regionUsuario");
                 if($region!==$regionUsuario){
                     return view('home');
                 }
@@ -77,6 +76,22 @@ class MonitoreoRegion extends Controller
 //            return view('monitoreo_afiliado_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>FALSE)); 
 //    }
     
+    public function guardarDetalleProducto(Request $request){
+        $detalle=  PlnRegionProductoDetalle::find($request->ide_region_producto_detalle);
+        $ejecutado=$request->ejecutado;
+        if($ejecutado<0){
+            return response()->json(array('error'=>'Debe ingresar un valor ejecutado.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        if($request->requiere_archivo===HPMEConstants::SI){
+            $archivos= MonArchivoProductoPeriodo::where('ide_region_producto_detalle','=',$detalle->ide_region_producto_detalle)->count();
+            if($archivos===0){
+                return response()->json(array('error'=>'El producto requiere cargar archivos para comprobar la ejecuci&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+        }
+        $detalle->ejecutado=$ejecutado;
+        $detalle->save();
+        return response()->json();
+    }
     
     private function vistaPrivilegio(){
         $privilegios=request()->session()->get('privilegios');
@@ -228,7 +243,7 @@ class MonitoreoRegion extends Controller
     
     public function detalleProducto($ideRegionProductoDetalle){
        //Log::info("Producto: $ideRegionProducto periodo $periodo");
-       Log::info("Region producto detalle $ideRegionProductoDetalle");
+       //Log::info("Region producto detalle $ideRegionProductoDetalle");
        //$detalle=PlnRegionProductoDetalle::where(array('ide_region_producto'=>$ideRegionProducto,'num_detalle'=>$periodo))->first();
        $detalle=  PlnRegionProductoDetalle::find($ideRegionProductoDetalle);//where(array('ide_region_producto_detalle'=>$ideRegionProductoDetalle))->first();   
        $detalle->archivos;
