@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\HPMEConstants;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 use App\PlnPresupuestoColaborador;
 use App\PlnPresupuestoDepartamento;
 use App\CfgDepartamento;
-use Illuminate\Support\Facades\Auth;
 use App\PrivilegiosConstants;
-use Maatwebsite\Excel\Facades\Excel;
+use App\PlnProyectoPresupuesto;
+use App\HPMEConstants;
+use App\ExportConstants;
 
 class PresupuestoConsolidado extends Controller
 {
@@ -71,12 +73,20 @@ class PresupuestoConsolidado extends Controller
         //return view('presupuesto_depto_export',array('cuentas'=>$consolidado));        
     }
     
-    public function exportPresupuesto($idePresupuestoDepartamento){
-        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
-        if(!$this->vistaPrivilegio($presupuestoDepartamento->ide_departamento)){
-             return view('home');
-        }    
-        return view('presupuesto_export');
+    public function exportPresupuesto($ideProyectoPresupuesto){
+        $proyecto=  PlnProyectoPresupuesto::find($ideProyectoPresupuesto); 
+        $date =  date_create($proyecto->fecha_proyecto);
+        $year=$date->format("Y");
+        $cuentas=DB::select(ExportConstants::PLN_PRESUPUESTO_EXPORT_SUN,array('ideProyectoPresupuesto'=>$ideProyectoPresupuesto));
+        //return view('presupuesto_export',array('year'=>$year,'cuentas'=>$cuentas));
+        Excel::create("Presupuesto ".$proyecto->descripcion, function($excel) use ($cuentas,$year) {
+            $excel->sheet('Presupuesto', function($sheet) use ($cuentas,$year){
+                $sheet->loadView('presupuesto_export',array('year'=>$year,'cuentas'=>$cuentas));
+                //$sheet->freezeFirstRow();
+                //$sheet->freezeFirstRowAndColumn();
+                //$sheet->setFreeze('D2');
+            });
+        })->export('xls');
     }
     
     private function vistaPrivilegio($ideDepartamento){
