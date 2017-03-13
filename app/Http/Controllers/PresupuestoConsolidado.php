@@ -71,6 +71,14 @@ class PresupuestoConsolidado extends Controller
         //return view('presupuesto_depto_export',array('cuentas'=>$consolidado));        
     }
     
+    public function exportPresupuesto($idePresupuestoDepartamento){
+        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        if(!$this->vistaPrivilegio($presupuestoDepartamento->ide_departamento)){
+             return view('home');
+        }    
+        return view('presupuesto_export');
+    }
+    
     private function vistaPrivilegio($ideDepartamento){
         $privilegios=request()->session()->get('privilegios');
         if(isset($privilegios)){

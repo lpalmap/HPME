@@ -35,6 +35,8 @@
                                 <button id="btnCerrar" value="{{$ideProyectoPresupuesto}}">                      
                                 <img src="{{asset('images/plan_cerrar.png')}}" class="menu-imagen-big" value="{{$ideProyectoPresupuesto}}" title="Cerrar Presupuesto"/></button>
                                 @endif
+                                <a href="{{url('presupuesto/export/'.$ideProyectoPresupuesto)}}" >
+                                <img src="{{asset('images/sun.png')}}" class="menu-imagen-big" alt="" title="Exportar Presupuesto"/></a>  
                              <div class="table-responsive" id="tableContent">
                                  
                                 <table class="table table-striped table-bordered table-hover" id="dataTableItems">

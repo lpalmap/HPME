@@ -315,6 +315,8 @@ Route::post('/presupuestos/aprobar',['uses' => 'PresupuestoDepartamento@aprobarP
 //Cerrar presupuesto
 Route::post('/presupuesto/cerrar',['uses' => 'ProyectoPresupuesto@cerrarPresupuesto', 'middleware' => 'auth']);
 
+//Exportar presupuesto a sistema externo
+Route::get('/presupuesto/export/{id}',['uses' => 'PresupuestoConsolidado@exportPresupuesto', 'middleware' => 'auth']);
 
 /*  MONITOREO  */
 Route::get('/adminmonitoreo',['uses' => 'MonitoreoProyecto@index', 'middleware' => 'auth']);

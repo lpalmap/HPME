@@ -60,6 +60,7 @@ class Cuentas extends Controller
         $cuenta->descripcion=$request->descripcion;
         $cuenta->ind_consolidar=$request->ind_consolidar;
         $cuenta->estado=$request->estado;
+        $cuenta->codigo_interno=$request->codigo_interno;
         $cuenta->save();
         return response()->json($cuenta);       
     }
@@ -67,9 +68,11 @@ class Cuentas extends Controller
     public function validateRequest($request){                
         $rules=[
             'nombre' => 'required|max:250',
+            'codigo_interno' => 'required|max:150',
         ];
         $messages=[
-            'required' => 'Debe ingresar :attribute. de la cuenta'
+            'required' => 'Debe ingresar :attribute. de la cuenta',
+            'max'  => 'La capacidad del campo :attribute es :max'
         ];
         $this->validate($request, $rules,$messages);        
     }

@@ -29,9 +29,6 @@ $(document).ready(function(){
             type: "DELETE",
             url: url + '/' + item_id,
             success: function (data) {
-                console.log(data);
-                //$("#usuario" + user_id).remove();
-                //dataTable.DataTable().draw();
                 dataTable.row( $('#item'+item_id)).remove().draw();
                 $('#loading').modal('hide');
             },
@@ -71,6 +68,7 @@ $(document).ready(function(){
             $('#inCuenta').val(data.cuenta);
             $('#inNombre').val(data.nombre);
             $('#inDescripcion').val(data.descripcion);
+            $('#inCodigo').val(data.codigo_interno);
             if(data.ind_consolidar=='S'){
                 $('#inConsolidar').prop('checked', true);
             }else{
@@ -107,6 +105,7 @@ $(document).ready(function(){
             descripcion: $('#inDescripcion').val(),
             ind_consolidar:consolida,
             estado: $('#inEstado').val(),
+            codigo_interno: $('#inCodigo').val(),
             ide_cuenta_padre: cuenta_padre
         };   
         
@@ -135,7 +134,6 @@ $(document).ready(function(){
             data: formData,
             dataType: 'json',
             success: function (data) {
-                console.log(data); 
                 var item = '<tr class="even gradeA" id="item'+data.ide_cuenta+'">';
                     item+='<td>'+data.cuenta+'</td>';
                     item+='<td><a href="'+urlTarget+'/'+data.ide_cuenta+'">'+data.nombre+'</a></td>';
@@ -149,7 +147,8 @@ $(document).ready(function(){
                         item+='<td>Activa</td>';
                     }else{
                         item+='<td>Inactiva</td>';
-                    }                   
+                    }   
+                    item+='<td>'+data.codigo_interno+'</td>';
                     item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_cuenta+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item+='<button class="btn btn-danger" value="'+data.ide_cuenta+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 

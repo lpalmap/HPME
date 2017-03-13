@@ -39,6 +39,7 @@
                                             <th>Descripci&oacute;n</th>
                                             <th>Consolida</th>
                                             <th>Estado</th>
+                                            <th>C&oacute;digo Interno</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -51,6 +52,7 @@
                                             <td>{{$cuentas[$i]->descripcion}}</td>
                                             <td>{{$cuentas[$i]->ind_consolidar=='S'?'SI':'NO'}}</td>
                                             <td>{{$cuentas[$i]->estado=='ACTIVA'?'Activa':'Inactiva'}}</td>
+                                            <td>{{$cuentas[$i]->codigo_interno}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$cuentas[$i]->ide_cuenta}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$cuentas[$i]->ide_cuenta}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -128,6 +130,10 @@
                                                     <option value="INACTIVA" id="inInactiva">Inactiva</option>
                                                 </select>
                                            </div>  
+                                           <div class="form-group">
+                                               <label>C&oacute;digo Interno</label>
+                                                <input class="form-control" id="inCodigo" required="true"/>
+                                           </div> 
                                         </form>
                                         </div>
                                         <div class="modal-footer">
