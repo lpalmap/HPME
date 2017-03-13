@@ -44,6 +44,7 @@
                                             <th>Fecha Cierre</th>
                                             <th>Descripci&oacute;n</th>
                                             <th>Periodicidad</th>
+                                            <th>Tasa</th>
                                             <th>Estado Plantilla</th>
                                             @if($ingresaPlan)
                                                 <th>Estado Planificaci&oacute;n</th>
@@ -60,6 +61,7 @@
                                             <td>{{$items[$i]->fecha_cierre}}</td>
                                             <td><a href="{{url('/plantilla/'.$items[$i]->ide_proyecto)}}">{{$items[$i]->descripcion}}</a></td>
                                             <td>{{$items[$i]->periodicidad->descripcion}}</td>
+                                            <td>{{$items[$i]->tasa}}</td>
                                             <td>{{$items[$i]->estado}}</td>
                                             <td>
                                                 @if($apruebaPlanificacion && $items[$i]->estado=='ABIERTO')
@@ -144,7 +146,10 @@
                                                     </select>
                                                 @endif
                                             </div>
-
+                                            <div class="form-group">
+                                                <label>Tasa de Cambio</label>
+                                                <input class="form-control" id="inTasa" required="true"/>
+                                            </div>
                                             
                                         </form>
                                         </div>

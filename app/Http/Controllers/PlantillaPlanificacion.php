@@ -71,9 +71,11 @@ class PlantillaPlanificacion extends Controller
         $this->validateRequest($request);
         $descripcion=$request->descripcion;
         $periodicidad=$request->periodicidad;
+        $tasa=$request->tasa;
         $plantilla=new PlnProyectoPlanificacion();
         $plantilla->descripcion=$descripcion;
         $plantilla->ide_lista_periodicidad=$periodicidad; 
+        $plantilla->tasa=$tasa;
         date_default_timezone_set(HPMEConstants::TIME_ZONE);
         $plantilla->fecha_proyecto= date(HPMEConstants::DATE_FORMAT,  time());
         $authuser=Auth::user();

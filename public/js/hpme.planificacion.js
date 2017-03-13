@@ -5,7 +5,7 @@
  */
 $(document).ready(function(){
     var dataTable=$('#dataTableItems').DataTable({
-        "order": [[ 4, "asc" ]],
+        "order": [[ 0, "desc" ]],
         "language": window.lang.language
     });
     
@@ -188,7 +188,8 @@ $(document).ready(function(){
         $('#loading').modal('show');
         var formData = {
             descripcion: $('#inDescripcion').val(),
-            periodicidad:$('#inPeriodo').val()
+            periodicidad:$('#inPeriodo').val(),
+            tasa:$('#inTasa').val()
         };   
               
         $.ajaxSetup({
@@ -225,7 +226,8 @@ $(document).ready(function(){
                 item+='<td>'+(data.fecha_cierre?data.fecha_cierre:'')+'</td>';
                 item+='<td><a href="'+url_target+"/"+data.ide_proyecto+'">'+data.descripcion+'</a></td>';
                 item+='<td>'+data.periodicidad.descripcion+'</td>';
-                item+='<td>'+data.estado+'</td>';
+                item+='<td>'+data.tasa+'</td>';
+                item+='<td>'+data.estado+'</td>';               
                 item+='<td>';
                 item+='<button class="btn btn-primary btn-editar" value="'+data.ide_proyecto+'"><i class="icon-pencil icon-white" ></i> Editar</a>';
                 item+='<button class="btn btn-danger" value="'+data.ide_proyecto+'"><i class="icon-remove icon-white"></i> Eliminar</button>';
