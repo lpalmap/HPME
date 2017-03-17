@@ -51,11 +51,11 @@
                                                     <td>{{$items[$i]->periodo->fecha_cierre}}</td>
                                                     <td><a href="{{url('/periodoregion/'.$items[$i]->ide_periodo_region)}}">{{$items[$i]->periodo->descripcion}}</a></td>
                                                     <td>{{$items[$i]->estado}}</td>
-                                                    @if($items[$i]->estado==='ABIERTO')
-                                                    <td></td>
-                                                    @else
-                                                    <td><button type="button" class="btn btn-primary btn-habilitar" value="{{$items[$i]->ide_periodo_monitoreo}}">Habilitar</button></td>   
-                                                    @endif
+                                                    <td>
+                                                        @if($items[$i]->estado=='ABIERTO')
+                                                            <button class="btn btn-success btn-enviar" value="{{$items[$i]->ide_periodo_region}}"><i class="icon-arrow-up icon-white" ></i> Enviar a Revisi&oacute;n</a></button>
+                                                        @endif                                             
+                                                    </td>
                                                 </tr>
                                             @endfor
                                         @endif
@@ -70,53 +70,30 @@
        <!--END PAGE CONTENT -->
 @endsection
 @section('outsidewraper')
-<div class="modal fade" id="iniciarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="enviarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Iniciar Monitoreo</h4>
+                    <h4 class="modal-title">Enviar ejecuci&oacute;n a revisi&oacute;n</h4>
                 </div>
                 <div class="modal-body">
-               <form role="form" id="formPublicar">
+               <form role="form" id="formEnviar">
                    <div class="form-group">
                        <p>
-                           Esta seguro iniciar el proceso de monitoreo del proyecto de planificaci&oacute;n&quest; 
+                           Esta seguro de enviar la ejecuci&oacute;n del periodo a revisi&oacute;n&quest; Ya no podr&aacute; modificar hasta que se le habilite. 
                        </p>
                     </div>
                 </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnIniciar" value="{{$ideProyecto}}">Iniciar</button>
+                    <button type="button" class="btn btn-primary" id="btnEnviar">Enviar</button>
                 </div>
             </div>
         </div>
     </div>
 
-<div class="modal fade" id="habilitarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Habilitar Monitoreo</h4>
-                </div>
-                <div class="modal-body">
-               <form role="form">
-                   <div class="form-group">
-                       <p>
-                           Esta seguro habilitar el periodo, se podr&aacute;n hacer modificaciones a los datos ingresados&quest; 
-                       </p>
-                    </div>
-                </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnHabilitar">Habilitar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -144,10 +121,11 @@
 @section('footer')
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
-        <meta name="_urlTarget" content="{{url('adminmonitoreo')}}"/>
+        <meta name="_urlTarget" content="{{url('periodoregion')}}"/>
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>
+        <script src="{{asset('js/hpme.monitoreo.operaciones.js')}}"></script>
 <!--        <script src="{{asset('js/hpme.monitoreo.proyectos.js')}}"></script>-->
 <!--        <script src="{{asset('js/hpme.proyectos.js')}}"></script>-->
 @endsection

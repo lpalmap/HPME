@@ -334,7 +334,7 @@ Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'mi
 Route::get('/periodoregion/detalleproducto/{id}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
 Route::post('/periodoregion/guardar',['uses' => 'MonitoreoRegion@guardarDetalleProducto', 'middleware' => 'auth']);
 Route::post('/periodoregion/aprobar',['uses' => 'MonitoreoRegion@aprobarPeriodoRegion', 'middleware' => 'auth']);
-
+Route::post('/periodoregion/enviar',['uses' => 'MonitoreoRegion@enviarPeriodoRegion', 'middleware' => 'auth']);
 
 Route::get('/monobservaciones/{id}',['uses' => 'MonitoreoObservaciones@observacionesRegion', 'middleware' => 'auth']);
 //agregar mensaje

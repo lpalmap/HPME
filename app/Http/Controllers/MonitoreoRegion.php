@@ -61,12 +61,8 @@ class MonitoreoRegion extends Controller
     }
     
     public function aprobarPeriodoRegion(Request $request){
-        Log::info("Aprobando plan".$request->ide_periodo_region);
         $periodo= MonPeriodoRegion::find($request->ide_periodo_region);
-        Log::info($periodo);
-        Log::info("NOT FOUND");
         if(!is_null($periodo)){
-            Log::info("asdfsf ");
             $count= MonBitacoraPeriodo::where(array('ide_periodo_region'=>$periodo->ide_periodo_region,'estado'=>  HPMEConstants::ABIERTO))->count();
             if(!is_null($count) && $count>0){
                 return response()->json(array('error'=>'La ejecuci&oacute;n tiene observaciones pendentes, debe marcarlas como resueltas para aprobar.'), HPMEConstants::HTTP_AJAX_ERROR);
@@ -94,6 +90,16 @@ class MonitoreoRegion extends Controller
         }else{
             response()->json("No se encontro el periodo ".$request->ide_periodo_region);
         }
+    }
+    
+    public function enviarPeriodoRegion(Request $request){
+        $region=  MonPeriodoRegion::find($request->ide_periodo_region);
+        if($region->estado!==HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'Solo se pueden enviar periodos en estado '.HPMEConstants::ABIERTO), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $region->estado=  HPMEConstants::ENVIADO;
+        $region->save();
+        return response()->json();
     }
     
     private function enviarNotificacionAprobado($asunto,$usuario){

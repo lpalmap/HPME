@@ -126,4 +126,54 @@ $(document).ready(function(){
             }
         });
     });
+    
+     $(document).on('click','.btn-enviar',function(){
+        $('#loading').modal('show');
+        $('#btnEnviar').val($(this).val());
+        $('#enviarModal').modal('show');
+        $('#loading').modal('hide');
+    }); 
+    
+    $("#btnEnviar").click(function (e) { 
+        $('#loading').modal('show');
+        var idePeriodoRegion=$(this).val();
+        var formData = {
+            ide_periodo_region:idePeriodoRegion
+        };   
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var url_target=(""+$('meta[name="_urlTarget"]').attr('content'));
+        url_target+='/enviar';
+        
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                $('#loading').modal('hide');
+                location.reload(true);
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al enviar la ejecuci&oacute;n.</li>';
+                }
+                //console.log('Error:', data);
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
+        });
+    });
+    
 });
