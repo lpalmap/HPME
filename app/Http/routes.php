@@ -333,7 +333,7 @@ Route::get('/periodoregion/{id}',['uses' => 'MonitoreoRegion@periodoRegion', 'mi
 //Route::get('/periodoregion/producto/{producto}/periodo/{periodo}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
 Route::get('/periodoregion/detalleproducto/{id}',['uses' => 'MonitoreoRegion@detalleProducto', 'middleware' => 'auth']);
 Route::post('/periodoregion/guardar',['uses' => 'MonitoreoRegion@guardarDetalleProducto', 'middleware' => 'auth']);
-
+Route::post('/periodoregion/aprobar',['uses' => 'MonitoreoRegion@aprobarPeriodoRegion', 'middleware' => 'auth']);
 
 
 Route::get('/monobservaciones/{id}',['uses' => 'MonitoreoObservaciones@observacionesRegion', 'middleware' => 'auth']);

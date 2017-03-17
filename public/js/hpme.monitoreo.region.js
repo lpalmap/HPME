@@ -134,7 +134,7 @@ $(document).ready(function(){
     $("#btnAprobar").click(function (e) {      
         $('#loading').modal('show');
         var formData = {
-            ide_proyecto_region: $(this).val()
+            ide_periodo_region: $(this).val()
         };   
               
         $.ajaxSetup({
@@ -142,7 +142,6 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         });
-        
         var url_target=(""+$('meta[name="_urlTarget"]').attr('content'))+'/aprobar';
         $.ajax({
             type: 'POST',
@@ -162,7 +161,7 @@ $(document).ready(function(){
                         errHTML+="<li>"+data.responseJSON[e]+"</li>";
                     }
                 }else{
-                    errHTML+='<li>Error al aprobar la planificaci&oacute;n.</li>';
+                    errHTML+='<li>Error al aprobar la ejecuci&oacute;n.</li>';
                 }
                 $("#erroresContent").html(errHTML); 
                 $('#erroresModal').modal('show');                

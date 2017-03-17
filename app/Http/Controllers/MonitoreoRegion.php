@@ -15,6 +15,7 @@ use App\CfgRegion;
 use App\PlnProyectoRegion;
 use App\PlnRegionProductoDetalle;
 use App\MonArchivoProductoPeriodo;
+use App\MonBitacoraPeriodo;
 
 class MonitoreoRegion extends Controller
 {
@@ -43,12 +44,71 @@ class MonitoreoRegion extends Controller
 
         $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$periodo,$periodoRegion->ide_proyecto_region);
         $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
-
+        $apruebaPlanificaion=$this->apruebaPlanificacion();
         $encabezados=array();
         $encabezados[]=  MonProyectoPeriodo::where('ide_periodo_monitoreo','=',$periodoRegion->ide_periodo_monitoreo)->pluck('descripcion')->first();
-        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'vistaPrivilegio'=>$vistaPrivilegio,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion,'ideProyectoPlanificacion'=>$proyectoRegion->ide_proyecto_planificacion,'ingresaMon'=>$ingresaMon)); 
+        return view('monitoreo_region_detalle',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$periodoRegion->estado,'vistaPrivilegio'=>$vistaPrivilegio,'periodo'=>$periodo,'idePeriodoRegion'=>$idePeriodoRegion,'ideProyectoPlanificacion'=>$proyectoRegion->ide_proyecto_planificacion,'ingresaMon'=>$ingresaMon,'apruebaPlanificacion'=>$apruebaPlanificaion)); 
     }
     
+    private function apruebaPlanificacion(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PLANIFICACION_APROBAR_PLANIFICACION, $privilegios)){
+                return TRUE;
+            }
+        }      
+        return FALSE;
+    }
+    
+    public function aprobarPeriodoRegion(Request $request){
+        Log::info("Aprobando plan".$request->ide_periodo_region);
+        $periodo= MonPeriodoRegion::find($request->ide_periodo_region);
+        Log::info($periodo);
+        Log::info("NOT FOUND");
+        if(!is_null($periodo)){
+            Log::info("asdfsf ");
+            $count= MonBitacoraPeriodo::where(array('ide_periodo_region'=>$periodo->ide_periodo_region,'estado'=>  HPMEConstants::ABIERTO))->count();
+            if(!is_null($count) && $count>0){
+                return response()->json(array('error'=>'La ejecuci&oacute;n tiene observaciones pendentes, debe marcarlas como resueltas para aprobar.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            if($periodo->estado==HPMEConstants::APROBADO){
+                return response()->json(array('error'=>'Ya se encuentra aprobada la ejecucioni&oacute;n del periodo para la regi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            if($periodo->estado==HPMEConstants::ABIERTO){
+                return response()->json(array('error'=>'La ejecuci&oacute;n se encuentra en estado '.HPMEConstants::ABIERTO.' no se ha enviado para su revisi&oacute;n.'), HPMEConstants::HTTP_AJAX_ERROR);
+            }
+            date_default_timezone_set(HPMEConstants::TIME_ZONE);
+            $periodo->estado=  HPMEConstants::APROBADO;
+            $periodo->fecha_aprobacion=date(HPMEConstants::DATE_FORMAT,  time());
+            $periodo->save();
+            $proyectoRegion=  PlnProyectoRegion::find($periodo->ide_proyecto_region);
+            try{
+                $region=CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->first();
+                $region->administradores();
+                $proyecto = PlnProyectoPlanificacion::where('ide_proyecto','=',$planificacion->ide_proyecto_planificacion)->pluck('descripcion')->first();
+                $this->enviarNotificacionAprobado($proyecto.'/'.$region['nombre'],$region->administradores[0]); 
+            } catch(\Exception $e){
+                //Si ocurre un error al enviar el correo se ignora y se agrega el mensaje en bitacora de todos modos
+            } 
+            return response()->json();
+        }else{
+            response()->json("No se encontro el periodo ".$request->ide_periodo_region);
+        }
+    }
+    
+    private function enviarNotificacionAprobado($asunto,$usuario){
+        $para=$usuario->email;
+        $user=Auth::user();
+        if(strlen($para)>0){   
+            $mensaje='Felicidades!!! Su ejecuci&oacute;n para el proyecto '.$asunto.' ha sido aprobada.';
+            Mail::send('emails.reminder', ['title' => 'Aprobaci&oacute;n Ejecuci&oacute;n', 'content' => $mensaje], function ($message) use ($user,$asunto,$para)
+            {
+                $message->from(env('MAIL_USERNAME'), $user->nombres.' '.$user->apellidos);
+                $message->to(array($para));              
+                $message->subject($asunto);
+            });
+        }     
+    }
     
 //    public function monitoreoAfiliadoDetalle($idePeriodoMonitoreo){
 //        $monitoreo=  MonProyectoPeriodo::find($idePeriodoMonitoreo);

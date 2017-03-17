@@ -40,8 +40,8 @@
                                 <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
                             &nbsp;
                             &nbsp;
-                            @if($estado!='APROBADO')
-                            <button  id="btnAprobarPlan" value="{{$ideProyectoRegion}}">
+                            @if($apruebaPlanificacion && $estado!='APROBADO')
+                            <button  id="btnAprobarPlan" value="{{$idePeriodoRegion}}">
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Ejecuci&oacute;n"/></button>
                             @endif
                             <button id="cleanVacio">
@@ -190,12 +190,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Aprobar Planificaci&oacute;n</h4>
+                <h4 class="modal-title">Aprobar Ejecuci&oacute;n</h4>
             </div>
             <div class="modal-body">
                 <form role="form" id="formAprobar">
                     <div class="form-group">
-                        <label>Esta seguro de aprobar la planificaci&oacute;n para la regi&oacute;n&quest;</label>
+                        <label>Esta seguro de aprobar la ejecuci&oacute;n para este periodo&quest;</label>
                     </div>                                   
                 </form>
             </div>
