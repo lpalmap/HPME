@@ -23,12 +23,19 @@ $(document).ready(function(){
                 var tabla=$('#tabla_archivos tbody');
                 var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
                 var download_image=(""+$('meta[name="_download"]').attr('content'));
-                var url_delete=(""+$('meta[name="_urlDelete"]').attr('content'));
+                //var url_delete=(""+$('meta[name="_urlDelete"]').attr('content'));
                 var delete_image=(""+$('meta[name="_delete"]').attr('content'));
-                var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
-                var deletefile='<img src="'+delete_image+'" class="menu-imagen" alt="" title="Eliminar archivo"'
+                var estado=(""+$('meta[name="_estado"]').attr('content'));
+                var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"></img>'            
+                var deletefile='<img src="'+delete_image+'" class="menu-imagen" alt="" title="Eliminar archivo"></img>'
+                var item;
                 for(var e in data.archivos){
-                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a><a href="+url_delete+'/'+data.archivos[e].ide_archivo_producto+">"+deletefile+"</a></td>");
+                  item="<tr id=arc"+data.archivos[e].ide_archivo_producto+"><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a>";                    
+                  if(estado==="ABIERTO"){
+                    item+='<button type="button" value="'+data.archivos[e].ide_archivo_producto+'" class="btn-borrar-archivo">'+deletefile+"</button>"
+                  }
+                  item+="</td>";
+                  tabla.append(item);
                 }
                 if(requiereComprobante==='S'){
                     $("#fileUpload").attr('disabled', false);
@@ -61,9 +68,59 @@ $(document).ready(function(){
                 var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
                 for(var e in data.archivos){
                   tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
-                }
+                  }
             }
             $('#loading').modal('hide');
+        });
+    });
+    
+    $( document ).on( 'click', '.btn-borrar-archivo', function() {
+        $('#loading').modal('show');
+        $('#confirmacionBorrarModal').modal('show');
+        var ideArchivoProducto=$(this).val();
+        $('#btnBorrarArchivo').val(ideArchivoProducto);
+        $('#loading').modal('hide');
+    });
+    
+    $("#btnBorrarArchivo").click(function (e) {      
+        $('#loading').modal('show');
+        var ideArchivoProducto=$(this).val();
+        var idePeriodoRegion=(""+$('meta[name="_periodoRegion"]').attr('content'));
+        var formData = {
+            ide_archivo_producto: ideArchivoProducto,
+            ide_periodo_region:idePeriodoRegion
+        };     
+              
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });      
+
+        var url_target=(""+$('meta[name="_urlDelete"]').attr('content'))+'/monitoreo';
+        $.ajax({
+            type: 'POST',
+            url: url_target,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {    
+                $('#arc'+ideArchivoProducto).remove();
+                $('#confirmacionBorrarModal').modal('hide');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for( e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al borrar archivo</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show');                
+            }
         });
     });
     
@@ -162,7 +219,7 @@ $(document).ready(function(){
     
     $("#btnGuardarDetalle").click(function (e) {      
         $('#loading').modal('show');
-        var ejecutado_val=$("#ejecutado").val()
+        var ejecutado_val=$("#ejecutado").val();
         var ideRegionProductoDetalle=$(this).val();
         var requiereComprobante=$("#comprobante"+ideRegionProductoDetalle).val();
         var formData = {
@@ -212,10 +269,10 @@ $(document).ready(function(){
             }
         }); 
         var ideRegionProductoDetalle=$("#btnGuardarDetalle").val();
-
+        var idePeriodoRegion=(""+$('meta[name="_periodoRegion"]').attr('content'));
         var data=new FormData(this);
         data.append('ide_region_producto_detalle',ideRegionProductoDetalle);
-        
+        data.append('ide_periodo_region',idePeriodoRegion);
         $.ajax( {
           url: url_target,
           type: 'POST',
@@ -227,9 +284,18 @@ $(document).ready(function(){
               var tabla=$('#tabla_archivos tbody');
               var url_download=(""+$('meta[name="_urlDownload"]').attr('content'));
               var download_image=(""+$('meta[name="_download"]').attr('content'));
-              var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"'
+              var delete_image=(""+$('meta[name="_delete"]').attr('content'));
+              var estado=(""+$('meta[name="_estado"]').attr('content'));
+              var download='<img src="'+download_image+'" class="menu-imagen" alt="" title="Descargar archivo"></img>'
+              var deletefile='<img src="'+delete_image+'" class="menu-imagen" alt="" title="Eliminar archivo"></img>'
+                var item;
               for(var e in data.archivos){
-                  tabla.append("<tr><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a></td>");
+                  item="<tr id=arc"+data.archivos[e].ide_archivo_producto+"><td>" + data.archivos[e].nombre + "</td><td>" + data.archivos[e].fecha + "</td><td><a href="+url_download+'/'+data.archivos[e].ide_archivo_producto+">"+download+"</a>";                    
+                  if(estado==="ABIERTO"){
+                    item+='<button type="button" value="'+data.archivos[e].ide_archivo_producto+'" class="btn-borrar-archivo">'+deletefile+"</button>"
+                  }
+                  item+="</td>";
+                  tabla.append(item);
               }
               $('#loading').modal('hide');
           },

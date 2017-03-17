@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use App\MonArchivoProductoPeriodo;
 use App\HPMEConstants;
+use App\MonPeriodoRegion;
 
 class FileController extends Controller
 {
@@ -16,12 +17,14 @@ class FileController extends Controller
         $files = $request->allFiles();
         
         $detalle=$request->ide_region_producto_detalle;
+        $estadoPeriodoRegion=  MonPeriodoRegion::where('ide_periodo_region','=',$request->ide_periodo_region)->pluck('estado')->first();
+        if($estadoPeriodoRegion!==HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'El periodo de la regi&oacute;n debe estar '.HPMEConstants::ABIERTO.' para subir archivos.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         date_default_timezone_set(HPMEConstants::TIME_ZONE);
         $archivos=array();
         foreach ($files as $file){
-            Log::info("test");
             $filename=$file->getClientOriginalName();
-            Log::info("Subiendo archivos...");
             $new_file=  new MonArchivoProductoPeriodo;
             $new_file->nombre=$filename;
             $new_file->fecha=date(HPMEConstants::DATETIME_FORMAT,  time());
@@ -48,6 +51,16 @@ class FileController extends Controller
     
     public function monitoreoDownload($id){
         $file=MonArchivoProductoPeriodo::find($id);
-        return response()->download('archivos/m'.$id,$file->nombre.'.'.$file->extension);
+        return response()->download('archivos/m'.$id,$file->nombre);
+    }
+    
+    public function deleteArchivoMonitoreo(Request $request){
+        $estadoPeriodo=  MonPeriodoRegion::where('ide_periodo_region','=',$request->ide_periodo_region)->pluck('estado')->first();
+        if($estadoPeriodo!==HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'Solo se puede borrar archivos cuando el periodo para la regi&oacute;n est&aacute; '+HPMEConstants::ABIERTO+'.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }    
+        File::delete('archivos/m'.$request->ide_archivo_producto);
+        MonArchivoProductoPeriodo::destroy($request->ide_archivo_producto);
+        return response()->json();
     }
 }

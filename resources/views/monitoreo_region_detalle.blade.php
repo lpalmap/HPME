@@ -231,6 +231,8 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="ingresarDetalleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
@@ -357,6 +359,31 @@
                             </div>
 
 
+<div class="modal fade" id="confirmacionBorrarModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Borrar Archivo</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+<ul style="list-style-type:circle" id="infoContent">Esta seguro de borrar el archivo&quest;</ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default" id="btnBorrarArchivo" >Borrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
@@ -397,6 +424,7 @@
     <meta name="_periodoRegion" content="{{$idePeriodoRegion}}"/>
     <meta name="_download" content="{{asset('images/download2.png')}}"/>
     <meta name="_delete" content="{{asset('images/delete.png')}}"/>
+    <meta name="_estado" content="{{$estado}}"/>
     <script src="{{asset('js/hpme.monitoreo.region.js')}}"></script>
     <script src="{{asset('assets/plugins/jasny/js/bootstrap-fileupload.js')}}"></script>
 <!--        <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
