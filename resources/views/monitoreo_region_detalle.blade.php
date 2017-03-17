@@ -308,7 +308,9 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                            @if($estado=='ABIERTO')
                                             <button type="button" tabindex="6" class="btn btn-primary" id="btnGuardarDetalle">Guardar</button>
+                                            @endif
                                             <input type="hidden" id="ide_item2" value="0"/>
                                         </div>
                                     </div>
