@@ -35,7 +35,13 @@
                                 </li>
                                 <li class="active"><a href="" data-toggle="tab">Colaboradores/Proyectos</a>
                                 </li>
+                                
                             </ul>
+                             <hr/>
+                            
+                                    <button  id="btnClonarPresupuesto" value="{{$ideProyectoPresupuesto}}">
+                                    <img src="{{asset('images/clone.png')}}" class="menu-imagen-big" alt="" title="Clonar Presupuesto Departamento"/></button>
+                                
                              <hr />
                              @if($estado=='ABIERTO')
                              <button class="btn btn-success" id="btnAgregar"><i class="icon-user icon-white" ></i> Agregar Presupuesto Colaborador/Proyecto</button>
@@ -121,6 +127,37 @@
                             </div>
                     </div>
 
+<div class="modal fade" id="clonarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Clonar Presupuesto</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formAprobar">
+                    <div class="form-group">
+                        <label>Seleccione de la lista el presupuesto del departamento que desea duplicar en este, se borrar&aacute; lo que ya ingres&oacute; para este departamento.</label>
+                    </div> 
+                    <div class="form-group">
+                        <label>Presupuestos</label>
+                                                
+                            <select id="inPresupuesto" class="form-control">
+                            </select>
+                                                
+                   </div> 
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" tabindex="6" class="btn btn-primary" id="btnEjecutarDuplicar">Clonar</button>
+                <input type="hidden" id="ide_item2" value="0"/>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal for displaying the messages -->
 <div class="modal fade" id="erroresModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
     <div class="modal-dialog">
@@ -152,6 +189,7 @@
         <meta name="_url" content="{{url('departamento')}}" />
         <meta name="_departamento" content="{{$idePresupuestoDepartamento}}" />
         <meta name="_urlTarget" content="{{url('colaborador')}}" />
+        <meta name="_urlPresupuesto" content="{{url('departamento')}}" />
         <meta name="_imgConsolidado" content="{{asset('images/detail.png')}}" />
         <meta name="_urlDetalle" content="{{url('presupuestocolaborador')}}" />       
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>

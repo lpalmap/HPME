@@ -16,6 +16,7 @@ use App\CfgCuenta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\PrivilegiosConstants;
+use App\PresupuestoConstants;
 
 class ProyectoPresupuesto extends Controller
 {
@@ -339,5 +340,67 @@ class ProyectoPresupuesto extends Controller
         return response()->json($presupuestoColaborador);
     }
     
+    public function presupuestosDepartamento(Request $request){
+       $idePresupuestoDepartamento=$request->ide_presupuesto_departamento;
+       $ideDepartamento=  PlnPresupuestoDepartamento::where('ide_presupuesto_departamento','=',$idePresupuestoDepartamento)->pluck('ide_departamento')->first();
+       Log::info("buscando para $ideDepartamento");
+       $presupuestos=DB::select(PresupuestoConstants::PRESUPUESTO_CLONAR_DEPARTAMENTO,array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento));
+       return response()->json($presupuestos);
+    }
+    
+    public function clonarPresupuesto(Request $request){
+        $ideDepartamento=$request->ide_presupuesto_departamento;
+        $estadoPresupuesto=  PlnPresupuestoDepartamento::where('ide_presupuesto_departamento','=',$ideDepartamento)->pluck('estado')->first();
+        if($estadoPresupuesto!==HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'El presupuesto debe estar '.HPMEConstants::ABIERTO.' para modificarlo'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        $ideDepartamentoNuevo=$request->ide_presupuesto_departamento_nuevo;
+        Log::info("depto: $ideDepartamentoNuevo");
+        if(!($ideDepartamentoNuevo>0)){
+            return response()->json(array('error'=>'Debe seleccionar el presupuesto de un departamento para clonar'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
+        DB::statement(PresupuestoConstants::PRESUPUESTO_ELIMINAR_DETALLE_CUENTA_COLABORADOR,array('idePresupuestoDepartamento'=>$ideDepartamento));
+        DB::statement(PresupuestoConstants::PRESUPUESTO_ELIMINAR_CUENTAS_COLABORADOR,array('idePresupuestoDepartamento'=>$ideDepartamento));
+        DB::statement(PresupuestoConstants::PRESUPUESTO_ELIMINAR_PRESUPUESTO_COLABORADOR,array('idePresupuestoDepartamento'=>$ideDepartamento));
+        $this->clonarPresupuestoColaborador($ideDepartamento, $ideDepartamentoNuevo);
+        return response()->json();
+    }
+    
+    private function clonarPresupuestoColaborador($ideDepartamentoOriginal,$ideDepartamento){
+        $colaboradores=DB::select(PresupuestoConstants::PRESUPUESTO_COLABORADOR_DEPARTAMENTO,array('idePresupuestoDepartamento'=>$ideDepartamento));
+        foreach ($colaboradores as $colaborador){
+            $nuevo_colaborador=new PlnPresupuestoColaborador();
+            $nuevo_colaborador->fecha_ingreso=date(HPMEConstants::DATE_FORMAT,  time());
+            $nuevo_colaborador->ide_colaborador=$colaborador->ide_colaborador;
+            $nuevo_colaborador->ide_presupuesto_departamento=$ideDepartamentoOriginal;
+            $nuevo_colaborador->save();
+            //clonar cuentas...
+            $cuentas=DB::select(PresupuestoConstants::PRESUPUESTO_COLABORADOR_CUENTA,array('idePresupuestoColaborador'=>$colaborador->ide_presupuesto_colaborador,'estadoCuenta'=>  HPMEConstants::ACTIVA));            
+            $this->clonarPresupuestoCuentas($cuentas, $nuevo_colaborador->ide_presupuesto_colaborador);
+        }
+        
+    }
+    
+    private function clonarPresupuestoCuentas($cuentas,$idePresupuestoColaborador){
+        foreach ($cuentas as $cuenta){
+            $nuevoColaboradorCuenta= new PlnColaboradorCuenta();
+            $nuevoColaboradorCuenta->ide_cuenta=$cuenta->ide_cuenta;
+            $nuevoColaboradorCuenta->ide_presupuesto_colaborador=$idePresupuestoColaborador;
+            $nuevoColaboradorCuenta->save();
+            $detalles=DB::select(PresupuestoConstants::PRESUPUESTO_CUENTA_DETALLE,array('ideColaboradorCuenta'=>$cuenta->ide_colaborador_cuenta));
+            $this->clonarDetalleCuenta($detalles,$nuevoColaboradorCuenta->ide_colaborador_cuenta);
+        }
+             
+    }
+    
+    private function clonarDetalleCuenta($detalles,$ideColaboradorCuenta){
+        foreach ($detalles as $detalle){
+            $nuevoDetalle=new PlnColaboradorCuentaDetalle();
+            $nuevoDetalle->ide_colaborador_cuenta=$ideColaboradorCuenta;
+            $nuevoDetalle->num_detalle=$detalle->num_detalle;
+            $nuevoDetalle->valor=$detalle->valor;
+            $nuevoDetalle->save();
+        }
+    }
     
 }

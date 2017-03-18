@@ -14,6 +14,91 @@ $(document).ready(function(){
         $('#loading').modal('hide');
     });
     
+    
+    $('#btnClonarPresupuesto').click(function(){
+        $('#loading').modal('show');
+        $('#clonarModal').modal('show');
+        $('#inPresupuesto').val(0);
+        var urlTarget=$('meta[name="_urlPresupuesto"]').attr('content')+"/retrivePresupuestos";
+        var idePresupuestoDepartamento=$('meta[name="_departamento"]').attr('content');
+        var selectHTML='<option value="0"></option>';
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var data={
+            ide_presupuesto_departamento:idePresupuestoDepartamento            
+        };
+        //alert(">asdfsdf ")
+        $.ajax({
+            type: "POST",
+            url: urlTarget,
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data); 
+                for(var u in data){
+                    selectHTML+='<option value="'+data[u].ide_presupuesto_departamento+'">'+data[u].descripcion+'/'+data[u].nombre+'</option>';
+                }
+                console.log(selectHTML);
+                $('#inPresupuesto').html(selectHTML); 
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                console.log('Error:', data); 
+                $('#inPresupuesto').html(selectHTML); 
+                $('#loading').modal('hide');
+            }
+        });
+    });
+    
+    
+    $('#btnEjecutarDuplicar').click(function(){
+        $('#loading').modal('show');
+        
+        var nuevoPresupuesto=$('#inPresupuesto').val();
+        var urlTarget=$('meta[name="_urlPresupuesto"]').attr('content')+"/clonar";
+        var idePresupuestoDepartamento=$('meta[name="_departamento"]').attr('content');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        
+        var data={
+            ide_presupuesto_departamento:idePresupuestoDepartamento,
+            ide_presupuesto_departamento_nuevo:nuevoPresupuesto
+        };
+        //alert(">asdfsdf ")
+        $.ajax({
+            type: "POST",
+            url: urlTarget,
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                location.reload(true);
+                $('#clonarModal').modal('hide');
+                $('#loading').modal('hide');
+            },
+            error: function (data) {
+                $('#loading').modal('hide');
+                var errHTML="";
+                if((typeof data.responseJSON != 'undefined')){
+                    for(var  e in data.responseJSON){
+                        errHTML+="<li>"+data.responseJSON[e]+"</li>";
+                    }
+                }else{
+                    errHTML+='<li>Error al clonar el presupuesto.</li>';
+                }
+                $("#erroresContent").html(errHTML); 
+                $('#erroresModal').modal('show'); 
+            }
+        });
+    });
+    
+    
     //Agregar nuevo
     $('#btnAgregar').click(function(){
         $('#loading').modal('show');
@@ -56,13 +141,12 @@ $(document).ready(function(){
                     $('#loading').modal('hide');
                     var errHTML="";
                     if((typeof data.responseJSON != 'undefined')){
-                        for( e in data.responseJSON){
+                        for( var e in data.responseJSON){
                             errHTML+="<li>"+data.responseJSON[e]+"</li>";
                         }
                     }else{
                         errHTML+='<li>Error al obtener colaboradores.</li>';
                     }
-                    console.log('Error:', data);
                     $("#erroresContent").html(errHTML); 
                     $('#erroresModal').modal('show'); 
                     

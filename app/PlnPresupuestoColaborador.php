@@ -17,4 +17,8 @@ class PlnPresupuestoColaborador extends BaseModel
         return $this->belongsTo('App\CfgColaboradorProyecto','ide_colaborador');
     }
     
+    public function cuentas(){
+        return $this->hasMany('App\PlnColaboradorCuenta', 'ide_presupuesto_colaborador');
+    }
+    
 }

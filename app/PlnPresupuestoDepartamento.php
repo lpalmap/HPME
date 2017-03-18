@@ -16,4 +16,9 @@ class PlnPresupuestoDepartamento extends BaseModel
     public function departamento(){
         return $this->belongsTo('App\CfgDepartamento','ide_departamento');
     }
+    
+    public function colaboradores(){
+        return $this->hasMany('App\PlnPresupuestoColaborador', 'ide_presupuesto_departamento');
+    }
+    
 }

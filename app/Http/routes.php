@@ -283,6 +283,8 @@ Route::get('/departamento/{id}',['uses' => 'ProyectoPresupuesto@retriveColaborad
 Route::post('/departamento/all',['uses' => 'ProyectoPresupuesto@retriveAllColaboradores', 'middleware' => 'auth']);
 Route::put('/departamento/colaborador',['uses' => 'ProyectoPresupuesto@addColaborador', 'middleware' => 'auth']);
 Route::delete('/departamento/{id}',['uses' => 'ProyectoPresupuesto@deleteColaborador', 'middleware' => 'auth']);
+Route::post('/departamento/retrivePresupuestos',['uses' => 'ProyectoPresupuesto@presupuestosDepartamento', 'middleware' => 'auth']);
+Route::post('/departamento/clonar',['uses' => 'ProyectoPresupuesto@clonarPresupuesto', 'middleware' => 'auth']);
 
 //Presupuesto cuentas
 Route::get('/colaborador/{colaborador}/cuenta/{id?}',['uses' => 'ProyectoPresupuesto@colaboradorCuenta', 'middleware' => 'auth']);

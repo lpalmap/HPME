@@ -17,4 +17,8 @@ class PlnColaboradorCuenta extends BaseModel
         return $this->belongsTo('App\CfgCuenta','ide_cuenta');
     }
     
+    public function detalle(){
+        return $this->hasMany('App\PlnColaboradorCuentaDetalle','ide_colaborador_cuenta');
+    }
+    
 }
