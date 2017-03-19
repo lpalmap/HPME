@@ -40,7 +40,6 @@ class Login extends Controller
                 }
                 $request->session()->put('privilegios',$privilegios);
                // Log::info("#### privilegios");
-               // Log::info($privilegios);
                 //Log::info('rol.... '.$rol);
                 $request->session()->put("rol", $rol);
                 return redirect()->route('home');

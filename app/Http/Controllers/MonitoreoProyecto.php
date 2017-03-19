@@ -14,6 +14,8 @@ use App\CfgListaValor;
 use App\MonPeriodoRegion;
 use App\CfgRegion;
 use App\PlnProyectoRegion;
+use App\PlnProyectoPresupuesto;
+use App\MonArchivoPresupuesto;
 
 
 class MonitoreoProyecto extends Controller
@@ -91,6 +93,16 @@ class MonitoreoProyecto extends Controller
         $privilegios=request()->session()->get('privilegios');
         if(isset($privilegios)){
             if(in_array(PrivilegiosConstants::MONITOREO_ADMINISTRACION, $privilegios)){
+                return TRUE;
+            }
+        }  
+        return FALSE;
+    }
+    
+    private function vistaContador(){
+        $privilegios=request()->session()->get('privilegios');
+        if(isset($privilegios)){
+            if(in_array(PrivilegiosConstants::PRESUPUESTO_CONSULTA_CONTADOR_DEPARTAMENTO, $privilegios)){
                 return TRUE;
             }
         }  
@@ -175,6 +187,35 @@ class MonitoreoProyecto extends Controller
             return null;
         }
     }
+    
+    public function proyectosContador(){
+        $proyectos= PlnProyectoPresupuesto::orderBy('fecha_proyecto', 'desc')->get();
+        if(!$this->vistaContador()){
+            return view('home');
+        }
+        return view('monitoreo_proyectos_contador',array('items'=>$proyectos));
+    }
+    
+    public function periodosContador($ideProyecto){
+        if(!$this->vistaContador()){
+            return view('home');
+        }
+        $proyecto=  PlnProyectoPlanificacion::find($ideProyecto);
+        $periodos=  MonProyectoPeriodo::where('ide_proyecto','=',$ideProyecto)->orderBy('no_periodo','asc')->get();   
+        return view('monitoreo_periodos_ejecucion',array('proyecto'=>$proyecto->descripcion,'ideProyecto'=>$proyecto->ide_proyecto,'items'=>$periodos,'estado'=>$proyecto->estado));
+        
+    }
+    
+    public function proyectoPeriodo($id){
+        if(!$this->vistaContador()){
+            return view('home');
+        }        
+        $user=Auth::user();
+        $periodo=MonProyectoPeriodo::find($id);//where('ide_periodo_monitoreo','=',$id)->pluck('descripcion')->first();
+        $archivos=  MonArchivoPresupuesto::where(array('ide_periodo_monitoreo'=>$id,'ide_usuario'=>$user->ide_usuario))->get();
+        return view('monitoreo_periodo_presupuesto',array('archivos'=>$archivos,'periodo'=>$periodo->descripcion,'ideProyecto'=>$periodo->ide_proyecto));
+    }
+    
     
     
 }

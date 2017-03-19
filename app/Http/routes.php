@@ -350,6 +350,13 @@ Route::get('/monitoreoproyecto',['uses' => 'MonitoreoProyecto@monitoreoProyecto'
 Route::post('/fileupload',['uses' => 'FileController@upload', 'middleware' => 'auth']);
 Route::get('/filedownload/monitoreo/{id}',['uses' => 'FileController@monitoreoDownload', 'middleware' => 'auth']);
 Route::post('/filedelete/monitoreo',['uses' => 'FileController@deleteArchivoMonitoreo', 'middleware' => 'auth']);
+Route::post('/upload/verificarEjecucion',['uses' => 'FileController@verificarEjecucion', 'middleware' => 'auth']);
+
+/* MONITOREO CONTADOR */
+/* MONITOREO AFILAIDO*/
+Route::get('/proyectocontador',['uses' => 'MonitoreoProyecto@proyectosContador', 'middleware' => 'auth']);
+Route::get('/proyectocontador/{id}',['uses' => 'MonitoreoProyecto@periodosContador', 'middleware' => 'auth']);
+Route::get('/proyectoperiodo/{id}',['uses' => 'MonitoreoProyecto@proyectoPeriodo', 'middleware' => 'auth']);
 
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));

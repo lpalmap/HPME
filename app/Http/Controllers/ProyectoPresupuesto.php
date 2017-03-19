@@ -243,9 +243,14 @@ class ProyectoPresupuesto extends Controller
     }
     
     public function cleanCuenta(Request $request){
-        Log::info("clean cuenta ");
+        //Log::info("clean cuenta ");
+        $idePresupuestoDepartamento= PlnPresupuestoColaborador::where('ide_presupuesto_colaborador','=',$request->ide_presupuesto_colaboardor)->pluck('ide_presupuesto_departamento')->first();
+        $estado=  PlnPresupuestoDepartamento::where('ide_presupuesto_departamento','=',$idePresupuestoDepartamento)->pluck('estado')->first();
+        if($estado!==HPMEConstants::ABIERTO){
+            return response()->json(array('error'=>'El presupuesto del departamento debe estar '.HPMEConstants::ABIERTO.' para modificar datos.'), HPMEConstants::HTTP_AJAX_ERROR);
+        }
         $ideColaboradorCuenta=$this->cuentaColaborador($request->ide_cuenta, $request->ide_presupuesto_colaborador);
-        Log::info("clean test $ideColaboradorCuenta");
+        //Log::info("clean test $ideColaboradorCuenta");
         if(!is_null($ideColaboradorCuenta)){
             PlnColaboradorCuentaDetalle::where('ide_colaborador_cuenta','=',$ideColaboradorCuenta)->delete();
             PlnColaboradorCuenta::destroy($ideColaboradorCuenta);   

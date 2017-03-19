@@ -359,7 +359,7 @@
                 </li>
                 @endif
 <!--                  MENU MONITOREO -->
-                @if(array_intersect([100,200,201],$privilegios))  
+                @if(array_intersect([4,100,200,201],$privilegios))  
                 <li class="panel ">
                     <a href="#" data-parent="#menu" data-toggle="collapse" class="accordion-toggle collapsed" data-target="#form-nav">
                         <img class="menu-imagen"src="{{asset('images/mod_monitoreo.png')}}"/>  Monitoreo
@@ -378,6 +378,9 @@
                         @endif
                         @if(array_intersect([100,201],$privilegios))
                         <li class=""><a href="{{url('monitoreoafiliado')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_formato.png')}}"/>  Monitoreo Planificaci&oacute;n</a></li>
+                        @endif
+                        @if(in_array(4,$privilegios))
+                        <li class=""><a href="{{url('proyectocontador')}}"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/presupuesto_ejecucion1.png')}}"/>  Ejecuci&#243;n Presupuesto</a></li>
                         @endif
 <!--                        <li class=""><a href="forms_validation.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_avances.png')}}"/>  Monitoreo Afiliados </a></li>
                         <li class=""><a href="forms_fileupload.html"><i class="icon-angle-right"></i><img class="menu-imagen"src="{{asset('images/mon_historial.png')}}"/>  Historial de Formatos </a></li>
