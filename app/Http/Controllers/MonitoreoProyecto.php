@@ -213,7 +213,7 @@ class MonitoreoProyecto extends Controller
         $user=Auth::user();
         $periodo=MonProyectoPeriodo::find($id);//where('ide_periodo_monitoreo','=',$id)->pluck('descripcion')->first();
         $archivos=  MonArchivoPresupuesto::where(array('ide_periodo_monitoreo'=>$id,'ide_usuario'=>$user->ide_usuario))->get();
-        return view('monitoreo_periodo_presupuesto',array('archivos'=>$archivos,'periodo'=>$periodo->descripcion,'ideProyecto'=>$periodo->ide_proyecto));
+        return view('monitoreo_periodo_presupuesto',array('archivos'=>$archivos,'periodo'=>$periodo->descripcion,'ideProyecto'=>$periodo->ide_proyecto,'idePeriodoMonitoreo'=>$id));
     }
     
     

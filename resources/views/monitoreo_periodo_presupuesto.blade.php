@@ -102,7 +102,7 @@
                                                      </div>
                                                      <div class="form-group">
                                                         <label>Total monto filas encontradas</label>
-                                                        <input class="form-control" id="inMontroEncontrado" required="true"/>
+                                                        <input class="form-control" id="inMontoEncontrado" required="true"/>
                                                      </div>
                                                      <div class="form-group">
                                                         <label>Total monto filas no encontradas</label>
@@ -120,6 +120,29 @@
                                 </div>
                             </div>
 
+
+<div class="modal fade" id="confirmarModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Subir Archivo</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- The messages container -->
+<!--                <div id="erroresContent"></div>-->
+<ul style="list-style-type:circle" id="infoContent">Se carg&oac&oacute; correctamente el archivo de ejecuci&oacute;n para el periodo.</ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Modal for displaying the messages -->
@@ -150,6 +173,8 @@
     @parent
         <meta name="_token" content="{!! csrf_token() !!}" />
         <meta name="_urlUpload" content="{{url('upload')}}"/>
+        <meta name="_proyecto" content="{{$ideProyecto}}"/>
+        <meta name="_periodo" content="{{$idePeriodoMonitoreo}}"/>
         <script src="{{asset('assets/plugins/dataTables/jquery.dataTables.js')}}"></script>
         <script src="{{asset('assets/plugins/dataTables/dataTables.bootstrap.js')}}"></script>
         <script src="{{asset('js/hpme.lang.js')}}"></script>

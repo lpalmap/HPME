@@ -18,5 +18,7 @@ class PresupuestoConstants
     const IMPORT_BASE=2;
     const IMPORT_L1=6;
     const IMPORT_L2=7;
-    const IMPORT_L4=8;   
+    const IMPORT_L4=8;      
+    const PRESUPUESTO_COUNT_DETALLE_PERIODO="select count(de.ide_colaborador_cuenta_detalle) detalles from pln_colaborador_cuenta_detalle de,pln_colaborador_cuenta cc,pln_presupuesto_colaborador pc,cfg_cuenta cu,cfg_colaborador_proyecto co,pln_presupuesto_departamento pd,cfg_departamento dep where de.ide_colaborador_cuenta=cc.ide_colaborador_cuenta and cc.ide_cuenta=cu.ide_cuenta and cc.ide_presupuesto_colaborador=pc.ide_presupuesto_colaborador and pc.ide_colaborador=co.ide_colaborador and pc.ide_presupuesto_departamento=pd.ide_presupuesto_departamento and pd.ide_departamento=dep.ide_departamento and pd.ide_proyecto_presupuesto=:idePresupuestoDepartamento and cu.cuenta=:cuenta and cu.codigo_interno=:clase and dep.codigo_interno=:departamento and co.codigo_interno=:empleado and de.num_detalle=:periodo";
+    const PRESUPUESTO_UPDATE_DETALLE_PERIODO="update pln_colaborador_cuenta_detalle de,pln_colaborador_cuenta cc,pln_presupuesto_colaborador pc,cfg_cuenta cu,cfg_colaborador_proyecto co,pln_presupuesto_departamento pd,cfg_departamento dep set de.ejecutado=:base where de.ide_colaborador_cuenta=cc.ide_colaborador_cuenta and cc.ide_cuenta=cu.ide_cuenta and cc.ide_presupuesto_colaborador=pc.ide_presupuesto_colaborador and pc.ide_colaborador=co.ide_colaborador and pc.ide_presupuesto_departamento=pd.ide_presupuesto_departamento and pd.ide_departamento=dep.ide_departamento and pd.ide_proyecto_presupuesto=:idePresupuestoDepartamento and cu.cuenta=:cuenta and cu.codigo_interno=:clase and dep.codigo_interno=:departamento and co.codigo_interno=:empleado and de.num_detalle=:periodo";
 }

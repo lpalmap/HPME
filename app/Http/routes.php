@@ -351,6 +351,7 @@ Route::post('/fileupload',['uses' => 'FileController@upload', 'middleware' => 'a
 Route::get('/filedownload/monitoreo/{id}',['uses' => 'FileController@monitoreoDownload', 'middleware' => 'auth']);
 Route::post('/filedelete/monitoreo',['uses' => 'FileController@deleteArchivoMonitoreo', 'middleware' => 'auth']);
 Route::post('/upload/verificarEjecucion',['uses' => 'FileController@verificarEjecucion', 'middleware' => 'auth']);
+Route::post('/upload/aplicarEjecucion',['uses' => 'FileController@aplicarEjecucion', 'middleware' => 'auth']);
 
 /* MONITOREO CONTADOR */
 /* MONITOREO AFILAIDO*/

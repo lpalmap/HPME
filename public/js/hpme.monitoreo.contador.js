@@ -16,22 +16,24 @@ $(document).ready(function(){
     $( '#formAgregarDetalle' ).submit( function( e ) {
         //console.log(e);
         $('#loading').modal('show');
-        $('#erroresModal').modal('show');
-        var url_target=(""+$('meta[name="_urlUpload"]').attr('content'))+"/verificarEjecucion";
-       // var form=$(this);
-        //var val = $("input[type=submit][clicked=true]").val()
-        //alert("submit s"+value);
-        //$('#loading').modal('hide');
+        var target='verificarEjecucion'
+        if(value==='Subir'){
+            target="aplicarEjecucion";
+        }
+        var url_target=(""+$('meta[name="_urlUpload"]').attr('content'))+"/"+target;
+        var ideProyectoPlanificacion=(""+$('meta[name="_proyecto"]').attr('content'));
+        var idePeriodoMonitoreo=(""+$('meta[name="_periodo"]').attr('content'));
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             }
         }); 
-        //var ideRegionProductoDetalle=$("#btnGuardarDetalle").val();
-        //var idePeriodoRegion=(""+$('meta[name="_periodoRegion"]').attr('content'));
+        
         var data=new FormData(this);
-        //data.append('ide_region_producto_detalle',ideRegionProductoDetalle);
-        //data.append('ide_periodo_region',idePeriodoRegion);
+        data.append('ide_proyecto_planificacion',ideProyectoPlanificacion);
+        data.append('ide_periodo_monitoreo',idePeriodoMonitoreo);
+        
         $.ajax( {
           url: url_target,
           type: 'POST',
@@ -40,16 +42,18 @@ $(document).ready(function(){
           contentType: false,
           uploadMultiple : true,
           success: function(data){
+              if(value==='Subir'){
+                $('#confirmarModal').modal('show');
+                location.reload(true);              
+              }else{
+                $('#inFila').val(data.filas);              
+                $('#inFilaEncontrada').val(data.total_encontrado);
+                $('#inFilaNoEncontrada').val(data.total_noencontrado);
+                $('#inMontoEncontrado').val(data.monto_encontrado);
+                $('#inMontoNoEncontrado').val(data.monto_noencontrado);        
+                $('#detalleArchivosModal').modal('show');
+              }
               
-              console.log(data);
-              $('#inFila').val(data.filas);
-              
-              //$('#inFilaEncontrada').val(data.filas);
-              //$('#inFilaNoEncontrada').val(data.filas);
-              //$('#inMontoEncontrado').val(data.filas);
-              //$('#inMontoNoEncontrado').val(data.filas);
-              
-              $('#detalleArchivosModal').modal('show');
               $('#loading').modal('hide');
           },
           error:function(data){            
