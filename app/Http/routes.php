@@ -359,6 +359,10 @@ Route::get('/proyectocontador',['uses' => 'MonitoreoProyecto@proyectosContador',
 Route::get('/proyectocontador/{id}',['uses' => 'MonitoreoProyecto@periodosContador', 'middleware' => 'auth']);
 Route::get('/proyectoperiodo/{id}',['uses' => 'MonitoreoProyecto@proyectoPeriodo', 'middleware' => 'auth']);
 
+/* Ejecucion */
+Route::get('/ejecucionregion/{id}',['uses' => 'PlanificacionRegion@ejecutadoRegionDetalle', 'middleware' => 'auth']);
+Route::get('/regionproductochart/{id}',['uses' => 'PlanificacionRegion@detalleProductoRegion', 'middleware' => 'auth']);
+
 //Route::get('/insert', function() {
 //    App\SegUsuario::create(array('usuario' => 'root','password'=>  bcrypt('root'),'nombres'=>'Luis Antonio','apellidos'=>'Palma Pineda','ide_afiliado'=>null));
 //    return 'Usuario Agregado 222';

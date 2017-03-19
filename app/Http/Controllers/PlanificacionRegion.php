@@ -15,6 +15,7 @@ use App\PrivilegiosConstants;
 use Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\MonProyectoPeriodo;
+use App\PlnRegionProductoDetalle;
 
 
 class PlanificacionRegion extends Controller
@@ -481,6 +482,73 @@ class PlanificacionRegion extends Controller
         }else{
             return view('home');
         }  
+    }
+    
+    public function ejecutadoRegionDetalle($id){ 
+        $proyectoRegion=  PlnProyectoRegion::find($id);
+        $rol=  request()->session()->get('rol');
+        $ingresaPlan=  $this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($proyectoRegion) && ($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion)){
+            $adminRegion=false;
+            if($ingresaPlan && (!$consultaPlanificacion)){
+                $ideRegion=$this->regionUsuario();
+                if(is_null($ideRegion)){
+                    return view('home');
+                }else{
+                    if($ideRegion!=$proyectoRegion->ide_region){
+                        return view('home');
+                    }else{
+                        $adminRegion=true;
+                    }
+                }
+            }
+
+            $proyectoPlanificacion = PlnProyectoPlanificacion::find($proyectoRegion->ide_proyecto_planificacion);
+
+            $proyectoRegion->region;
+            $nombreRegion=$proyectoRegion->region->nombre;
+        
+            $metas=$this->obtenerMetas($proyectoPlanificacion->ide_proyecto,$proyectoRegion->ide_proyecto_region);
+            $plantilla=array("proyecto"=>($proyectoPlanificacion->descripcion),'metas'=> $metas);
+            
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            return view('monitoreo_plan_region_ejecutado',array('plantilla'=>$plantilla,'region'=>$nombreRegion,'num_items'=>count($encabezados),'encabezados'=>$encabezados,'rol'=>$rol,'ideProyectoRegion'=>$proyectoRegion->ide_proyecto_region,'estado'=>$proyectoRegion->estado,'ingresaPlan'=>$adminRegion,'apruebaPlanificacion'=>$apruebaPlanificacion));
+            //return view('planificacion_region_detalle',array('region'=>$nombreRegion));
+        }else{
+            return view('home');
+        }      
+    }
+    
+    public function detalleProductoRegion($ideRegionProducto){
+        $encabezados=array();
+        $encabezados[]='Ene-Mar';
+        $encabezados[]='Abr-Jun';
+        $encabezados[]='Jul-Sep';
+        $encabezados[]='Oct-Dic';
+        $detalles=PlnRegionProductoDetalle::where('ide_region_producto','=',$ideRegionProducto)->get();
+        $result=array();
+        foreach ($detalles as $detalle){
+            $nuevoDetalle['encabezado']=$encabezados[$detalle->num_detalle-1];
+            $nuevoDetalle['plan']=$detalle->valor;
+            $nuevoDetalle['ejecutado']=$detalle->ejecutado;
+            $result[]=$nuevoDetalle;
+        }
+        Log::info("region $ideRegionProducto");
+        Log::info($detalles);
+        Log::info($result);
+        $nombreProducto='';
+        $nombres=DB::select(HPMEConstants::PLN_NOMBRE_PRODUCTO_REGION,array('ideProductoRegion'=>$ideRegionProducto));
+        if(count($nombres)>0){
+            $nombreProducto=$nombres[0]->nombre;
+        }
+        
+        return response()->json(array('producto'=>$nombreProducto,'detalles'=>$result));
     }
     
 }
