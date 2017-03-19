@@ -70,6 +70,11 @@ $(document).ready(function(){
             $('#inNombre').val(data.nombre);
             $('#inDescripcion').val(data.descripcion);
             $('#inOrden').val(data.orden);
+            if(data.requiere_comprobantes=='S'){
+                $('#inComprobante').prop('checked', true);
+            }else{
+                $('#inComprobante').prop('checked', false);
+            }
             $('#btnGuardar').val('update');
             $('#agregarEditarModal').modal('show');
             $('#ide_item').val(data.ide_producto);
@@ -78,11 +83,17 @@ $(document).ready(function(){
     });    
 
     //create new task / update existing task
-    $("#btnGuardar").click(function (e) {      
+    $("#btnGuardar").click(function (e) { 
+        var comprobante='N';
+        if($('#inComprobante').prop('checked')){
+            comprobante='S';
+        }
+        
         var formData = {
             nombre: $('#inNombre').val(),
             descripcion: $('#inDescripcion').val(),
-            orden:$('#inOrden').val() 
+            orden:$('#inOrden').val(),
+            requiere_comprobantes:comprobante
         };   
         $('#loading').modal('show');
         $.ajaxSetup({
@@ -112,6 +123,11 @@ $(document).ready(function(){
                     item+='<td>'+data.nombre+'</td>'
                     item+='<td>'+data.descripcion+'</td>';
                     item+='<td>'+data.orden+'</td>';
+                    if(data.requiere_comprobantes=='S'){
+                        item+='<td>SI</td>';
+                    }else{
+                        item+='<td>NO</td>';
+                    }
                     item+='<td><button class="btn btn-primary btn-editar" value="'+data.ide_producto+'"><i class="icon-pencil icon-white" ></i> Editar</button>';
                     item+='<button class="btn btn-danger" value="'+data.ide_producto+'"><i class="icon-remove icon-white"></i> Eliminar</button></td></tr>';
                 if (state == "add"){ 

@@ -38,6 +38,7 @@ class Productos extends Controller
         $item->nombre=$request->nombre;
         $item->descripcion=$request->descripcion; 
         $item->orden=$request->orden;
+        $item->requiere_comprobantes=$request->requiere_comprobantes;
         $item->save();
         return response()->json($item);       
     }

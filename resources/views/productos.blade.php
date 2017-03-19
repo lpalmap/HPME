@@ -33,6 +33,7 @@
                                             <th>Nombre</th>
                                             <th>Descripci&oacute;n</th>
                                             <th>Orden</th>
+                                            <th>Requiere Comprobante</td>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -43,6 +44,7 @@
                                             <td>{{$items[$i]->nombre}}</td>
                                             <td>{{$items[$i]->descripcion}}</td>
                                             <td>{{$items[$i]->orden}}</td>
+                                            <td>{{$items[$i]->requiere_comprobantes=='S'?'SI':'NO'}}</td>
                                             <td>
                                                 <button class="btn btn-primary btn-editar" value="{{$items[$i]->ide_producto}}"><i class="icon-pencil icon-white" ></i> Editar</button>
                                                 <button class="btn btn-danger" value="{{$items[$i]->ide_producto}}"><i class="icon-remove icon-white"></i> Eliminar</button>
@@ -106,7 +108,11 @@
                                            <div class="form-group">
                                                 <label>Orden</label>
                                                 <input class="form-control" id="inOrden" required="true"/>
-                                                </div>
+                                            </div>
+                                           <div class="form-group">
+                                                <label>Requiere Comprobante</label>
+                                                <input class="uniform" type="checkbox" id="inComprobante"/>
+                                            </div>
                                         </form>
                                         </div>
                                         <div class="modal-footer">
