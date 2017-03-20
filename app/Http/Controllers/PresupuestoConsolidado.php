@@ -328,16 +328,20 @@ class PresupuestoConsolidado extends Controller
             if(isset($itemTotal['item'.$i])){
                 if(isset($itemCuenta['item'.$i])){
                     $itemCuenta['item'.$i]=$itemCuenta['item'.$i]+$itemTotal['item'.$i];
+                    $itemCuenta['ej'.$i]=$itemCuenta['ej'.$i]+$itemTotal['ej'.$i];
                 }else{
                     $itemCuenta['item'.$i]=$itemTotal['item'.$i];
+                    $itemCuenta['ej'.$i]=$itemTotal['ej'.$i];
                 }
             }
         } 
         if(isset($itemTotal['total'])){
             if(isset($itemCuenta['total'])){
                 $itemCuenta['total']=$itemCuenta['total']+$itemTotal['total'];
+                $itemCuenta['ejtotal']=$itemCuenta['ejtotal']+$itemTotal['ejtotal'];
             }else{
                 $itemCuenta['total']=$itemTotal['total'];
+                $itemCuenta['ejtotal']=$itemTotal['ejtotal'];
             }
         }
         //Log::info("***********ITEM CUENTA********************");
@@ -378,6 +382,22 @@ class PresupuestoConsolidado extends Controller
         $item12=0.0;
         $total=0.0;
         $totalCuenta=0.0;
+        
+        $ej1=0.0;
+        $ej2=0.0;
+        $ej3=0.0;
+        $ej4=0.0;
+        $ej5=0.0;
+        $ej6=0.0;
+        $ej7=0.0;
+        $ej8=0.0;
+        $ej9=0.0;
+        $ej10=0.0;
+        $ej11=0.0;
+        $ej12=0.0;
+        $ejtotal=0.0;
+        $ejtotalCuenta=0.0;
+        
         foreach($cuentasHijas as $hija){
             $item=array();
             $item['cuenta']=$hija->cuenta;
@@ -385,65 +405,102 @@ class PresupuestoConsolidado extends Controller
             $totalCuenta=0.0;
             if($hija->item1>0){
                 $item['item1']=$hija->item1;
+                $item['ej1']=$hija->ej1;
                 $item1+=$hija->item1;
+                $ej1+=$hija->ej1;
                 $totalCuenta+=$hija->item1;
+                $ejtotalCuenta+=$hija->ej1;
             }
             if($hija->item2>0){
                 $item['item2']=$hija->item2;
+                $item['ej2']=$hija->ej2;
                 $item2+=$hija->item2;
+                $ej2+=$hija->ej2;
                 $totalCuenta+=$hija->item2;
+                $ejtotalCuenta+=$hija->ej2;
             }
             if($hija->item3>0){
                 $item['item3']=$hija->item3;
+                $item['ej3']=$hija->ej3;
                 $item3+=$hija->item3;
+                $ej3+=$hija->ej3;
                 $totalCuenta+=$hija->item3;
+                $ejtotalCuenta+=$hija->ej3;
             }
             if($hija->item4>0){
                 $item['item4']=$hija->item4;
+                $item['ej4']=$hija->ej4;
                 $item4+=$hija->item4;
+                $ej4+=$hija->ej4;
                 $totalCuenta+=$hija->item4;
+                $ejtotalCuenta+=$hija->ej4;
             }
             if($hija->item5>0){
                 $item['item5']=$hija->item5;
+                $item['ej5']=$hija->ej5;
                 $item5+=$hija->item5;
+                $ej5+=$hija->ej5;
                 $totalCuenta+=$hija->item5;
+                $ejtotalCuenta+=$hija->ej5;
             }
             if($hija->item6>0){
                 $item['item6']=$hija->item6;
+                $item['ej6']=$hija->ej6;
                 $item6+=$hija->item6;
+                $ej6+=$hija->ej6;
                 $totalCuenta+=$hija->item6;
+                $ejtotalCuenta+=$hija->ej6;
             }
             if($hija->item7>0){
                 $item['item7']=$hija->item7;
+                $item['ej7']=$hija->ej7;
                 $item7+=$hija->item7;
+                $ej7+=$hija->ej7;
                 $totalCuenta+=$hija->item7;
+                $ejtotalCuenta+=$hija->ej7;
             }
             if($hija->item8>0){
                 $item['item8']=$hija->item8;
+                $item['ej8']=$hija->ej8;
                 $item8+=$hija->item8;
+                $ej8+=$hija->ej8;
                 $totalCuenta+=$hija->item8;
+                $ejtotalCuenta+=$hija->ej8;
             }
             if($hija->item9>0){
                 $item['item9']=$hija->item9;
+                $item['ej9']=$hija->ej9;
                 $item9+=$hija->item9;
+                $ej9+=$hija->ej9;
                 $totalCuenta+=$hija->item9;
+                $ejtotalCuenta+=$hija->ej9;
             }
             if($hija->item10>0){
                 $item['item10']=$hija->item10;
+                $item['ej10']=$hija->ej10;
                 $item10+=$hija->item10;
+                $ej10+=$hija->ej10;
                 $totalCuenta+=$hija->item10;
+                $ejtotalCuenta+=$hija->ej10;
             }
             if($hija->item11>0){
                 $item['item11']=$hija->item11;
+                $item['ej11']=$hija->ej11;
                 $item11+=$hija->item11;
+                $ej11+=$hija->ej11;
                 $totalCuenta+=$hija->item11;
+                $ejtotalCuenta+=$hija->ej11;
             }
             if($hija->item12>0){
                 $item['item12']=$hija->item12;
+                $item['ej12']=$hija->ej12;
                 $item12+=$hija->item12;
+                $ej12+=$hija->ej12;
                 $totalCuenta+=$hija->item12;
+                $ejtotalCuenta+=$hija->ej12;
             }
             $item['total']=$totalCuenta;
+            $item['ejtotal']=$ejtotalCuenta;
             $item['nivel']=$nivel+1;
             $result[]=$item;
         } 
@@ -452,53 +509,78 @@ class PresupuestoConsolidado extends Controller
         $itemCuenta['nombre']=$cuenta->nombre;
         if($item1>0){
             $itemCuenta['item1']=$item1;
+            $itemCuenta['ej1']=$ej1;
+            $ejtotal+=$ej1;
             $total+=$item1;
         }
         if($item2>0){
             $itemCuenta['item2']=$item2;
+            $itemCuenta['ej2']=$ej2;
+            $ejtotal+=$ej2;
             $total+=$item2;
         }
         if($item3>0){
             $itemCuenta['item3']=$item3;
+            $itemCuenta['ej3']=$ej3;
+            $ejtotal+=$ej3;
             $total+=$item3;
         }
         if($item4>0){
             $itemCuenta['item4']=$item4;
+            $itemCuenta['ej4']=$ej4;
+            $ejtotal+=$ej4;
             $total+=$item4;
         }
         if($item5>0){
             $itemCuenta['item5']=$item5;
+            $itemCuenta['ej5']=$ej5;
+            $ejtotal+=$ej5;
             $total+=$item5;
         }
         if($item6>0){
             $itemCuenta['item6']=$item6;
+            $itemCuenta['ej6']=$ej6;
+            $ejtotal+=$ej6;
             $total+=$item6;
         }
         if($item7>0){
             $itemCuenta['item7']=$item7;
+            $itemCuenta['ej7']=$ej7;
+            $ejtotal+=$ej7;
             $total+=$item7;
         }
         if($item8>0){
             $itemCuenta['item8']=$item8;
+            $itemCuenta['ej8']=$ej8;
+            $ejtotal+=$ej8;
             $total+=$item8;
         }
         if($item9>0){
             $itemCuenta['item9']=$item9;
+            $itemCuenta['ej9']=$ej9;
+            $ejtotal+=$ej9;
             $total+=$item9;
         }
         if($item10>0){
             $itemCuenta['item10']=$item10;
+            $itemCuenta['ej10']=$ej10;
+            $ejtotal+=$ej10;
             $total+=$item10;
         }
         if($item11>0){
             $itemCuenta['item11']=$item11;
+            $itemCuenta['ej11']=$ej11;
+            $ejtotal+=$ej11;
             $total+=$item11;
         }
         if($item12>0){
             $itemCuenta['item12']=$item12;
+            $itemCuenta['ej12']=$ej12;
+            $ejtotal+=$ej12;
             $total+=$item12;
         }
         $itemCuenta['total']=$total;
+        $itemCuenta['ejtotal']=$ejtotal;
         $itemCuenta['nivel']=$nivel;
         //$result[]=$itemCuenta;
         array_unshift($result,$itemCuenta);
@@ -607,6 +689,21 @@ class PresupuestoConsolidado extends Controller
         return $result;     
     }
     
+    public function ejecucionPresupuestoDepartamento($idePresupuestoDepartamento){
+        $rol=  request()->session()->get('rol');
+        $presupuestoDepartamento=PlnPresupuestoDepartamento::find($idePresupuestoDepartamento);
+        $vistaPrivilegio=$this->vistaPrivilegio($presupuestoDepartamento->ide_departamento);
+        if(!$this->departamentoDirector($presupuestoDepartamento->ide_departamento)){
+            if(!$vistaPrivilegio){
+                return view('home');
+            } 
+        }
+        $aprueba=$this->apruebaPrivilegio();
+        $presupuestoDepartamento->departamento;
+        $nombreDepartamento=$presupuestoDepartamento->departamento->nombre;        
+        $consolidado=$this->buildConsolidado(array('idePresupuestoDepartamento'=>$idePresupuestoDepartamento),FALSE);        
+        return view('mon_presupuesto_ejecucion_dep',array('cuentas'=>$consolidado,'nombre'=>$nombreDepartamento,'idePresupuestoDepartamento'=>$idePresupuestoDepartamento,'rol'=>$rol,'estado'=>$presupuestoDepartamento->estado,'aprueba'=>$aprueba,'vistaGeneral'=>$vistaPrivilegio));        
+    }
     
     
     

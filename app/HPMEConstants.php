@@ -122,7 +122,19 @@ class HPMEConstants
   sum(IF(d.num_detalle=9,d.valor,0)) as item9,
   sum(IF(d.num_detalle=10,d.valor,0)) as item10,
   sum(IF(d.num_detalle=11,d.valor,0)) as item11,
-  sum(IF(d.num_detalle=12,d.valor,0)) as item12
+  sum(IF(d.num_detalle=12,d.valor,0)) as item12,
+  sum(IF(d.num_detalle=1,d.ejecutado,0)) as ej1,
+  sum(IF(d.num_detalle=2,d.ejecutado,0)) as ej2,
+  sum(IF(d.num_detalle=3,d.ejecutado,0)) as ej3,
+  sum(IF(d.num_detalle=4,d.ejecutado,0)) as ej4,
+  sum(IF(d.num_detalle=5,d.ejecutado,0)) as ej5,
+  sum(IF(d.num_detalle=6,d.ejecutado,0)) as ej6,
+  sum(IF(d.num_detalle=7,d.ejecutado,0)) as ej7,
+  sum(IF(d.num_detalle=8,d.ejecutado,0)) as ej8,
+  sum(IF(d.num_detalle=9,d.ejecutado,0)) as ej9,
+  sum(IF(d.num_detalle=10,d.ejecutado,0)) as ej10,
+  sum(IF(d.num_detalle=11,d.ejecutado,0)) as ej11,
+  sum(IF(d.num_detalle=12,d.ejecutado,0)) as ej12
   from pln_colaborador_cuenta_detalle d,pln_colaborador_cuenta p,pln_presupuesto_colaborador l,cfg_cuenta c 
   where d.ide_colaborador_cuenta=p.ide_colaborador_cuenta and p.ide_presupuesto_colaborador=l.ide_presupuesto_colaborador and p.ide_cuenta=c.ide_cuenta AND c.ide_cuenta_padre=:ideCuentaPadre AND l.ide_presupuesto_departamento=:idePresupuestoDepartamento GROUP BY c.ide_cuenta,c.cuenta,c.nombre";
     

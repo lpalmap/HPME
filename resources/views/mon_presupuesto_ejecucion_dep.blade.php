@@ -12,7 +12,7 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2>Presupuesto/{{$nombre}}</h2>
+                        <h2>Ejecuci&oacute;n Presupuesto/{{$nombre}}</h2>
                     </div>
                 </div>
 
@@ -32,27 +32,6 @@
                         <div class="panel-heading">
                             <span style="font-weight: bold">Detalle presupuesto</span><a href="{{url('presupuestodepartamentotrim/'.$idePresupuestoDepartamento)}}" >
                         <img src="{{asset('images/quarter.png')}}" class="menu-imagen-big" alt="" title="Ver por trimestre"/></a>
-                            &nbsp;
-                            &nbsp;
-                            &nbsp;
-                            &nbsp;
-                            &nbsp;
-                            <a href="{{url('observacionespresupuesto/'.$idePresupuestoDepartamento)}}" >
-                                <img src="{{asset('images/observaciones.png')}}" class="menu-imagen-big" alt="" title="Observaciones"/></a>
-                            &nbsp;
-                            &nbsp;
-                            @if(isset($rol) && $aprueba && $estado!='APROBADO')
-                            <button  id="btnAprobarPlan" value="{{$idePresupuestoDepartamento}}">
-                                <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar presupuesto departamento"/></button>
-                            @endif
-                             &nbsp;
-                            &nbsp;
-                            <a href="{{url('presupuestodepartamento/export/'.$idePresupuestoDepartamento)}}" >
-                                <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar presupuesto a Excel"/></a>
-                            &nbsp;
-                            &nbsp;
-                                <a href="{{url('presupuestodepto/'.$idePresupuestoDepartamento)}}" >
-                                    <img src="{{asset('images/ejecucion.png')}}" class="menu-imagen-big" alt="" title="Ver Ejecuci&oacute;n"/></a>
                             <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>                            
                         </div>
                         
@@ -66,19 +45,50 @@
                                             <th style="text-align: center"></th>
                                             <th style="text-align: center"></th>
                                             <th>%</th>
-                                            <th>Enero</th>
-                                            <th>Febrero</th>
-                                            <th>Marzo</th>
-                                            <th>Abril</th>
-                                            <th>Mayo</th>
-                                            <th>Junio</th>
-                                            <th>Julio</th>
-                                            <th>Agosto</th>
-                                            <th>Septiembre</th>
-                                            <th>Octubre</th>
-                                            <th>Noviembre</th>
-                                            <th>Diciembre</th>
-                                            <th>Total</th>
+                                            <th colspan="2">Enero</th>
+                                            <th colspan="2">Febrero</th>
+                                            <th colspan="2">Marzo</th>
+                                            <th colspan="2">Abril</th>
+                                            <th colspan="2">Mayo</th>
+                                            <th colspan="2">Junio</th>
+                                            <th colspan="2">Julio</th>
+                                            <th colspan="2">Agosto</th>
+                                            <th colspan="2">Septiembre</th>
+                                            <th colspan="2">Octubre</th>
+                                            <th colspan="2">Noviembre</th>
+                                            <th colspan="2" >Diciembre</th>
+                                            <th colspan="2">Total</th>
+                                        </tr>
+                                         <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
+                                            <th>Plan</th>
+                                            <th>Ejec</th>
                                         </tr>
                                     </thead>
                                         <tbody id="lista-items" name="lista-items">
@@ -106,18 +116,31 @@
                                                 @endif
                                                 <td style="font-weight: bolder">{{isset($cuentas[$i]['porc'])?number_format($cuentas[$i]['porc'],2):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item1'])?number_format($cuentas[$i]['item1'],(fmod($cuentas[$i]['item1'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej1'])?number_format($cuentas[$i]['ej1'],(fmod($cuentas[$i]['ej1'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item2'])?number_format($cuentas[$i]['item2'],(fmod($cuentas[$i]['item2'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej2'])?number_format($cuentas[$i]['ej2'],(fmod($cuentas[$i]['ej2'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item3'])?number_format($cuentas[$i]['item3'],(fmod($cuentas[$i]['item3'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej3'])?number_format($cuentas[$i]['ej3'],(fmod($cuentas[$i]['ej3'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item4'])?number_format($cuentas[$i]['item4'],(fmod($cuentas[$i]['item4'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej4'])?number_format($cuentas[$i]['ej4'],(fmod($cuentas[$i]['ej4'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item5'])?number_format($cuentas[$i]['item5'],(fmod($cuentas[$i]['item5'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej5'])?number_format($cuentas[$i]['ej5'],(fmod($cuentas[$i]['ej5'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item6'])?number_format($cuentas[$i]['item6'],(fmod($cuentas[$i]['item6'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej6'])?number_format($cuentas[$i]['ej6'],(fmod($cuentas[$i]['ej6'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item7'])?number_format($cuentas[$i]['item7'],(fmod($cuentas[$i]['item7'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej7'])?number_format($cuentas[$i]['ej7'],(fmod($cuentas[$i]['ej7'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item8'])?number_format($cuentas[$i]['item8'],(fmod($cuentas[$i]['item8'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej8'])?number_format($cuentas[$i]['ej8'],(fmod($cuentas[$i]['ej8'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item9'])?number_format($cuentas[$i]['item9'],(fmod($cuentas[$i]['item9'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej9'])?number_format($cuentas[$i]['ej9'],(fmod($cuentas[$i]['ej9'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item10'])?number_format($cuentas[$i]['item10'],(fmod($cuentas[$i]['item10'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej10'])?number_format($cuentas[$i]['ej10'],(fmod($cuentas[$i]['ej10'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item11'])?number_format($cuentas[$i]['item11'],(fmod($cuentas[$i]['item11'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej11'])?number_format($cuentas[$i]['ej11'],(fmod($cuentas[$i]['ej11'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td>{{isset($cuentas[$i]['item12'])?number_format($cuentas[$i]['item12'],(fmod($cuentas[$i]['item12'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ej12'])?number_format($cuentas[$i]['ej12'],(fmod($cuentas[$i]['ej12'], 1) !== 0.00)?2:0):'0'}}</td>
                                                 <td style="font-weight: bolder">{{isset($cuentas[$i]['total'])?number_format($cuentas[$i]['total'],(fmod($cuentas[$i]['total'], 1) !== 0.00)?2:0):'0'}}</td>
+                                                <td>{{isset($cuentas[$i]['ejtotal'])?number_format($cuentas[$i]['ejtotal'],(fmod($cuentas[$i]['ejtotal'], 1) !== 0.00)?2:0):'0'}}</td>
                                             </tr>
                                         @endfor    
                                     </tbody>
