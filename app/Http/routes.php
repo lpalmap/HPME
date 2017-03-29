@@ -11,9 +11,9 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('/', function () {
+    return view('welcome');
+});
 Route::get('/logintest','Login@login')->name('login');
 Route::get('/login/{error?}','Login@login')->name('login');
 Route::post('/login','Login@auth');
