@@ -27,7 +27,7 @@
                         
                          <div class="panel-body">
                              @if(isset($regiones))
-                             <a href="{{url('planconsolidado/'.$ideProyecto)}}" >
+                             <a href="{{url('monitoreoconsolidado/'.$ideProyecto)}}" >
                                                 <img src="{{asset('images/consolidado.png')}}" class="menu-imagen-big" alt="" title="Ver planificac&oacute;n consolidada"/></a>
                                                 &nbsp;
                                                 &nbsp;
@@ -37,7 +37,7 @@
                                 @endif
                                 &nbsp;
                                 &nbsp;
-                                <a href="{{url('planificacionesexport/'.$ideProyecto)}}" >
+                                <a href="{{url('monitoreoexport/'.$ideProyecto)}}" >
                                 <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar todas las regiones a Excel"/></a>  
                                 
                                 

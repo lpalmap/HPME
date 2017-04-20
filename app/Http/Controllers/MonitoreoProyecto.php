@@ -165,7 +165,8 @@ class MonitoreoProyecto extends Controller
                 $region->estado=  HPMEConstants::ABIERTO;
                 $region->ide_periodo_monitoreo=$periodo;
                 $region->ide_proyecto_region=$ideProyectoRegion;
-                $region->create($region->toArray());
+                //$region=$region->create($region->toArray());
+                $region=$region->create($region->toArray());
                 $region->periodo();
                 $periodosRegion[]=$region;
             }else{
@@ -173,7 +174,8 @@ class MonitoreoProyecto extends Controller
                 $periodosRegion[]=$region;
             }          
         }
-        
+        Log::info("TEstsf");
+                Log::info($periodosRegion);
         return view('monitoreo_afiliado_proyecto',array('proyecto'=>$proyecto->descripcion,'ideProyecto'=>$proyecto->ide_proyecto,'items'=>$periodosRegion,'region' =>$nombreRegion));
     }
     

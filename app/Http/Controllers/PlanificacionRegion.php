@@ -76,7 +76,19 @@ class PlanificacionRegion extends Controller
         } 
         
     }
-
+    
+    public function monitoreoConsolidada($ideProyecto){
+        $rol=  request()->session()->get('rol');
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
+            $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
+            return view('monitoreo_detalle_consolidado',$parametrosVista);
+        }else{
+            return view('home');
+        } 
+        
+    }
+    
     public function planificacionRegionDetalle($id){ 
         $proyectoRegion=  PlnProyectoRegion::find($id);
         $rol=  request()->session()->get('rol');
@@ -426,6 +438,26 @@ class PlanificacionRegion extends Controller
             return view('home');
         }      
     }
+    
+    public function exportMonitoreoConsolidada($ideProyecto){
+        $rol=  request()->session()->get('rol');
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
+            $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
+            $nombreArchivo='Monitoreo consolidado '.$parametrosVista['plantilla']['proyecto'];
+            
+            Excel::create($nombreArchivo, function($excel) use($parametrosVista) {
+                $excel->sheet('Monitoreo Consolidado', function($sheet) use ($parametrosVista){
+                    $sheet->loadView('monitoreo_consolidado_export', $parametrosVista);
+                    $sheet->setFitToWidth();
+                    $sheet->freezeFirstRow();
+                });
+            })->export('xls');
+        }else{
+            return view('home');
+        }      
+    }
+    
     //Construye la vista para la planificacion consolidada
     private function parametrosConsolidado($ideProyecto){
         $proyectoPlanificacion = PlnProyectoPlanificacion::find($ideProyecto);  
@@ -452,12 +484,13 @@ class PlanificacionRegion extends Controller
     }
 
     public function planificacionExport($ideProyecto){
+        Log::info("paln $ideProyecto");
         $rol=  request()->session()->get('rol');
         $apruebaPlanificacion=$this->apruebaPlanificacion();
         if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
             $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
             $nombreArchivo='Consolidado '.$parametrosVista['plantilla']['proyecto'];
-            Log::info('Test');
+            //Log::info('Test');
             $regiones=$this->plantillasExport($ideProyecto);
             $encabezados=array();
             $encabezados[]='Ene-Mar';
@@ -471,10 +504,44 @@ class PlanificacionRegion extends Controller
                     $sheet->loadView('planificacion_consolidado_export', $parametrosVista);
                     $sheet->freezeFirstRow();
                 });
-                Excel::shareView('planificacion_region_export')->create();
+//                Excel::shareView('planificacion_region_export')->create();
                 foreach ($regiones as $region){
                     $excel->sheet($region['region'], function($sheet) use ($region,$num_items,$encabezados){
                         $sheet->loadView('planificacion_region_export', array('plantilla'=>$region,'num_items'=>$num_items,'encabezados'=>$encabezados));
+                        $sheet->freezeFirstRow();
+                    });
+                }
+            })->export('xls');
+        }else{
+            return view('home');
+        }  
+    }
+    
+    public function monitoreoExport($ideProyecto){
+        //Log::info("EXPORT MONITOREO $ideProyecto");
+        $rol=  request()->session()->get('rol');
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if(!is_null($ideProyecto) && ($apruebaPlanificacion || $this->consultaPlanificacion())){
+            $parametrosVista=  $this->parametrosConsolidado($ideProyecto);
+            $nombreArchivo='Monitoreo '.$parametrosVista['plantilla']['proyecto'];
+            //Log::info('Test');
+            $regiones=$this->plantillasExport($ideProyecto);
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            $num_items=count($encabezados);
+            set_time_limit(0);
+            Excel::create($nombreArchivo, function($excel) use($parametrosVista,$regiones,$num_items,$encabezados) {
+                $excel->sheet('Monitoreo Consolidado', function($sheet) use ($parametrosVista){
+                    $sheet->loadView('monitoreo_consolidado_export', $parametrosVista);
+                    $sheet->freezeFirstRow();
+                });
+               // Excel::shareView('planificacion_region_export')->create();
+                foreach ($regiones as $region){
+                    $excel->sheet($region['region'], function($sheet) use ($region,$num_items,$encabezados){
+                        $sheet->loadView('monitoreo_region_export', array('plantilla'=>$region,'num_items'=>$num_items,'encabezados'=>$encabezados));
                         $sheet->freezeFirstRow();
                     });
                 }

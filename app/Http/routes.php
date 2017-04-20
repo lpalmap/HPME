@@ -346,6 +346,9 @@ Route::post('/monobservaciones/marcar',['uses' => 'MonitoreoObservaciones@marcar
 
 /* MONITOREO AFILAIDO*/
 Route::get('/monitoreoproyecto',['uses' => 'MonitoreoProyecto@monitoreoProyecto', 'middleware' => 'auth']);
+Route::get('/monitoreoexport/{id}',['uses' => 'PlanificacionRegion@monitoreoExport', 'middleware' => 'auth']);
+Route::get('/monitoreoconsolidado/{id}',['uses' => 'PlanificacionRegion@monitoreoConsolidada', 'middleware' => 'auth']);
+Route::get('/monconsolidadoexport/{id}',['uses' => 'PlanificacionRegion@exportMonitoreoConsolidada', 'middleware' => 'auth']);
 
 Route::post('/fileupload',['uses' => 'FileController@upload', 'middleware' => 'auth']);
 Route::get('/filedownload/monitoreo/{id}',['uses' => 'FileController@monitoreoDownload', 'middleware' => 'auth']);
