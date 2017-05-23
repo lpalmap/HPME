@@ -45,7 +45,11 @@
                                 <img src="{{asset('images/recomendation3.png')}}" class="menu-imagen-big" alt="" title="Aprobar Ejecuci&oacute;n"/></button>
                             @endif
                             <button id="cleanVacio">
-                                <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>                            
+                                <img src="{{asset('images/clean.png')}}" class="menu-imagen-big" alt="" title="Ocultar productos con planificaci&oacute;n 0"/></button>  
+                            &nbsp;
+                            &nbsp;
+                            <a href="{{url('monitoreoregionexport/'.$idePeriodoRegion)}}" >
+                                <img src="{{asset('images/excel.png')}}" class="menu-imagen-big" alt="" title="Exportar monitoreo a Excel(No se incluye productos con planificaci&oacute;n o ejecuci&oacute;n 0)"/></a>
                             <div style="float: right"><span style="font-weight: bolder;">{{$estado}}</span></div>
                         </div>
                         

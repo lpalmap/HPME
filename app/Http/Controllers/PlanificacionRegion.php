@@ -16,6 +16,7 @@ use Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\MonProyectoPeriodo;
 use App\PlnRegionProductoDetalle;
+use App\MonPeriodoRegion;
 
 
 class PlanificacionRegion extends Controller
@@ -549,6 +550,53 @@ class PlanificacionRegion extends Controller
         }else{
             return view('home');
         }  
+    }
+    
+    
+    public function monitoreoExportRegion($idePeriodoRegion){       
+        $ingresaPlan=$this->ingresoPlanificacion();
+        $consultaPlanificacion=$this->consultaPlanificacion();
+        $apruebaPlanificacion=$this->apruebaPlanificacion();
+        if($apruebaPlanificacion || $ingresaPlan || $consultaPlanificacion){
+            $periodoRegion= MonPeriodoRegion::find($idePeriodoRegion);
+            if(is_null($periodoRegion)){
+                return view('home');
+            }
+            $proyectoRegion=  PlnProyectoRegion::find($periodoRegion->ide_proyecto_region);
+            
+            if($ingresaPlan && !$consultaPlanificacion){
+                $ideRegion=$this->regionUsuario();
+                if(is_null($ideRegion) || $ideRegion!=$proyectoRegion->ide_region){
+                    return view ('home');
+                }
+            }
+            
+            $proyectoPlan=  PlnProyectoPlanificacion::where('ide_proyecto','=',$proyectoRegion->ide_proyecto_planificacion)->pluck('descripcion')->first();
+            $nomRegion=  CfgRegion::where('ide_region','=',$proyectoRegion->ide_region)->pluck('nombre')->first();
+            Log::info("Expo reg $proyectoPlan");
+            
+            $encabezados=array();
+            $encabezados[]='Ene-Mar';
+            $encabezados[]='Abr-Jun';
+            $encabezados[]='Jul-Sep';
+            $encabezados[]='Oct-Dic';
+            $num_items=count($encabezados);
+                    
+            set_time_limit(0);
+            
+            $metas=$this->obtenerMetas($proyectoRegion->ide_proyecto_planificacion,$proyectoRegion->ide_proyecto_region);
+            $region=array("region"=>$nomRegion,'metas'=> $metas);
+            
+            Excel::create('Monitoreo '.$proyectoPlan.' '.$nomRegion, function($excel) use($num_items,$encabezados,$region) {
+                $excel->sheet($region['region'], function($sheet) use ($region,$num_items,$encabezados){
+                    $sheet->loadView('monitoreo_region_export', array('plantilla'=>$region,'num_items'=>$num_items,'encabezados'=>$encabezados));
+                    $sheet->freezeFirstRow();
+                });
+            })->export('xls');
+            
+        }else{
+            return view('home');
+        }
     }
     
     public function ejecutadoRegionDetalle($id){ 

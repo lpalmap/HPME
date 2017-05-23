@@ -18,10 +18,10 @@
                                             <th style="text-align: center" colspan="2">Total</th>
                                         </tr>
                                         <tr>
-                                            <th style="text-align: left">Meta/Area/Objetivo</th>
-                                            <th style="text-align: left">Indicador</th>
-                                            <th style="text-align: left">Proyecto</th>
-                                            <th style="text-align: left">Producto</th>
+                                            <th style="text-align: left"></th>
+                                            <th style="text-align: left"></th>
+                                            <th style="text-align: left"></th>
+                                            <th style="text-align: left"></th>
                                             <?php
                                                 foreach ($encabezados as $encabezado){
                                             ?>
