@@ -403,6 +403,8 @@ class PresupuestoConsolidado extends Controller
             $item['cuenta']=$hija->cuenta;
             $item['nombre']=$hija->nombre;
             $totalCuenta=0.0;
+            $ejtotalCuenta=0.0;
+            
             if($hija->item1>0){
                 $item['item1']=$hija->item1;
                 $item['ej1']=$hija->ej1;
@@ -594,8 +596,16 @@ class PresupuestoConsolidado extends Controller
         $item2=0.0;
         $item3=0.0;
         $item4=0.0;
+        
+        $itemej1=0.0;
+        $itemej2=0.0;
+        $itemej3=0.0;
+        $itemej4=0.0;
+        
         $total=0.0;
+        $ejtotal=0.0;
         $totalCuenta=0.0;
+        $totalCuejtaEj=0.0;
         foreach($cuentasHijas as $hija){
             $item=array();
             $item['cuenta']=$hija->cuenta;
@@ -604,62 +614,94 @@ class PresupuestoConsolidado extends Controller
             $trim2=0.0;
             $trim3=0.0;
             $trim4=0.0;
+            
+            $ej1=0.0;
+            $ej2=0.0;
+            $ej3=0.0;
+            $ej4=0.0;
+        
             $totalCuenta=0.0;
             if($hija->item1>0){
                 $trim1+=$hija->item1;
+                $ej1+=$hija->ej1;
             }
             
             if($hija->item2>0){
                 $trim1+=$hija->item2;
+                $ej1+=$hija->ej2;
             }
             if($hija->item3>0){
                 $trim1+=$hija->item3;
+                $ej1+=$hija->ej3;
             }
             $item['item1']=$trim1;
+            $item['ej1']=$ej1;
             $totalCuenta+=$trim1;
+            $totalCuejtaEj+=$ej1;
             
             if($hija->item4>0){
                 $trim2+=$hija->item4;
+                $ej2+=$hija->ej4;
             }
             if($hija->item5>0){
                 $trim2+=$hija->item5;
+                $ej2+=$hija->ej5;
             }
             if($hija->item6>0){
                 $trim2+=$hija->item6;
+                $ej2+=$hija->ej6;
             }
             $item['item2']=$trim2;
+            $item['ej2']=$ej2;
             $totalCuenta+=$trim2;
+            $totalCuejtaEj+=$ej2;
             
             if($hija->item7>0){
                 $trim3+=$hija->item7;
+                $ej3+=$hija->ej7;
             }
             if($hija->item8>0){
                 $trim3+=$hija->item8;
+                $ej3+=$hija->ej8;
             }
             if($hija->item9>0){
                 $trim3+=$hija->item9;
+                $ej3+=$hija->ej9;
             }
             $item['item3']=$trim3;
+            $item['ej3']=$ej3;
             $totalCuenta+=$trim3;
+            $totalCuejtaEj+=$ej3;
             
             if($hija->item10>0){
                 $trim4+=$hija->item10;
+                $ej4+=$hija->ej10;
             }
             if($hija->item11>0){
                 $trim4+=$hija->item11;
+                $ej4+=$hija->ej11;
             }   
             if($hija->item12>0){
                 $trim4+=$hija->item12;
+                $ej4+=$hija->ej12;
             }
             $item['item4']=$trim4;
+            $item['ej4']=$ej4;
             $totalCuenta+=$trim4;
+            $totalCuejtaEj+=$ej4;
             
             $item1+=$trim1;
             $item2+=$trim2;
             $item3+=$trim3;
             $item4+=$trim4;
             
+            $itemej1+=$ej1;
+            $itemej1+=$ej2;
+            $itemej1+=$ej3;
+            $itemej1+=$ej4;
+            
             $item['total']=$totalCuenta;
+            $item['ejtotal']=$totalCuejtaEj;
             $item['nivel']=$nivel+1;
             $result[]=$item;
         } 
@@ -668,21 +710,30 @@ class PresupuestoConsolidado extends Controller
         $itemCuenta['nombre']=$cuenta->nombre;
         if($item1>0){
             $itemCuenta['item1']=$item1;
+            $itemCuenta['ej1']=$itemej1;
             $total+=$item1;
+            $ejtotal+=$itemej1;
         }
         if($item2>0){
             $itemCuenta['item2']=$item2;
+            $itemCuenta['ej2']=$itemej2;
+            $ejtotal+=$itemej2;
             $total+=$item2;
         }
         if($item3>0){
             $itemCuenta['item3']=$item3;
+            $itemCuenta['ej3']=$itemej3;
+            $ejtotal+=$itemej3;
             $total+=$item3;
         }
         if($item4>0){
             $itemCuenta['item4']=$item4;
+            $itemCuenta['ej4']=$itemej4;
+            $ejtotal+=$itemej4;
             $total+=$item4;
         }
         $itemCuenta['total']=$total;
+        $itemCuenta['ejtotal']=$ejtotal;
         $itemCuenta['nivel']=$nivel;
         //$result[]=$itemCuenta;
         array_unshift($result,$itemCuenta);
