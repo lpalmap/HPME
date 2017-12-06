@@ -188,7 +188,7 @@ class PlantillaPlanificacion extends Controller
                 if($proyectoRegion->estado!='ABIERTO'){
                     return response()->json(array('error'=>'Solo se pueden enviar plantillas si el proyecto esta '.HPMEConstants::ABIERTO), HPMEConstants::HTTP_AJAX_ERROR);
                 }
-                $metasIncompletas=DB::select(HPMEConstants::PLN_METAS_NO_INGRESADAS,array('ideProyectoRegion'=>$ideProyectoRegion));
+                $metasIncompletas=DB::select(HPMEConstants::PLN_METAS_NO_INGRESADASV2,array('ideProyectoRegion'=>$ideProyectoRegion));
                 if(count($metasIncompletas)>0){
                     $errores=array();
                     foreach($metasIncompletas as $meta){
